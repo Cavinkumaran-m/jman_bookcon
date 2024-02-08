@@ -1,0 +1,38 @@
+/* LoginPage.css */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.paper {
+  margin: auto;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px; /* You can adjust this to suit your design */
+}
+
+.formContainer {
+  width: 100%;
+}
+
+.submitButton {
+  margin-top: 32px; /* Adjust spacing as needed */
+  margin-bottom: 32px; /* Adjust spacing as needed */
+}
+
+.linksContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.link {
+  text-decoration: none;
+  color: #1976d2; /* Material-UI primary color */
+  margin-top: 8px;
+}
