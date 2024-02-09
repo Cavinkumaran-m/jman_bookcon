@@ -1,0 +1,12 @@
+const Sequelize = require('sequelize')
+const sequelize = new Sequelize(
+    'bookstore',
+    'root',
+    '123456',
+    {
+        host: 'localhost',
+        port: '3304',
+        dialect: 'mysql'
+    }
+);
+module.exports=sequelize
