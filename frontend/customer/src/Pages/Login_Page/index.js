@@ -10,17 +10,22 @@ import {
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import style from "./index.module.css";
+import { useContext } from "react";
+import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-
+  const { setStore } = useContext(UserContext);
   const handleSubmit = (event) => {
     event.preventDefault();
     // Perform your validation and login logic here
     console.log("Login form submitted", event.target);
 
+    // If success set context data
+    setStore({ isLoggedIn: true, user_id: null, cart_items: null });
+
     // After login logic, navigate to a new route programmatically
-    navigate("/dashboard");
+    navigate("/home");
   };
 
   return (

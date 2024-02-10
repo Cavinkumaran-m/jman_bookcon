@@ -1,5 +1,10 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import LoginPage from "./Pages/Login_Page";
 import NotFound from "./Pages/NotFound/NotFound";
 import Home from "./Pages/Home/Home";
@@ -32,6 +37,8 @@ function App() {
       <Router>
         <Header></Header>
         <Routes>
+          {/* Redirect user visiting '/' to '/login' */}
+          <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<Home />} />
           <Route path="/search" element={<Search />} />
