@@ -34,15 +34,15 @@ function Header(props) {
             <div className="navbar-nav text-white flex-grow-1">
               <NavLink className="nav-item nav-link" to="home">
                 Home
+                {/* &#127968; */}
               </NavLink>
-              <NavLink className="nav-item nav-link" to="search">
-                Search
+              <NavLink className="nav-item nav-link" to="wishlist">
+                WishList
+                {/* &#x2764; */}
               </NavLink>
               <NavLink className="nav-item nav-link" to="cart">
                 My Cart
-              </NavLink>
-              <NavLink className="nav-item nav-link" to="wishlist">
-                &#x2764;&#xFE0F;
+                {/* &#128722; */}
               </NavLink>
             </div>
 

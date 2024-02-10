@@ -35,6 +35,9 @@ function Home(props) {
   };
 
   useEffect(() => {
+    setTimeout(() => {
+      setTrendingBooks([]);
+    }, 1000);
     // Axios.get("trending").then((res) => {
     // console.log(res.data.payLoad);
     //   setTrendingBooks(res.data.payLoad);
@@ -46,10 +49,7 @@ function Home(props) {
         <div className="row d-flex justify-content-between">
           {/* Left Panel */}
           <div className="rounded col-md-9">
-            <div
-              className="d-flex align-items-center row justify-content-between"
-              style={{ height: "40px" }}
-            >
+            <div className="d-flex align-items-center row justify-content-between mt-1">
               <div className="col-sm-8">
                 <input
                   className="form-control-sm"
@@ -85,9 +85,16 @@ function Home(props) {
               </div>
             </div>
             {/* Results div */}
-            <div className="bg-white rounded mt-sm-4 mt-5 mb-2">
-              <BookCardLoader />
-            </div>
+            {trendingBooks === null && (
+              <div className="bg-white rounded mt-4 mb-2">
+                <BookCardLoader />
+              </div>
+            )}
+            {trendingBooks !== null && trendingBooks.length === 0 && (
+              <span className="display-6 mt-sm-4 mt-5 text-danger">
+                No books :(
+              </span>
+            )}
           </div>
 
           {/* Right Panel */}

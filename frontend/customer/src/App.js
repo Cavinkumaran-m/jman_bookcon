@@ -11,7 +11,6 @@ import Home from "./Pages/Home/Home";
 import { UserContext } from "./CustomFunctionalities/Context/UserContext";
 import { useState } from "react";
 import Header from "./Components/Header/Header";
-import Search from "./Pages/Search/Search";
 import WishList from "./Pages/WishList/WishList";
 import Cart from "./Pages/Cart/Cart";
 import Register from "./Pages/Registration";
@@ -41,7 +40,6 @@ function App() {
           <Route path="/" element={<Navigate to="/login" />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/search" element={<Search />} />
           <Route path="/wishlist" element={<WishList />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<NotFound />} />
