@@ -8,7 +8,7 @@ const router = express.Router();
 //login
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
-
+  // console.log(username, "username isnide login route");
   let user = await Customer.findOne({ where: { username } });
   let role = "customer";
 

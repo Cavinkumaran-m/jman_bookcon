@@ -15,6 +15,10 @@ import WishList from "./Pages/WishList/WishList";
 import Cart from "./Pages/Cart/Cart";
 import Register from "./Pages/Registration";
 import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword/resetPassword";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   // Use this context to store data locally
   const [Store, setStore] = useState({
@@ -33,6 +37,7 @@ function App() {
 
   return (
     <UserContext.Provider value={{ Store, setStore }}>
+      <ToastContainer />
       <Router>
         <Header></Header>
         <Routes>
@@ -45,6 +50,7 @@ function App() {
           <Route path="*" element={<NotFound />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </Router>
     </UserContext.Provider>

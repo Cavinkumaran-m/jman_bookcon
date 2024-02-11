@@ -1,0 +1,137 @@
+import React, { useState } from "react";
+import {
+  Button,
+  TextField,
+  Box,
+  Typography,
+  Container,
+  Paper,
+  InputAdornment,
+  IconButton,
+} from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import Axios from "../../Components/Utils/Axios";
+
+const ResetPassword = () => {
+  const [values, setValues] = useState({
+    newPassword: "",
+    confirmPassword: "",
+    showPassword: false,
+    shownewPassword: false,
+  });
+
+  const handleChange = (prop) => (event) => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
+
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+  const handleClickShownewPassword = () => {
+    setValues({ ...values, shownewPassword: !values.shownewPassword });
+  };
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      if (values.newPassword !== values.confirmPassword) {
+        toast.error("Passwords do not match");
+        return;
+      }
+      const response = await Axios.post("/reset-password", {
+        password: values.newPassword,
+      });
+      console.log(response);
+    } catch (error) {
+      toast.error("Error resetting password");
+      console.error(error);
+    }
+    // Add logic to handle password reset
+    console.log(values);
+  };
+
+  return (
+    <Container component="main" maxWidth="xs">
+      <Paper
+        elevation={3}
+        sx={{
+          marginTop: 8,
+          padding: 3,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}>
+        <Typography component="h1" variant="h5">
+          Reset Password
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="newPassword"
+            label="New Password"
+            type={values.showPassword ? "text" : "password"}
+            id="new-password"
+            autoComplete="new-password"
+            value={values.newPassword}
+            onChange={handleChange("newPassword")}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end">
+                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="confirmPassword"
+            label="Confirm Password"
+            type={values.shownewPassword ? "text" : "password"}
+            id="confirm-password"
+            autoComplete="new-password"
+            value={values.confirmPassword}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleClickShownewPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end">
+                    {values.shownewPassword ? (
+                      <VisibilityOff />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            onChange={handleChange("confirmPassword")}
+          />
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}>
+            Reset Password
+          </Button>
+        </Box>
+      </Paper>
+    </Container>
+  );
+};
+
+export default ResetPassword;

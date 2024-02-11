@@ -7,7 +7,6 @@ import {
   FaLock,
   FaSearchLocation,
 } from "react-icons/fa";
-// Instead of importing from 'react-icons/md'
 import { MdEmail } from "react-icons/md";
 
 import { CgGenderMale } from "react-icons/cg";
@@ -23,8 +22,7 @@ const Register = () => {
     console.log("Register form submitted", event.target);
     console.log("Registering user...");
 
-    // On successful registration, navigate to the login page or dashboard
-    // navigate('/dashboard'); // Adjust the route as needed
+    navigate("/login");
   };
 
   return (
@@ -106,16 +104,14 @@ const Register = () => {
                   placeholder="Your Address"
                   rows="4"
                   required
-                  className={style.textarea_field}
-                ></textarea>
+                  className={style.textarea_field}></textarea>
               </div>
               <button
                 type="submit"
                 className={style.register_btn}
                 sx={{
                   color: "white",
-                }}
-              >
+                }}>
                 R E G I S T E R
               </button>
             </form>

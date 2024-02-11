@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
+  margin-top: 10%;
 }
 
 .paper {
@@ -27,6 +28,7 @@
 
 .linksContainer {
   display: flex;
+  margin-top: 2%;
   justify-content: space-between;
   width: 100%;
 }

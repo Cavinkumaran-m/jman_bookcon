@@ -5,8 +5,15 @@ const authRoutes = require("./routes/authRoute");
 const authenticateToken = require("./middleware/authMiddleware");
 const sequelize = require("./config/dbconfig");
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
+const cors = require("cors");
 
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Your frontend origin
+    credentials: true, // To allow cookies and authentication data
+  })
+);
 app.use(bodyParser.json());
 
 // Public route
