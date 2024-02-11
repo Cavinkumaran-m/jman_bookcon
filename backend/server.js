@@ -16,6 +16,7 @@ app.use("/api", authRoutes);
 app.get("/api/protected", authenticateToken, (req, res) => {
   res.json({ message: "You're authorized to access this route" });
 });
+
 async function testDatabaseConnection() {
   try {
     await sequelize.authenticate();
