@@ -46,7 +46,7 @@ function Home(props) {
       genre: Genre,
     })
       .then((res) => {
-        console.log(res.data.payload);
+        // console.log(res.data.payload);
         setBooks(res.data.payload);
       })
       .catch((err) => {
@@ -77,6 +77,7 @@ function Home(props) {
                   className="ms-2 btn btn-sm btn-danger rounded"
                   onClick={() => {
                     setLoaded(false);
+                    setBooks(null);
                   }}
                 >
                   Search
@@ -118,9 +119,19 @@ function Home(props) {
               </span>
             )}
             {Books !== null && (
-              <div className="bg-white rounded mt-4 mb-2">
+              <div className=" rounded mt-4 mb-2">
                 {Books.map((book, index) => (
-                  <BookCard key={index}></BookCard>
+                  <BookCard
+                    home
+                    name={book.Name}
+                    author={book.Author}
+                    image={book.Cover_Image}
+                    price={book.Selling_cost}
+                    genre={book.Genre}
+                    isbn={book.ISBN}
+                    rating={book.Rating}
+                    key={index}
+                  ></BookCard>
                 ))}
               </div>
             )}
