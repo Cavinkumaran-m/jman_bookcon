@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 
 function Home(props) {
   const [trendingBooks, setTrendingBooks] = useState(null);
+  const [loaded, setLoaded] = useState();
   const [priceRange, setPriceRange] = useState(5000);
   const [starRange, setStarRange] = useState(5);
   const [Genre, setGenre] = useState(new Array(6).fill(false));
@@ -36,13 +37,25 @@ function Home(props) {
 
   useEffect(() => {
     setTimeout(() => {
-      setTrendingBooks([]);
+      if (loaded) return;
+      Axios.post("/books", {
+        query: searchRef.current.value,
+        sort: sortRef.current.value,
+        price: priceRange,
+        rating: starRange,
+        genre: Genre,
+      })
+        .then((res) => console.log(res))
+        .catch((err) => {
+          console.log(err);
+        });
     }, 1000);
+    setLoaded(true);
     // Axios.get("trending").then((res) => {
     // console.log(res.data.payLoad);
     //   setTrendingBooks(res.data.payLoad);
     // });
-  }, []);
+  }, [loaded]);
   return (
     <>
       <div className="mt-sm-5 mt-2 bg-dark container rounded">
@@ -57,7 +70,12 @@ function Home(props) {
                   placeholder="Book Name/Author Name"
                   ref={searchRef}
                 ></input>
-                <button className="ms-2 btn btn-sm btn-danger rounded">
+                <button
+                  className="ms-2 btn btn-sm btn-danger rounded"
+                  onClick={() => {
+                    setLoaded(false);
+                  }}
+                >
                   Search
                 </button>
               </div>

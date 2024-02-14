@@ -1,52 +1,63 @@
-const Sequelize = require('sequelize')
-const sequelize = require('../config/dbconfig')
-const Book = sequelize.define('Books',{
-    _id:{   
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()'), 
-        primaryKey:true,
-        allowNull:false, 
-    },  
-    ISBN:{
-         type: Sequelize.STRING(20),
-         unique:true, 
-         allowNull:true 
+const Sequelize = require("sequelize");
+const sequelize = require("../config/dbconfig");
+const Book = sequelize.define(
+  "Books",
+  {
+    _id: {
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.literal("uuid_generate_v4()"),
+      primaryKey: true,
+      allowNull: false,
     },
-    Name:{
-        type:Sequelize.STRING,
-        allowNull:false,
+    ISBN: {
+      type: Sequelize.STRING(20),
+      unique: true,
+      allowNull: true,
     },
-    Cover_Image:{
-        type:Sequelize.STRING,
-        allowNull:false
+    Name: {
+      type: Sequelize.STRING,
+      allowNull: false,
     },
-    Selling_cost:{
-        type:Sequelize.DECIMAL(10,2),
-        allowNull:true
+    Cover_Image: {
+      type: Sequelize.STRING,
+      allowNull: false,
     },
-    Available_pieces:{
-        type:Sequelize.INTEGER,
-        allowNull:true
+    Selling_cost: {
+      type: Sequelize.DECIMAL(10, 2),
+      allowNull: true,
     },
-    Author:{
-        type:Sequelize.STRING,
-        allowNull:false
+    Available_pieces: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
     },
-    Publisher:{
-        type:Sequelize.STRING,
-        allowNull:false
+    Author: {
+      type: Sequelize.STRING,
+      allowNull: false,
     },
-    Year_of_Publication:{
-        type:Sequelize.INTEGER,
-        allowNull:true
+    Publisher: {
+      type: Sequelize.STRING,
+      allowNull: false,
     },
-    Purchase_Cost:{
-        type:Sequelize.DECIMAL(10,2),
-        allowNull:true
-    }
-},
-{
-    freezeTableName:true,
-    timestamps:false
-})
-module.exports =Book
+    Year_of_Publication: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+    },
+    Purchase_Cost: {
+      type: Sequelize.DECIMAL(10, 2),
+      allowNull: true,
+    },
+    Genre: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    Rating: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+  },
+  {
+    freezeTableName: true,
+    timestamps: false,
+  }
+);
+module.exports = Book;
