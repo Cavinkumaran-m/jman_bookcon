@@ -2,9 +2,10 @@ import React from "react";
 import Axios from "../../Components/Utils/Axios";
 import BookCardLoader from "../../Components/BookCard/BoodCardLoader";
 import { useState, useEffect, useRef } from "react";
+import BookCard from "../../Components/BookCard/BookCard";
 
 function Home(props) {
-  const [trendingBooks, setTrendingBooks] = useState(null);
+  const [Books, setBooks] = useState(null);
   const [loaded, setLoaded] = useState();
   const [priceRange, setPriceRange] = useState(5000);
   const [starRange, setStarRange] = useState(5);
@@ -36,20 +37,22 @@ function Home(props) {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      if (loaded) return;
-      Axios.post("/books", {
-        query: searchRef.current.value,
-        sort: sortRef.current.value,
-        price: priceRange,
-        rating: starRange,
-        genre: Genre,
+    if (loaded) return;
+    Axios.post("/books", {
+      query: searchRef.current.value,
+      sort: sortRef.current.value,
+      price: priceRange,
+      rating: starRange,
+      genre: Genre,
+    })
+      .then((res) => {
+        console.log(res.data.payload);
+        setBooks(res.data.payload);
       })
-        .then((res) => console.log(res))
-        .catch((err) => {
-          console.log(err);
-        });
-    }, 1000);
+      .catch((err) => {
+        console.log(err);
+      });
+
     setLoaded(true);
     // Axios.get("trending").then((res) => {
     // console.log(res.data.payLoad);
@@ -103,15 +106,23 @@ function Home(props) {
               </div>
             </div>
             {/* Results div */}
-            {trendingBooks === null && (
+            {Books === null && (
               <div className="bg-white rounded mt-4 mb-2">
                 <BookCardLoader />
               </div>
             )}
-            {trendingBooks !== null && trendingBooks.length === 0 && (
+
+            {Books !== null && Books.length === 0 && (
               <span className="display-6 mt-sm-4 mt-5 text-danger">
                 No books :(
               </span>
+            )}
+            {Books !== null && (
+              <div className="bg-white rounded mt-4 mb-2">
+                {Books.map((book, index) => (
+                  <BookCard key={index}></BookCard>
+                ))}
+              </div>
             )}
           </div>
 
