@@ -4,22 +4,24 @@ const User = require('../models/user')
 const Book = require('../models/book')
 const Review= sequelize.define('Review',{
     _id:{   
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()'),  
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         allowNull:false, 
         primaryKey:true
     }, 
     Book_id:{
-        type:Sequelize.STRING(36),
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         references:{
-            model: 'book',
+            model: 'Books',
             key: '_id',
         }
     },
     Customer_id:{
-        type:Sequelize.STRING(36), 
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         references: {
-            model: 'customer', 
+            model: 'Users', 
             key: '_id', 
          }
     },

@@ -4,23 +4,25 @@ const Order = require('../models/order')
 const Book = require('../models/book')
 const OrderDetail = sequelize.define('Order_Details',{
     _id:{   
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()'), 
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         allowNull:false, 
         primaryKey:true
     }, 
     Order_id:{
-        type:Sequelize.STRING(36),
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         references:{
-            model: 'order',
+            model: 'Orders',
             key: '_id',
         }
     },
     Book_id:{
-        type:Sequelize.STRING(36), 
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         allowNull:false, 
         references: {
-            model: 'book', 
+            model: 'Books', 
             key: '_id', 
          }
     },

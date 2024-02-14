@@ -3,13 +3,14 @@ const sequelize = require('../config/dbconfig')
 const Users = require('../models/user')  
 const Order = sequelize.define('Orders',{
     _id:{   
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()'),
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         allowNull:false, 
         primaryKey:true
     },  
     Customer_id:{
-         type: Sequelize.STRING(45), 
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1, 
          allowNull:false,
          references: {
             model: 'Users', 
