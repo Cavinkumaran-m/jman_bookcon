@@ -6,7 +6,7 @@ const knex = require('knex');
 const db = knex({
     client: 'mysql',
     connection: {
-        host: 'http://jman-mini-project-book-store.cje1ut4sij6i.ap-south-1.rds.amazonaws.com',
+        host: 'jman-mini-project-book-store.cje1ut4sij6i.ap-south-1.rds.amazonaws.com',
         user: 'admin',
         password: 'abcd1234',
         database: 'BOOK_STORE_DB' 
