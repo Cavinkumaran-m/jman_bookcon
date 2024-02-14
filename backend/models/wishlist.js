@@ -9,16 +9,18 @@ const Wishlist= sequelize.define('Wishlist',{
         primaryKey:true
     }, 
     Book_id:{
-        type:Sequelize.STRING(36),
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         references:{
-            model: 'book',
+            model: 'Books',
             key: '_id',
         }
     },
     Customer_id:{
-        type:Sequelize.STRING(36), 
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         references: {
-            model: 'customer', 
+            model: 'Users', 
             key: '_id', 
          }
     },

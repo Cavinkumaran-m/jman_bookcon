@@ -2,8 +2,8 @@ const Sequelize = require('sequelize')
 const sequelize = require('../config/dbconfig')
 const Book = sequelize.define('Books',{
     _id:{   
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()'), 
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         primaryKey:true,
         allowNull:false, 
     },  
