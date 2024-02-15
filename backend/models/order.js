@@ -46,7 +46,7 @@ const Order = sequelize.define('Orders',{
         allowNull:false
     },
     Status:{
-        type:Sequelize.ENUM('processed','shippped','delivered','cancelled'),
+        type:Sequelize.ENUM('processed','shipped','delivered','cancelled'),
         allowNull:true
     },
     Cart:{
