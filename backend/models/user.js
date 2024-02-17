@@ -1,35 +1,46 @@
-const Sequelize = require('sequelize')
-const sequelize = require('../config/dbconfig')
-const User = sequelize.define('Users',{
-    _id:{   
-        type: Sequelize.DataTypes.UUID,
-        defaultValue: Sequelize.UUIDV1,
-        allowNull:false, 
-        primaryKey:true
-    },  
-    Username:{
-         type: Sequelize.STRING, 
-         allowNull:false 
+const Sequelize = require("sequelize");
+const sequelize = require("../config/dbconfig");
+const User = sequelize.define(
+  "Users",
+  {
+    _id: {
+      type: Sequelize.DataTypes.UUID,
+      defaultValue: Sequelize.UUIDV1,
+      allowNull: false,
+      primaryKey: true,
     },
-    Email:{
-        type:Sequelize.STRING,
-        allowNull:false,
-        unique:true
+    Username: {
+      type: Sequelize.STRING,
+      allowNull: false,
     },
-    Password:{
-        type:Sequelize.STRING(45),
-        allowNull:false,
-        unique:true
+    Email: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
     },
-    Date:{
-        type:Sequelize.DATE,
+    Password: {
+      type: Sequelize.STRING(45),
+      allowNull: false,
+      unique: true,
     },
-    Role:{
-        type:Sequelize.TINYINT(1)
-    }
-},
-{
-    freezeTableName:true,
-    timestamps:false
-})
-module.exports =User;
+    Date: {
+      type: Sequelize.DATE,
+    },
+    Role: {
+      type: Sequelize.TINYINT(1),
+    },
+    Otp: {
+      type: Sequelize.STRING,
+      allowNull: true,
+    },
+    OtpExpires: {
+      type: Sequelize.DATE,
+      allowNull: true,
+    },
+  },
+  {
+    freezeTableName: true,
+    timestamps: false,
+  }
+);
+module.exports = User;
