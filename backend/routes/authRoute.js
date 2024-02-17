@@ -5,9 +5,6 @@ const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 require("dotenv").config();
 
-// ----------------------------------------------------
-// These files are missing Riya... so im commenting it out...
-// ----------------------------------------------------
 const User = require("../models/user");
 
 const router = express.Router();

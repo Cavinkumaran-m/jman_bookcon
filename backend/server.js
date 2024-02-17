@@ -8,12 +8,12 @@ const sequelize = require("./config/dbconfig");
 const app = express();
 const PORT = process.env.PORT || 8000;
 const cors = require("cors");
-// app.use(
-//   cors({
-//     origin: "http://localhost:3000", // Your frontend origin
-//     credentials: true, // To allow cookies and authentication data
-//   })
-// );
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Your frontend origin
+    credentials: true, // To allow cookies and authentication data
+  })
+);
 sequelize
   .sync({ force: false })
   .then(() => {
@@ -25,7 +25,7 @@ sequelize
 app.use(bodyParser.json());
 
 // Customer-end route
-// app.use("/api", customerRoutes);
+app.use("/api", customerRoutes);
 
 // Public route
 app.use("/api", authRoutes);

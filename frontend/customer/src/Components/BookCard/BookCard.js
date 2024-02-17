@@ -14,9 +14,9 @@ function BookCard(props) {
   };
 
   return (
-    <div className="col-sm-6 col-md-4 mt-4 p-1">
+    <div className="col-sm-6 col-md-4 mt-4 p-2">
       <div
-        className="d-flex bg-white border p-1 flex-column rounded"
+        className="d-flex bg-white border p-2 flex-column rounded"
         style={{ height: "100%" }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
