@@ -1,130 +1,141 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import {
-  FaUser,
-  FaPhoneAlt,
-  FaBabyCarriage,
-  FaLock,
-  FaSearchLocation,
-} from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
-
-import { CgGenderMale } from "react-icons/cg";
-import style from "./index.module.css"; // Import CSS file
+  TextField,
+  Button,
+  IconButton,
+  InputAdornment,
+  Box,
+  Typography,
+} from "@mui/material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import EmailIcon from "@mui/icons-material/Email";
+import PersonIcon from "@mui/icons-material/Person";
 
 const Register = () => {
-  const navigate = useNavigate();
+  const [user, setUser] = useState({ name: "", email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
+  const [emailError, setEmailError] = useState(false);
 
-  const handleRegister = async (event) => {
-    event.preventDefault();
-    // Add your registration logic here
-    // Example: Posting data to your API
-    console.log("Register form submitted", event.target);
-    console.log("Registering user...");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
 
-    navigate("/login");
+    if (name === "email") {
+      // Simple regex for basic email validation
+      const isValidEmail = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
+      setEmailError(!isValidEmail);
+    }
+
+    setUser({ ...user, [name]: value });
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Perform further validation if necessary before logging or submitting
+    console.log(user);
   };
 
   return (
-    <section className={style.register_bg}>
-      <div className={style.register_container}>
-        <div className={style.register_card}>
-          <div className={style.register_content}>
-            <h1 className={style.register_heading}>Create an account</h1>
-            <form className={style.form_container} onSubmit={handleRegister}>
-              <div className={style.input_group}>
-                <FaUser className={style.input_icon} />
-                <input
-                  type="text"
-                  id="name"
-                  placeholder="Your Name"
-                  required
-                  className={style.input_field}
-                />
-              </div>
+    <Box
+      sx={{
+        marginTop: "80px",
+      }}>
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{
+          padding: "20px",
+          borderRadius: "10px",
+          marginTop: "80px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          bgcolor: "background.paper",
 
-              <div className={style.input_group}>
-                <CgGenderMale className={style.input_icon} />
-                <select id="gender" required className={style.input_select}>
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-              <div className={style.input_group}>
-                <MdEmail className={style.input_icon} />
-                <input
-                  type="email"
-                  id="email"
-                  placeholder="Your Email"
-                  required
-                  className={style.input_field}
-                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-                  title="Please enter a valid email address."
-                />
-              </div>
-              <div className={style.input_group}>
-                <FaPhoneAlt className={style.input_icon} />
-                <input
-                  type="tel"
-                  id="phone"
-                  placeholder="Your Phone"
-                  required
-                  className={style.input_field}
-                  pattern="^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$"
-                  title="Please enter a valid phone number."
-                />
-              </div>
-              <div className={style.input_group}>
-                <FaLock className={style.input_icon} />
-                <input
-                  type="password"
-                  id="password"
-                  placeholder="Password"
-                  required
-                  className={style.input_field}
-                />
-              </div>
-              <div className={style.input_group}>
-                <FaLock className={style.input_icon} />
-                <input
-                  type="password"
-                  id="confirm-password"
-                  placeholder="Confirm Password"
-                  required
-                  className={style.input_field}
-                />
-              </div>
-
-              <div className={style.input_group}>
-                <FaSearchLocation className={style.input_icon} />
-                <textarea
-                  id="address"
-                  placeholder="Your Address"
-                  rows="4"
-                  required
-                  className={style.textarea_field}></textarea>
-              </div>
-              <button
-                type="submit"
-                className={style.register_btn}
-                sx={{
-                  color: "white",
-                }}>
-                R E G I S T E R
-              </button>
-            </form>
-            <p className={style.login_redirect}>
-              Already have an account?{" "}
-              <Link to="/login" className={style.login_link}>
-                Login here
-              </Link>
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px",
+          // Specifies the maximum width of the form
+          width: "60%", // Sets the form width to 90% of its container
+          margin: "auto", // Centers the form in the container
+        }}>
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{
+            color: "#333",
+            mb: 2,
+            textAlign: "center",
+            fontWeight: "bold",
+          }}>
+          Sign Up
+        </Typography>
+        <TextField
+          type="text"
+          name="name"
+          placeholder="Name"
+          value={user.name}
+          onChange={handleChange}
+          fullWidth
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <PersonIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TextField
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={user.email}
+          onChange={handleChange}
+          fullWidth
+          error={emailError}
+          helperText={emailError ? "Please enter a valid email" : ""}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <EmailIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <TextField
+          type={showPassword ? "text" : "password"}
+          name="password"
+          placeholder="Password"
+          value={user.password}
+          onChange={handleChange}
+          fullWidth
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <IconButton onClick={handleClickShowPassword} edge="end">
+                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ mt: 2 }}>
+          Register
+        </Button>
+        <Box textAlign="center" sx={{ mt: 2 }}>
+          Already have an account?{" "}
+          <a href="/login" style={{ textDecoration: "none", color: "#007bff" }}>
+            Login
+          </a>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

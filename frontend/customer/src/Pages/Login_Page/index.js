@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import {
   Button,
   TextField,
@@ -7,35 +7,52 @@ import {
   Container,
   Paper,
   Link as MuiLink,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
+import EmailIcon from "@mui/icons-material/Email";
+import LockIcon from "@mui/icons-material/Lock";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { toast } from "react-toastify";
-
 import { Link, useNavigate } from "react-router-dom";
-import style from "./index.module.css";
-import { useContext } from "react";
 import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
-import { useState } from "react";
 import Axios from "../../Components/Utils/Axios";
+// import style from "./index.module.css"; // Assuming you have specific CSS module styles
+
 const LoginPage = () => {
   const navigate = useNavigate();
-
   const { setStore } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const validateEmail = (email) => {
+    const re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const handleChangeEmail = (e) => {
+    const emailInput = e.target.value;
+    setEmail(emailInput);
+    setIsEmailValid(validateEmail(emailInput));
+  };
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log("Login form submitted", event.target.value);
-    console.log("Logging in user...");
-    console.log(email);
-    console.log(password);
     try {
       const response = await Axios.post("/login", {
         username: email,
         password: password,
       });
 
-      console.log(response.data);
       if (response.data.accessToken) {
         setStore({ isLoggedIn: true, user_id: null, cart_items: null });
         navigate("/home");
@@ -50,24 +67,34 @@ const LoginPage = () => {
         draggable: true,
         progress: undefined,
       });
-
-      console.log(error);
     }
-    // If success set context data
-    // setStore({ isLoggedIn: true, user_id: null, cart_items: null });
-
-    // After login logic, navigate to a new route programmatically
-    // navigate("/home");
   };
 
   return (
-    <Container component="main" maxWidth="xs" className={style.container}>
-      <Paper elevation={3} className={style.paper}>
-        <Box className={style.formContainer}>
-          <Typography component="h1" variant="h5">
-            Sign in
+    <Container component="main" maxWidth="md" style={{ marginTop: "80px" }}>
+      <Paper elevation={3} style={{ padding: "20px", borderRadius: "20px" }}>
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+          <Typography
+            component="h1"
+            variant="h5"
+            style={{
+              margin: "20px 0",
+              fontWeight: "bold",
+              textAlign: "center",
+            }}>
+            Sign in to continue for Shopping
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit}>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            style={{ width: "100%" }}>
             <TextField
               margin="normal"
               required
@@ -77,30 +104,59 @@ const LoginPage = () => {
               name="email"
               autoComplete="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoFocus
+              onChange={handleChangeEmail}
+              error={!isEmailValid}
+              helperText={!isEmailValid ? "Invalid email address" : ""}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EmailIcon />
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               margin="normal"
               required
               fullWidth
               id="password"
-              type="password"
               label="Password"
               name="password"
-              autoComplete="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              autoFocus
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end">
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              className={style.submitButton}>
+              style={{ marginTop: "20px", borderRadius: "20px" }}>
               Sign In
             </Button>
-            <Box className={style.linksContainer}>
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "20px",
+              }}>
               <MuiLink
                 component={Link}
                 to="/forgot-password"
