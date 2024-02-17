@@ -28,9 +28,11 @@ const Wishlist= sequelize.define('Wishlist',{
 {
     freezeTableName:true,
     timestamps:false
-})
+});
 
-Book.hasMany(Wishlist)
-User.hasMany(Wishlist)
+Book.hasMany(Wishlist);
+Wishlist.belongsTo(Book);
+User.hasMany(Wishlist);
+Wishlist.belongsTo(User);
 
 module.exports = Wishlist

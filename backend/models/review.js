@@ -37,8 +37,10 @@ const Review= sequelize.define('Review',{
 {
     freezeTableName:true,
     timestamps:false
-})
-Book.hasMany(Review)
-User.hasMany(Review)
+});
+Book.hasMany(Review);
+Review.belongsTo(Book);
+User.hasMany(Review);
+Review.belongsTo(User);
 
 module.exports = Review
