@@ -75,23 +75,11 @@ const ResetPassword = () => {
             fullWidth
             name="newPassword"
             label="New Password"
-            type={values.showPassword ? "text" : "password"}
+            type={"password"}
             id="new-password"
             autoComplete="new-password"
             value={values.newPassword}
             onChange={handleChange("newPassword")}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end">
-                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
           />
           <TextField
             margin="normal"
@@ -99,26 +87,10 @@ const ResetPassword = () => {
             fullWidth
             name="confirmPassword"
             label="Confirm Password"
-            type={values.shownewPassword ? "text" : "password"}
+            type={"password"}
             id="confirm-password"
             autoComplete="new-password"
             value={values.confirmPassword}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={handleClickShownewPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end">
-                    {values.shownewPassword ? (
-                      <VisibilityOff />
-                    ) : (
-                      <Visibility />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
             onChange={handleChange("confirmPassword")}
           />
           <Button

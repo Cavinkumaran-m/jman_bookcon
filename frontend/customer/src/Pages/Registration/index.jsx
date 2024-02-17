@@ -7,14 +7,13 @@ import {
   Box,
   Typography,
 } from "@mui/material";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
+import LockIcon from "@mui/icons-material/Lock";
 
 const Register = () => {
   const [user, setUser] = useState({ name: "", email: "", password: "" });
-  const [showPassword, setShowPassword] = useState(false);
+
   const [emailError, setEmailError] = useState(false);
 
   const handleChange = (e) => {
@@ -27,10 +26,6 @@ const Register = () => {
     }
 
     setUser({ ...user, [name]: value });
-  };
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
   };
 
   const handleSubmit = (e) => {
@@ -105,7 +100,7 @@ const Register = () => {
           }}
         />
         <TextField
-          type={showPassword ? "text" : "password"}
+          type={"password"}
           name="password"
           placeholder="Password"
           value={user.password}
@@ -114,9 +109,7 @@ const Register = () => {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <IconButton onClick={handleClickShowPassword} edge="end">
-                  {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
-                </IconButton>
+                <LockIcon />
               </InputAdornment>
             ),
           }}

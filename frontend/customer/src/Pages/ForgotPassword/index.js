@@ -6,7 +6,6 @@ import {
   Typography,
   Container,
   Paper,
-  Link as MuiLink,
 } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import style from "./index.module.css";
@@ -15,29 +14,44 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
   const [showOTPField, setShowOTPField] = useState(false);
   const [otp, setOTP] = useState("");
+  const [email, setEmail] = useState("");
+  const [isEmailValid, setIsEmailValid] = useState(true);
+
+  // Email validation function
+  const validateEmail = (email) => {
+    return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Perform your validation and login logic here
-    console.log("Login form submitted", event.target);
+    const isValid = validateEmail(email);
+    setIsEmailValid(isValid);
 
-    // After login logic, navigate to a new route programmatically
-    // navigate("/dashboard");
+    if (!isValid) {
+      console.log("Invalid email address");
+      return; // Stop here if the email is not valid
+    }
 
-    // For demonstration, let's just show the OTP field after sending OTP
+    // Assuming the email is valid, proceed with OTP sending logic
+    console.log("Sending OTP to:", email);
     setShowOTPField(true);
+    // Add actual logic to send OTP
   };
 
   const handleVerifyOTP = () => {
-    // Here you can implement logic to verify the OTP
     console.log("Verifying OTP:", otp);
-    // If OTP is verified successfully, navigate to a new route
     navigate("/dashboard");
   };
 
   const handleResendOTP = () => {
-    // Here you can implement logic to resend the OTP
     console.log("Resending OTP...");
+    // Add logic to resend OTP
+  };
+
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    // Reset email validity state when user modifies the email
+    if (!isEmailValid) setIsEmailValid(true);
   };
 
   return (
@@ -57,6 +71,12 @@ const ForgotPassword = () => {
               name="email"
               autoComplete="email"
               autoFocus
+              value={email}
+              onChange={handleEmailChange}
+              error={!isEmailValid}
+              helperText={
+                !isEmailValid && "Please enter a valid email address."
+              }
             />
 
             {!showOTPField && (
@@ -65,7 +85,7 @@ const ForgotPassword = () => {
                 fullWidth
                 variant="contained"
                 className={style.submitButton}
-              >
+                disabled={!isEmailValid || !email}>
                 Get OTP
               </Button>
             )}
@@ -90,8 +110,7 @@ const ForgotPassword = () => {
                   fullWidth
                   variant="contained"
                   className={style.verifyButton}
-                  onClick={handleVerifyOTP}
-                >
+                  onClick={handleVerifyOTP}>
                   Verify OTP
                 </Button>
 
@@ -101,8 +120,7 @@ const ForgotPassword = () => {
                   variant="contained"
                   className={style.resendButton}
                   sx={{ mt: 2 }}
-                  onClick={handleResendOTP}
-                >
+                  onClick={handleResendOTP}>
                   Resend OTP
                 </Button>
               </>

@@ -12,8 +12,6 @@ import {
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
@@ -26,7 +24,6 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
 
   const validateEmail = (email) => {
     const re =
@@ -38,10 +35,6 @@ const LoginPage = () => {
     const emailInput = e.target.value;
     setEmail(emailInput);
     setIsEmailValid(validateEmail(emailInput));
-  };
-
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
   };
 
   const handleSubmit = async (event) => {
@@ -122,7 +115,7 @@ const LoginPage = () => {
               id="password"
               label="Password"
               name="password"
-              type={showPassword ? "text" : "password"}
+              type={"password"}
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -130,16 +123,6 @@ const LoginPage = () => {
                 startAdornment: (
                   <InputAdornment position="start">
                     <LockIcon />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      edge="end">
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
                   </InputAdornment>
                 ),
               }}
