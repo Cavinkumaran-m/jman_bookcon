@@ -116,21 +116,5 @@ router.post("/verify-otp", async (req, res) => {
     res.status(400).send("Invalid OTP");
   }
 });
-router.post("/adduser", async (req, res) => {
-  return await User.create({
-    _id: crypto.randomUUID(),
-    Username: req.body.Username,
-    Email: req.body.Email,
-    Password: req.body.Password,
-    Date: moment().format("YYYY:MM:DD"),
-    Role: req.body.Role,
-  }).then(function (User) {
-    if (User) {
-      res.send(User);
-    } else {
-      res.status(400).send("Error in inserting new record");
-    }
-  });
-});
 
 module.exports = router;
