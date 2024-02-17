@@ -1,42 +1,63 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../config/dbconfig')
-const Customer = require('../models/customer')  
-const Order = sequelize.define('order',{
-    order_id:{   
-        type:Sequelize.INTEGER, 
-        autoIncrement:true, 
+const Users = require('../models/user')  
+const Order = sequelize.define('Orders',{
+    _id:{   
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         allowNull:false, 
         primaryKey:true
     },  
-    customer_id:{
-         type: Sequelize.INTEGER, 
+    Customer_id:{
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1, 
          allowNull:false,
          references: {
-            model: 'customer', 
-            key: 'customer_id', 
+            model: 'Users', 
+            key: '_id', 
          }
     },
-    cost:{
+    Cost:{
+        type:Sequelize.DECIMAL(10,2),
+        allowNull:true
+    },
+    Street:{
+        type:Sequelize.STRING,
+        allowNull:true
+    },
+    City:{
+        type:Sequelize.STRING,
+        allowNull:true
+    },
+    State:{
+        type:Sequelize.STRING,
+        allowNull:true
+    },
+    Country:{
+        type:Sequelize.STRING,
+        allowNull:true
+    },
+    Pincode:{
         type:Sequelize.INTEGER,
         allowNull:false
     },
-    address:{
-        type:Sequelize.STRING,
-        allowNull:false
-    },
-    date:{
+    Date:{
         type:Sequelize.DATE,
         allowNull:false
     },
-    delivered:{
-        type:Sequelize.DATE,
-        allowNull:false
+    Status:{
+        type:Sequelize.ENUM('processed','shipped','delivered','cancelled'),
+        allowNull:true
     },
+    Cart:{
+        type:Sequelize.TINYINT(1),
+        allowNull:true
+    }
 },
 {
     freezeTableName:true,
     timestamps:false
 })
 
-Customer.hasMany(Order)
+Users.hasMany(Order)
 module.exports = Order

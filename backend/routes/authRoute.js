@@ -1,11 +1,16 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const Customer = require("../models/customer");
-const Admin = require("../models/admin");
+
+// ----------------------------------------------------
+// These files are missing Riya... so im commenting it out...
+// ----------------------------------------------------
+// const Customer = require("../models/customer");
+// const Admin = require("../models/admin");
 
 const router = express.Router();
-//login
+
+// login
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
   // console.log(username, "username isnide login route");

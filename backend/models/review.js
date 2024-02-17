@@ -1,37 +1,36 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../config/dbconfig')
-const Order = require('../models/order')
+const User = require('../models/user')
 const Book = require('../models/book')
-const OrderDetail = sequelize.define('Order_Details',{
+const Review= sequelize.define('Review',{
     _id:{   
         type: Sequelize.DataTypes.UUID,
         defaultValue: Sequelize.UUIDV1,
         allowNull:false, 
         primaryKey:true
     }, 
-    Order_id:{
-        type: Sequelize.DataTypes.UUID,
-        defaultValue: Sequelize.UUIDV1,
-        references:{
-            model: 'Orders',
-            key: '_id',
-        }
-    },
     Book_id:{
         type: Sequelize.DataTypes.UUID,
         defaultValue: Sequelize.UUIDV1,
-        allowNull:false, 
+        references:{
+            model: 'Books',
+            key: '_id',
+        }
+    },
+    Customer_id:{
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         references: {
-            model: 'Books', 
+            model: 'Users', 
             key: '_id', 
          }
     },
-    No_Of_Pieces:{
-        type:Sequelize.INTEGER,
+    Rating:{
+        type:Sequelize.DECIMAL(10,0),
         allowNull:true
     },
-    Cost:{
-        type:Sequelize.INTEGER,
+    Comment:{
+        type:Sequelize.STRING,
         allowNull:true
     }
 },
@@ -39,6 +38,7 @@ const OrderDetail = sequelize.define('Order_Details',{
     freezeTableName:true,
     timestamps:false
 })
-Book.hasMany(OrderDetail)
+Book.hasMany(Review)
+User.hasMany(Review)
 
-module.exports = OrderDetail
+module.exports = Review

@@ -1,44 +1,36 @@
 const Sequelize = require('sequelize')
 const sequelize = require('../config/dbconfig')
-const Order = require('../models/order')
+const User = require('../models/user')
 const Book = require('../models/book')
-const OrderDetail = sequelize.define('Order_Details',{
+const Wishlist= sequelize.define('Wishlist',{
     _id:{   
-        type: Sequelize.DataTypes.UUID,
-        defaultValue: Sequelize.UUIDV1,
+        type:Sequelize.DATE, 
         allowNull:false, 
         primaryKey:true
     }, 
-    Order_id:{
-        type: Sequelize.DataTypes.UUID,
-        defaultValue: Sequelize.UUIDV1,
-        references:{
-            model: 'Orders',
-            key: '_id',
-        }
-    },
     Book_id:{
         type: Sequelize.DataTypes.UUID,
         defaultValue: Sequelize.UUIDV1,
-        allowNull:false, 
+        references:{
+            model: 'Books',
+            key: '_id',
+        }
+    },
+    Customer_id:{
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1,
         references: {
-            model: 'Books', 
+            model: 'Users', 
             key: '_id', 
          }
     },
-    No_Of_Pieces:{
-        type:Sequelize.INTEGER,
-        allowNull:true
-    },
-    Cost:{
-        type:Sequelize.INTEGER,
-        allowNull:true
-    }
 },
 {
     freezeTableName:true,
     timestamps:false
 })
-Book.hasMany(OrderDetail)
 
-module.exports = OrderDetail
+Book.hasMany(Wishlist)
+User.hasMany(Wishlist)
+
+module.exports = Wishlist

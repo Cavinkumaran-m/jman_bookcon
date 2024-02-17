@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoute");
+const customerRoutes = require("./routes/customerRoutes");
 const authenticateToken = require("./middleware/authMiddleware");
 const sequelize = require("./config/dbconfig");
 const app = express();
@@ -15,6 +16,9 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+
+// Customer-end route
+app.use("/api", customerRoutes);
 
 // Public route
 app.use("/api", authRoutes);

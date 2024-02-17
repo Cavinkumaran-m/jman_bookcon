@@ -1,43 +1,63 @@
-const Sequelize = require('sequelize')
-const sequelize = require('../config/dbconfig')
-const Book = sequelize.define('book',{
-    book_id:{   
-        type:Sequelize.INTEGER, 
-        autoIncrement:true, 
-        primaryKey:true,
-        allowNull:false, 
-    },  
-    isbn:{
-         type: Sequelize.INTEGER,
-         unique:true, 
-         allowNull:false 
+const Sequelize = require("sequelize");
+const sequelize = require("../config/dbconfig");
+const Book = sequelize.define(
+  "Books",
+  {
+    _id: {
+      type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1, 
+      primaryKey: true,
+      allowNull: false,
     },
-    book_name:{
-        type:Sequelize.STRING,
-        allowNull:false,
+    ISBN: {
+      type: Sequelize.STRING(20),
+      unique: true,
+      allowNull: true,
     },
-    cost:{
-        type:Sequelize.INTEGER,
-        allowNull:false
+    Name: {
+      type: Sequelize.STRING,
+      allowNull: false,
     },
-    no_of_pieces:{
-        type:Sequelize.INTEGER,
-        allowNull:false
+    Cover_Image: {
+      type: Sequelize.STRING,
+      allowNull: false,
     },
-    available:{
-        type:Sequelize.INTEGER,
+    Selling_cost: {
+      type: Sequelize.DECIMAL(10, 2),
+      allowNull: true,
     },
-    author:{
-        type:Sequelize.STRING,
-        allowNull:false
+    Available_pieces: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
     },
-    publisher:{
-        type:Sequelize.STRING,
-        allowNull:false
-    }
-},
-{
-    freezeTableName:true,
-    timestamps:false
-})
-module.exports =Book
+    Author: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    Publisher: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    Year_of_Publication: {
+      type: Sequelize.INTEGER,
+      allowNull: true,
+    },
+    Purchase_Cost: {
+      type: Sequelize.DECIMAL(10, 2),
+      allowNull: true,
+    },
+    Genre: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    Rating: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
+  },
+  {
+    freezeTableName: true,
+    timestamps: false,
+  }
+);
+module.exports = Book;

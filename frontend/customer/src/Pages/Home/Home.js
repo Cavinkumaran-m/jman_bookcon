@@ -2,9 +2,11 @@ import React from "react";
 import Axios from "../../Components/Utils/Axios";
 import BookCardLoader from "../../Components/BookCard/BoodCardLoader";
 import { useState, useEffect, useRef } from "react";
+import BookCard from "../../Components/BookCard/BookCard";
 
 function Home(props) {
-  const [trendingBooks, setTrendingBooks] = useState(null);
+  const [Books, setBooks] = useState(null);
+  const [loaded, setLoaded] = useState();
   const [priceRange, setPriceRange] = useState(5000);
   const [starRange, setStarRange] = useState(5);
   const [Genre, setGenre] = useState(new Array(6).fill(false));
@@ -35,69 +37,33 @@ function Home(props) {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      setTrendingBooks([]);
-    }, 1000);
+    if (loaded) return;
+    Axios.post("/books", {
+      query: searchRef.current.value,
+      sort: sortRef.current.value,
+      price: priceRange,
+      rating: starRange,
+      genre: Genre,
+    })
+      .then((res) => {
+        // console.log(res.data.payload);
+        setBooks(res.data.payload);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    setLoaded(true);
     // Axios.get("trending").then((res) => {
     // console.log(res.data.payLoad);
     //   setTrendingBooks(res.data.payLoad);
     // });
-  }, []);
+  }, [loaded]);
   return (
     <>
-      <div className="mt-sm-5 mt-2 bg-dark container rounded">
-        <div className="row d-flex justify-content-between">
+      <div className="bg-dark">
+        <div className="row d-flex justify-content-between m-0 pt-2">
           {/* Left Panel */}
-          <div className="rounded col-md-9">
-            <div className="d-flex align-items-center row justify-content-between mt-1">
-              <div className="col-sm-8">
-                <input
-                  className="form-control-sm"
-                  style={{ height: "80%" }}
-                  placeholder="Book Name/Author Name"
-                  ref={searchRef}
-                ></input>
-                <button className="ms-2 btn btn-sm btn-danger rounded">
-                  Search
-                </button>
-              </div>
-              <div
-                className="col-sm-4 d-flex justify-content-sm-end"
-                style={{ height: "80%" }}
-              >
-                <select
-                  className="rounded"
-                  style={{ height: "100%" }}
-                  name="sorter"
-                  id="sorter"
-                  ref={sortRef}
-                >
-                  <option value="" disabled selected hidden>
-                    Sort By
-                  </option>
-                  <option value="Relevance">Relevance</option>
-                  <option value="ReleaseDate">Release Date</option>
-                  <option value="Name">Name</option>
-                  <option value="lowestPrice">Lowest Price</option>
-                  <option value="highestPrice">Highest Price</option>
-                  <option value="userReview">User Review</option>
-                </select>
-              </div>
-            </div>
-            {/* Results div */}
-            {trendingBooks === null && (
-              <div className="bg-white rounded mt-4 mb-2">
-                <BookCardLoader />
-              </div>
-            )}
-            {trendingBooks !== null && trendingBooks.length === 0 && (
-              <span className="display-6 mt-sm-4 mt-5 text-danger">
-                No books :(
-              </span>
-            )}
-          </div>
-
-          {/* Right Panel */}
           <div className="rounded p-0 col-3 col-md-3 d-none d-md-block">
             {/* Narrow by price */}
             <div className="text-white border border-secondary border-3">
@@ -171,6 +137,80 @@ function Home(props) {
                 </table>
               </center>
             </div>
+          </div>
+
+          {/* Right Panel */}
+          <div className="col-md-9">
+            <div className="d-flex align-items-center row justify-content-between mt-1">
+              <div className="col-sm-8">
+                <input
+                  className="form-control-sm"
+                  style={{ height: "80%" }}
+                  placeholder="Book Name/Author Name"
+                  ref={searchRef}
+                ></input>
+                <button
+                  className="ms-2 btn btn-sm btn-danger rounded"
+                  onClick={() => {
+                    setLoaded(false);
+                    setBooks(null);
+                  }}
+                >
+                  Search
+                </button>
+              </div>
+              <div
+                className="col-sm-4 d-flex justify-content-sm-end"
+                style={{ height: "80%" }}
+              >
+                <select
+                  className="rounded"
+                  style={{ height: "100%" }}
+                  name="sorter"
+                  id="sorter"
+                  ref={sortRef}
+                >
+                  <option value="" disabled selected hidden>
+                    Sort By
+                  </option>
+                  <option value="Relevance">Relevance</option>
+                  <option value="ReleaseDate">Release Date</option>
+                  <option value="Name">Name</option>
+                  <option value="lowestPrice">Lowest Price</option>
+                  <option value="highestPrice">Highest Price</option>
+                  <option value="userReview">User Review</option>
+                </select>
+              </div>
+            </div>
+            {/* Results div */}
+            {Books === null && (
+              <div className="bg-white rounded mt-4 mb-2">
+                <BookCardLoader />
+              </div>
+            )}
+
+            {Books !== null && Books.length === 0 && (
+              <span className="display-6 mt-sm-4 mt-5 text-danger">
+                No books :(
+              </span>
+            )}
+            {Books !== null && (
+              <div className="row rounded mt-4 mb-2 px-3">
+                {Books.map((book, index) => (
+                  <BookCard
+                    home
+                    name={book.Name}
+                    author={book.Author}
+                    image={book.Cover_Image}
+                    price={book.Selling_cost}
+                    genre={book.Genre}
+                    isbn={book.ISBN}
+                    rating={book.Rating}
+                    key={index}
+                  ></BookCard>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
