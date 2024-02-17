@@ -65,7 +65,7 @@ const LoginPage = () => {
       <Paper elevation={3} className={style.paper}>
         <Box className={style.formContainer}>
           <Typography component="h1" variant="h5">
-            Sign in to continue for Shopping
+            Sign in
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit}>
             <TextField
@@ -85,6 +85,7 @@ const LoginPage = () => {
               required
               fullWidth
               id="password"
+              type="password"
               label="Password"
               name="password"
               autoComplete="password"
