@@ -25,7 +25,7 @@ sequelize
 app.use(bodyParser.json());
 
 // Customer-end route
-app.use("/api", customerRoutes);
+// app.use("/api", customerRoutes);
 
 // Public route
 app.use("/api", authRoutes);
