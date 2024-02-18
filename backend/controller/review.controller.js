@@ -10,7 +10,7 @@ const Review = require('../models/review')
 const { request } = require('http');
 
 const port = process.env.PORT || 3306;
-const app = express();
+const app = express.Router();
 app.use(cors());
 app.use(express.json());
 
@@ -54,6 +54,4 @@ app.post("/viewallreview", async (req, res) => {
       return res.status(500).send(error);
     }
   });
-app.listen(port , ()=>{
-    console.log(`app running on port ${port}`);
-})
+module.exports = app;

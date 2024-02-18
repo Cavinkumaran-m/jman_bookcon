@@ -9,8 +9,7 @@ const sequelize = require('../config/dbconfig');
 const OrderDetails = require('../models/orderDetail')
 const { request } = require('http');
 
-const port = process.env.PORT || 3306;
-const app = express();
+const app = express.Router();
 app.use(cors());
 app.use(express.json());
 
@@ -56,6 +55,4 @@ app.post("/viewallorderdetails", async (req, res) => {
     }
   });
 
-app.listen(port , ()=>{
-    console.log(`app running on port ${port}`);
-})
+module.exports = app;
