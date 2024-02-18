@@ -3,24 +3,35 @@ import Axios from "../../Components/Utils/Axios";
 import BookCardLoader from "../../Components/BookCard/BoodCardLoader";
 import { useState, useEffect, useRef } from "react";
 import BookCard from "../../Components/BookCard/BookCard";
+import PriceFilter from "../../Components/Filters/PriceFilter";
+import RatingFilter from "../../Components/Filters/RatingFilter";
+import GenreFilter from "../../Components/Filters/GenreFilter";
+import DropDown from "../../Components/InputFields/DropDown";
+import Pagination from "../../Components/Utils/Pagination";
 
 function Home(props) {
   const [Books, setBooks] = useState(null);
+  const [currentPageBooks, setCurrentPageBooks] = useState(null);
   const [loaded, setLoaded] = useState();
+  const [pageLoaded, setPageLoaded] = useState(true);
   const [priceRange, setPriceRange] = useState(5000);
   const [starRange, setStarRange] = useState(5);
+  const [nPages, setNPages] = useState(0);
   const [Genre, setGenre] = useState(new Array(6).fill(false));
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(12);
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const sortRef = useRef(null);
   const searchRef = useRef(null);
-  const genreNames = [
-    "Fiction",
-    "Mystery",
-    "Fantasy",
-    "Romance",
-    "Science Fiction",
-    "Horror",
+  const DropDownValues = [
+    "Name",
+    "Latest",
+    "Old",
+    "lowestPrice",
+    "highestPrice",
+    "userReview",
   ];
-
   const handlePriceRange = (event) => {
     setPriceRange(event.target.value);
   };
@@ -36,7 +47,17 @@ function Home(props) {
     setGenre(updatedCheckedState);
   };
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    setCurrentPageBooks(null);
+    setPageLoaded(false);
+  };
+
   useEffect(() => {
+    if (!pageLoaded) {
+      setCurrentPageBooks(Books.slice(indexOfFirstRecord, indexOfLastRecord));
+      setPageLoaded(true);
+    }
     if (loaded) return;
     Axios.post("/books", {
       query: searchRef.current.value,
@@ -46,8 +67,12 @@ function Home(props) {
       genre: Genre,
     })
       .then((res) => {
-        // console.log(res.data.payload);
+        setNPages(Math.ceil(res.data.payload.length / recordsPerPage));
         setBooks(res.data.payload);
+        setCurrentPage(1);
+        setCurrentPageBooks(
+          res.data.payload.slice(indexOfFirstRecord, indexOfLastRecord)
+        );
       })
       .catch((err) => {
         console.log(err);
@@ -58,7 +83,7 @@ function Home(props) {
     // console.log(res.data.payLoad);
     //   setTrendingBooks(res.data.payLoad);
     // });
-  }, [loaded]);
+  }, [loaded, pageLoaded]);
   return (
     <>
       <div className="bg-dark">
@@ -66,77 +91,17 @@ function Home(props) {
           {/* Left Panel */}
           <div className="rounded p-0 col-3 col-md-3 d-none d-md-block">
             {/* Narrow by price */}
-            <div className="text-white border border-secondary border-3">
-              <div className="border border-secondary border-2 ps-2">
-                Narrow By Price
-              </div>
-              <br></br>
-              <center>
-                <input
-                  style={{ width: "80%" }}
-                  type="range"
-                  min="100"
-                  max="5000"
-                  step={100}
-                  value={priceRange}
-                  onChange={handlePriceRange}
-                ></input>
-                <br></br>
-                <span>Under ₹{priceRange}</span>
-              </center>
-            </div>
-
+            <PriceFilter
+              priceRange={priceRange}
+              handlePriceRange={handlePriceRange}
+            />
             {/* Narrow by Review */}
-            <div className="text-white border border-secondary mt-3 border-3">
-              <div className="border border-secondary border-2 ps-2">
-                Narrow By Ratings
-              </div>
-              <br></br>
-              <center>
-                <input
-                  style={{ width: "80%" }}
-                  type="range"
-                  min="1"
-                  max="5"
-                  step={1}
-                  value={starRange}
-                  onChange={handleStarRange}
-                ></input>
-                <br></br>
-                <span>{starRange}&#11088;</span>
-              </center>
-            </div>
-
+            <RatingFilter
+              starRange={starRange}
+              handleStarRange={handleStarRange}
+            />
             {/* Narrow by Tag */}
-            <div className="text-white border border-secondary border-3 mt-3">
-              <div className="border border-secondary border-2 ps-2">
-                Narrow By Tag
-              </div>
-              <br></br>
-              <center>
-                <table style={{ width: "80%" }}>
-                  <tbody>
-                    {genreNames.map((genre, index) => (
-                      <tr key={index}>
-                        <td>
-                          <input
-                            type="checkbox"
-                            id={genre}
-                            name="genre"
-                            value={genre}
-                            checked={Genre[index]}
-                            onChange={() => handleGenreChange(index)}
-                          />
-                          <label className="ms-2" htmlFor={genre}>
-                            {genre}
-                          </label>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </center>
-            </div>
+            <GenreFilter Genre={Genre} handleGenreChange={handleGenreChange} />
           </div>
 
           {/* Right Panel */}
@@ -154,33 +119,18 @@ function Home(props) {
                   onClick={() => {
                     setLoaded(false);
                     setBooks(null);
+                    setCurrentPageBooks(null);
                   }}
                 >
                   Search
                 </button>
               </div>
-              <div
+              <DropDown
                 className="col-sm-4 d-flex justify-content-sm-end"
-                style={{ height: "80%" }}
-              >
-                <select
-                  className="rounded"
-                  style={{ height: "100%" }}
-                  name="sorter"
-                  id="sorter"
-                  ref={sortRef}
-                >
-                  <option value="" disabled selected hidden>
-                    Sort By
-                  </option>
-                  <option value="Relevance">Relevance</option>
-                  <option value="ReleaseDate">Release Date</option>
-                  <option value="Name">Name</option>
-                  <option value="lowestPrice">Lowest Price</option>
-                  <option value="highestPrice">Highest Price</option>
-                  <option value="userReview">User Review</option>
-                </select>
-              </div>
+                values={DropDownValues}
+                Reference={sortRef}
+                id="sorter"
+              />
             </div>
             {/* Results div */}
             {Books === null && (
@@ -194,9 +144,9 @@ function Home(props) {
                 No books :(
               </span>
             )}
-            {Books !== null && (
+            {currentPageBooks !== null && (
               <div className="row rounded mt-4 mb-2 px-3">
-                {Books.map((book, index) => (
+                {currentPageBooks.map((book, index) => (
                   <BookCard
                     home
                     name={book.Name}
@@ -207,11 +157,19 @@ function Home(props) {
                     isbn={book.ISBN}
                     rating={book.Rating}
                     key={index}
+                    publishYear={book.Year_of_Publication}
                   ></BookCard>
                 ))}
               </div>
             )}
           </div>
+          {currentPageBooks !== null && (
+            <Pagination
+              nPages={nPages}
+              currentPage={currentPage}
+              setCurrentPage={handlePageChange}
+            />
+          )}
         </div>
       </div>
     </>

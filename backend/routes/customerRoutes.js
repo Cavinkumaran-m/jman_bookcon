@@ -1,6 +1,7 @@
 const express = require("express");
 const Books = require("../models/book");
 const { Op } = require("sequelize");
+const sequelize = require("../config/dbconfig");
 const router = express.Router();
 
 // =====================================
@@ -18,6 +19,9 @@ router.post("/login", async (req, res) => {
 
 //search
 router.post("/books", async (req, res) => {
+  console.log(req.body);
+
+  // Genre
   const AvailGenres = [
     "Fiction",
     "Mystery",
@@ -32,6 +36,24 @@ router.post("/books", async (req, res) => {
       genre.push(AvailGenres[i]);
     }
   }
+
+  // Order
+  var sort = req.body.sort;
+  var orderQuery;
+  if (sort === "Name") {
+    orderQuery = ["Name"];
+  } else if (sort === "Latest") {
+    orderQuery = ["Year_of_Publication", "DESC"];
+  } else if (sort === "Old") {
+    orderQuery = ["Year_of_Publication"];
+  } else if (sort === "lowestPrice") {
+    orderQuery = ["Selling_cost"];
+  } else if (sort === "highestPrice") {
+    orderQuery = ["Selling_cost", "DESC"];
+  } else if (sort === "userReview") {
+    orderQuery = ["Rating", "DESC"];
+  }
+
   const response = await Books.findAll({
     attributes: [
       "Author",
@@ -41,8 +63,8 @@ router.post("/books", async (req, res) => {
       "ISBN",
       "Rating",
       "Selling_cost",
+      "Year_of_Publication",
     ],
-    limit: 20,
     where: {
       Genre: { [Op.or]: genre },
       Rating: { [Op.gte]: req.body.rating },
@@ -60,6 +82,7 @@ router.post("/books", async (req, res) => {
         },
       ],
     },
+    order: [orderQuery],
   });
   res.json({ status: "success", payload: response });
 });

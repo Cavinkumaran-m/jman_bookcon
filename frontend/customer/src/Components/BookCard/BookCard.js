@@ -32,6 +32,9 @@ function BookCard(props) {
               <div className="bg-dark rounded px-2 text-white">
                 <b>{props.genre}</b>
               </div>
+              <div className="bg-dark rounded px-2 text-white">
+                {props.publishYear === 0 ? "NA" : props.publishYear}
+              </div>
             </div>
           )}
         </div>
