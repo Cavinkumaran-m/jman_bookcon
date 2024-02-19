@@ -38,12 +38,12 @@ function App() {
   return (
     <UserContext.Provider value={{ Store, setStore }}>
       <ToastContainer />
-      
+
       <Router>
         <Header></Header>
         <Routes>
           {/* Redirect user visiting '/' to '/login' */}
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/home" element={<Home />} />
           <Route path="/wishlist" element={<WishList />} />

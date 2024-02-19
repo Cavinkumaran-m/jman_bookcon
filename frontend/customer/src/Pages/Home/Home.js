@@ -8,8 +8,11 @@ import RatingFilter from "../../Components/Filters/RatingFilter";
 import GenreFilter from "../../Components/Filters/GenreFilter";
 import DropDown from "../../Components/InputFields/DropDown";
 import Pagination from "../../Components/Utils/Pagination";
+import { useContext } from "react";
+import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
 
 function Home(props) {
+  const { Store } = useContext(UserContext);
   const [Books, setBooks] = useState(null);
   const [currentPageBooks, setCurrentPageBooks] = useState(null);
   const [loaded, setLoaded] = useState();
@@ -86,7 +89,7 @@ function Home(props) {
   }, [loaded, pageLoaded]);
   return (
     <>
-      <div className="bg-dark">
+      <div className="bg-transparent">
         <div className="row d-flex justify-content-between m-0 pt-2">
           {/* Left Panel */}
           <div className="rounded p-0 col-3 col-md-3 d-none d-md-block">
@@ -148,6 +151,7 @@ function Home(props) {
               <div className="row rounded mt-4 mb-2 px-3">
                 {currentPageBooks.map((book, index) => (
                   <BookCard
+                    loggedIn={Store.isLoggedIn}
                     home
                     name={book.Name}
                     author={book.Author}

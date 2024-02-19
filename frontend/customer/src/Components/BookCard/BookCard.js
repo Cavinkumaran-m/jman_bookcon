@@ -49,24 +49,36 @@ function BookCard(props) {
               - <em>{props.author}</em>
             </div>
             <div className="flex-grow-1"></div>
-            <div>
-              <button
-                className="btn btn-primary mb-1"
-                onMouseEnter={() => {
-                  setBuyHover(true);
-                }}
-                onMouseLeave={() => {
-                  setBuyHover(false);
-                }}
-                style={{ width: "100%" }}
-              >
-                {buyHover ? <>Add to Cart &#128722;</> : <>₹ {props.price}</>}
-              </button>
-              <br></br>
-              <button className="btn btn-dark" style={{ width: "100%" }}>
-                Like &#x2764;
-              </button>
-            </div>
+            {props.loggedIn && (
+              <div>
+                <button
+                  className="btn btn-primary mb-1"
+                  onMouseEnter={() => {
+                    setBuyHover(true);
+                  }}
+                  onMouseLeave={() => {
+                    setBuyHover(false);
+                  }}
+                  style={{ width: "100%" }}
+                >
+                  {buyHover ? <>Add to Cart &#128722;</> : <>₹ {props.price}</>}
+                </button>
+                <br></br>
+                <button className="btn btn-dark" style={{ width: "100%" }}>
+                  Like &#x2764;
+                </button>
+              </div>
+            )}
+            {!props.loggedIn && (
+              <div>
+                <button
+                  className="btn btn-primary mb-1"
+                  style={{ width: "100%" }}
+                >
+                  ₹ {props.price}
+                </button>
+              </div>
+            )}
           </div>
         )}
 
