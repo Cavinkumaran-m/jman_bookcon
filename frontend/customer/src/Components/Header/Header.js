@@ -61,8 +61,8 @@ function Header(props) {
             <NavLink
               className="nav-item nav-link me-2"
               onClick={logoutHandler}
-              to="login"
-              style={{ color: "#66FCF1" }}
+              to="home"
+              style={{ color: "#c5c6c7" }}
             >
               Log Out
             </NavLink>

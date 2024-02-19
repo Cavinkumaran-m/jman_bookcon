@@ -20,6 +20,7 @@ function GenreFilter({ Genre, handleGenreChange }) {
               <tr key={index}>
                 <td>
                   <input
+                    style={{ accentColor: "#66fcf1" }}
                     type="checkbox"
                     id={genre}
                     name="genre"

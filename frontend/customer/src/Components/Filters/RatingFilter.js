@@ -9,7 +9,7 @@ function RatingFilter({ starRange, handleStarRange }) {
       <br></br>
       <center>
         <input
-          style={{ width: "80%" }}
+          style={{ width: "80%", accentColor: "#c5c6c7" }}
           type="range"
           min="1"
           max="5"

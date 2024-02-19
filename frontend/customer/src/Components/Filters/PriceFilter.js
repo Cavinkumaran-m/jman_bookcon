@@ -9,7 +9,10 @@ function PriceFilter({ priceRange, handlePriceRange }) {
       <br></br>
       <center>
         <input
-          style={{ width: "80%" }}
+          style={{
+            width: "80%",
+            accentColor: "#c5c6c7",
+          }}
           type="range"
           min="100"
           max="5000"

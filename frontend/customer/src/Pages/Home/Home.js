@@ -118,7 +118,8 @@ function Home(props) {
                   ref={searchRef}
                 ></input>
                 <button
-                  className="ms-2 btn btn-sm btn-danger rounded"
+                  className="ms-2 btn btn-sm rounded text-white"
+                  style={{ backgroundColor: "#1f2833" }}
                   onClick={() => {
                     setLoaded(false);
                     setBooks(null);

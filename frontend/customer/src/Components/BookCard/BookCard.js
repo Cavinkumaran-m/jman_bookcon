@@ -16,8 +16,8 @@ function BookCard(props) {
   return (
     <div className="col-sm-6 col-md-4 mt-4 p-2">
       <div
-        className="d-flex bg-white border p-2 flex-column rounded"
-        style={{ height: "100%" }}
+        className="d-flex text-white border p-2 flex-column rounded"
+        style={{ height: "100%", backgroundColor: "#1f2833" }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -52,19 +52,27 @@ function BookCard(props) {
             {props.loggedIn && (
               <div>
                 <button
-                  className="btn btn-primary mb-1"
+                  className="btn mb-1"
                   onMouseEnter={() => {
                     setBuyHover(true);
                   }}
                   onMouseLeave={() => {
                     setBuyHover(false);
                   }}
-                  style={{ width: "100%" }}
+                  style={{
+                    width: "100%",
+                    color: buyHover ? "white" : "white",
+                    backgroundColor: "#c5c6c7",
+                    border: "0px",
+                  }}
                 >
                   {buyHover ? <>Add to Cart &#128722;</> : <>₹ {props.price}</>}
                 </button>
                 <br></br>
-                <button className="btn btn-dark" style={{ width: "100%" }}>
+                <button
+                  className="btn btn-dark"
+                  style={{ width: "100%", color: "#66fcf1", border: "0px" }}
+                >
                   Like &#x2764;
                 </button>
               </div>
@@ -73,7 +81,12 @@ function BookCard(props) {
               <div>
                 <button
                   className="btn btn-primary mb-1"
-                  style={{ width: "100%" }}
+                  style={{
+                    width: "100%",
+                    color: buyHover ? "white" : "white",
+                    backgroundColor: "#c5c6c7",
+                    border: "0px",
+                  }}
                 >
                   ₹ {props.price}
                 </button>

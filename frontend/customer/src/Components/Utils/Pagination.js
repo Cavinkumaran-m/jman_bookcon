@@ -20,7 +20,12 @@ function Pagination({ nPages, currentPage, setCurrentPage }) {
     <nav>
       <ul className="pagination justify-content-center mb-0">
         <li className="page-item">
-          <a className="page-link" onClick={goToPrevPage} href="#">
+          <a
+            className="page-link"
+            style={{ backgroundColor: "#1f2833", color: "#c5c6c7" }}
+            onClick={goToPrevPage}
+            href="#"
+          >
             Previous
           </a>
         </li>
@@ -33,13 +38,19 @@ function Pagination({ nPages, currentPage, setCurrentPage }) {
               onClick={() => setCurrentPage(pgNumber)}
               className="page-link"
               href="#"
+              style={{ backgroundColor: "#1f2833", color: "#c5c6c7" }}
             >
               {pgNumber}
             </a>
           </li>
         ))}
         <li className="page-item">
-          <a className="page-link" onClick={goToNextPage} href="#">
+          <a
+            className="page-link"
+            onClick={goToNextPage}
+            href="#"
+            style={{ backgroundColor: "#1f2833", color: "#c5c6c7" }}
+          >
             Next
           </a>
         </li>
