@@ -14,7 +14,7 @@ function Header(props) {
     setStore({ isLoggedIn: false, user_id: null, cart_items: null });
   };
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-transparent ps-2">
+    <nav className="navbar navbar-expand-sm navbar-dark bg-dark ps-2">
       <NavLink className="navbar-brand" to="home">
         BookCon
       </NavLink>

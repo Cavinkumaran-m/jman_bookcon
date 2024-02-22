@@ -14,15 +14,17 @@ function BookCard(props) {
   };
 
   return (
-    <div className="col-sm-6 col-md-4 mt-4 p-2">
+    <div className="col-sm-6 col-md-4 col-lg-3 mt-2 p-2 py-0">
       <div
-        className="d-flex text-white border p-2 flex-column rounded"
+        className="d-flex text-white border border-3 p-2 pb-2 pt-2 flex-column rounded-4"
         style={{ height: "100%", backgroundColor: "#1f2833" }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         <div className={style.image_container}>
-          <img src={props.image} width={"100%"} alt="Product" />
+          <center>
+            <img src={props.image} width={"80%"} alt="Product" />
+          </center>
           {hover && (
             <div
               className={`${style.rating_card} d-flex flex-column align-items-center`}
@@ -44,7 +46,22 @@ function BookCard(props) {
             style={{ height: "100%" }}
             className="d-flex flex-column justify-content-between"
           >
-            <div style={{ textAlign: "center" }}>{props.name}</div>
+            <div
+              style={{
+                textAlign: "center",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "-webkit-box",
+                lineClamp: 2,
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+              }}
+            >
+              {/* {props.name.length > 30
+                ? props.name.slice(0, 30) + "..."
+                : props.name} */}
+              {props.name}
+            </div>
             <div style={{ textAlign: "center" }}>
               - <em>{props.author}</em>
             </div>

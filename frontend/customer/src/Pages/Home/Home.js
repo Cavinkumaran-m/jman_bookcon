@@ -92,7 +92,7 @@ function Home(props) {
       <div className="bg-transparent">
         <div className="row d-flex justify-content-between m-0 pt-2">
           {/* Left Panel */}
-          <div className="rounded p-0 col-3 col-md-3 d-none d-md-block">
+          <div className="rounded p-0 ps-2 col-3 col-md-3 d-none d-md-block">
             {/* Narrow by price */}
             <PriceFilter
               priceRange={priceRange}
@@ -149,7 +149,7 @@ function Home(props) {
               </span>
             )}
             {currentPageBooks !== null && (
-              <div className="row rounded mt-4 mb-2 px-3">
+              <div className="row rounded mt-4 mb-2 px-1">
                 {currentPageBooks.map((book, index) => (
                   <BookCard
                     loggedIn={Store.isLoggedIn}
