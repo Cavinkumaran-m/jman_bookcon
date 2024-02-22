@@ -16,25 +16,31 @@ app.use(express.json());
 
 //insert order
 app.post('/addorder',async(req,res)=>{
-    return await Order.create({
-        _id:crypto.randomUUID(),
-        Customer_id:req.body.Customer_id,
-        Cost:req.body.Cost,
-        Street:req.body.Street,
-        City: req.body.City,
-        State:req.body.State,
-        Country:req.body.Country,
-        Pincode:req.body.Pincode,
-        Date:moment().format('YYYY:MM:DD'),
-        Status:req.body.Status,
-        Cart:req.body.Cart
-    }).then(function(Order){
-        if(Order){
-            res.send(Order)
-        }else {
-            res.status(400).send('Error in inserting new record')
-        }
-    });
+  try{
+    const OrderData = {
+      _id:crypto.randomUUID(),
+      Customer_id:req.body.Customer_id,
+      Cost:req.body.Cost,
+      Street:req.body.Street,
+      City: req.body.City,
+      State:req.body.State,
+      Country:req.body.Country,
+      Pincode:req.body.Pincode,
+      Date:moment().format('YYYY:MM:DD'),
+      Status:req.body.Status,
+      Cart:req.body.Cart
+    };
+    const newOrder = Order.create(OrderData);
+    //console.log(newOrder);
+    res.status(200).json({
+      message :"Success"
+    })
+  }catch(err){
+    console.log(err);
+    res.status(400).send({
+      message:err
+  })
+  }
 });
 
 //delete order
@@ -51,14 +57,13 @@ app.post('/deleteorder', async(req, res)=>{
   });
 
 //display all orders
-//display all books
 app.post("/viewallorder", async (req, res) => {
     try {
       const orders = await Order.findAll();
       return res.status(200).send(orders);
     } catch (error) {
-      return res.status(500).send(error);
+      return res.status(400).send(error);
     }
   });
 
-  module.exports = app;
+module.exports = app;

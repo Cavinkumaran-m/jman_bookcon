@@ -9,7 +9,6 @@ const sequelize = require('../config/dbconfig');
 const Review = require('../models/review')
 const { request } = require('http');
 
-const port = process.env.PORT || 3306;
 const app = express.Router();
 app.use(cors());
 app.use(express.json());

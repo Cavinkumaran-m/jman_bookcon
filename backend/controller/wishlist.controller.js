@@ -9,7 +9,7 @@ const sequelize = require('../config/dbconfig');
 const Wishlist = require('../models/wishlist')
 const { request } = require('http');
 
-const port = process.env.PORT || 3306;
+//const app = express.Router();
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -17,17 +17,23 @@ app.use(express.json());
 
 //insert into wishlist
 app.post('/addwishlist',async(req,res)=>{
-    return await Wishlist.create({
-        _id:crypto.randomUUID(),
-        Book_id:req.body.Book_id,
-        Customer_id:req.body.Customer_id,
-    }).then(function(Wishlist){
-        if(Wishlist){
-            res.send(Wishlist)
-        }else {
-            res.status(400).send('Error in inserting new record')
+    try{
+        const wishListData = {
+            _id:crypto.randomUUID(),
+            Book_id:req.body.Book_id,
+            Customer_id:req.body.Customer_id,
+            inCart:0
         }
-    });
+        const newWishList = Wishlist.create(wishListData);
+        console.log(newWishList);
+        res.status(200).json({
+            message :"Success"
+        })
+        }catch(err){
+          res.status(400).json({
+            message:err
+          })
+        }
 });
 
 //delete from wishlist
@@ -42,8 +48,11 @@ app.post('/deletewishlist', async(req, res)=>{
         }
     })
   });
-
-
-app.listen(port , ()=>{
-    console.log(`app running on port ${port}`);
+app.post('/del',async(req,res)=>{
+    const t = req.query.id;
+    console.log(t);
+})
+///module.exports = app;
+app.listen(8080 , ()=>{
+    console.log(`app running on port 8080`);
 })

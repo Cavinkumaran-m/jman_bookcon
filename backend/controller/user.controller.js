@@ -9,28 +9,33 @@ const sequelize = require('../config/dbconfig');
 const User = require('../models/user')
 const { request } = require('http');
 
-const port = process.env.PORT || 3306;
-const app = express();
+const app = express.Router();
 app.use(cors());
 app.use(express.json());
 
 
 //insert user
 app.post('/adduser',async(req,res)=>{
-    return await User.create({
-        _id:crypto.randomUUID(),
+  try{
+    const UserData = {
+      _id:crypto.randomUUID(),
         Username:req.body.Username,
         Email:req.body.Email,
         Password:req.body.Password,
         Date: moment().format('YYYY:MM:DD'),
-        Role:req.body.Role,
-    }).then(function(User){
-        if(User){
-            res.send(User)
-        }else {
-            res.status(400).send('Error in inserting new record')
-        }
-    });
+        Role:req.body.Role
+    };
+    const newUser = User.create(UserData);
+    //console.log(newUser);
+    res.status(200).json({
+      message :"Success"
+    })
+  }
+  catch (err){
+    res.status(400).send({
+        message:err
+    })
+}
 });
 
 //delete user
@@ -57,7 +62,4 @@ app.post("/viewallusers", async (req, res) => {
     }
   });
 
-
-app.listen(port , ()=>{
-    console.log(`app running on port ${port}`);
-})
+module.exports = app;

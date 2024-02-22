@@ -16,19 +16,24 @@ app.use(express.json());
 
 //insert details of the order
 app.post('/addorderdetails',async(req,res)=>{
-    return await OrderDetails.create({
-        _id:crypto.randomUUID(),
+  try{
+    const OrderDetailData = {
+      _id:crypto.randomUUID(),
         Order_id:req.body.Order_id,
         Book_id:req.body.Book_id,
         No_Of_Pieces:req.body.No_Of_Pieces,
         Cost:req.body.Cost,
-    }).then(function(OrderDetails){
-        if(OrderDetails){
-            res.send(OrderDetails)
-        }else {
-            res.status(400).send('Error in inserting new record')
-        }
-    });
+    };
+    const newOrderDetail = OrderDetails.create(OrderDetailData);
+    //console.log(newOrderDetail);
+    res.status(200).json({
+      message :"Success"
+    })
+  }catch(err){
+    res.status(400).json({
+      message:err
+    })
+  }
 });
 
 //delete book

@@ -4,7 +4,8 @@ const User = require('../models/user')
 const Book = require('../models/book')
 const Wishlist= sequelize.define('Wishlist',{
     _id:{   
-        type:Sequelize.DATE, 
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.UUIDV1, 
         allowNull:false, 
         primaryKey:true
     }, 
@@ -24,6 +25,14 @@ const Wishlist= sequelize.define('Wishlist',{
             key: '_id', 
          }
     },
+    inCart:{
+        type: Sequelize.DataTypes.BOOLEAN,
+         defaultValue: false 
+    },
+    cartQuantity:{
+        type:Sequelize.DataTypes.INTEGER,
+        defaultValue: 0
+    }
 },
 {
     freezeTableName:true,

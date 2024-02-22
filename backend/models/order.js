@@ -49,10 +49,6 @@ const Order = sequelize.define('Orders',{
         type:Sequelize.ENUM('processed','shipped','delivered','cancelled'),
         allowNull:true
     },
-    Cart:{
-        type:Sequelize.TINYINT(1),
-        allowNull:true
-    }
 },
 {
     freezeTableName:true,

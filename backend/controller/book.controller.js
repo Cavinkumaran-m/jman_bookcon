@@ -16,26 +16,32 @@ app.use(express.json());
 
 //insert books
 app.post('/addbook',async(req,res)=>{
-    return await Book.create({
-        _id:crypto.randomUUID(),
-        ISBN:req.body.ISBN,
-        Name:req.body.Name,
-        Cover_Image:req.body.Cover_Image,
-        Selling_cost:req.body.Selling_cost,
-        Available_pieces:req.body.Available_pieces,
-        Author:req.body.Author,
-        Publisher:req.body.Publisher,
-        Year_of_Publication:req.body.Year_of_Publication,
-        Purchase_Cost:req.body.Purchase_Cost,
-        Genre:req.body.Genre,
-        Rating:req.body.Rating
-    }).then(function(Book){
-        if(Book){
-            res.send(Book)
-        }else {
-            res.status(400).send('Error in inserting new record')
-        }
-    });
+  try{
+    const BookData = {
+      _id:crypto.randomUUID(),
+      ISBN:req.body.ISBN,
+      Name:req.body.Name,
+      Cover_Image:req.body.Cover_Image,
+      Selling_cost:req.body.Selling_cost,
+      Available_pieces:req.body.Available_pieces,
+      Author:req.body.Author,
+      Publisher:req.body.Publisher,
+      Year_of_Publication:req.body.Year_of_Publication,
+      Purchase_Cost:req.body.Purchase_Cost,
+      Genre:req.body.Genre,
+      Rating:req.body.Rating
+    };
+  const newBook = await Book.create(BookData);
+  //console.log(newBook);
+    res.status(200).json({
+      message :"Success"
+    })
+  }
+  catch (err){
+    res.status(400).send({
+        message:"error"+err
+    })
+}
 });
 
 //delete book
@@ -58,7 +64,7 @@ app.post("/viewallbook", async (req, res) => {
       const books = await Book.findAll();
       return res.status(200).send(books);
     } catch (error) {
-      return res.status(500).send(error);
+      return res.status(400).send(error);
     }
   });
 
