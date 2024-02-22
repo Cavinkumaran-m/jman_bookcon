@@ -89,7 +89,7 @@ function Home(props) {
   }, [loaded, pageLoaded]);
   return (
     <>
-      <div className="bg-transparent">
+      <div className="bg-transparent mt-3">
         <div className="row d-flex justify-content-between m-0 pt-2">
           {/* Left Panel */}
           <div className="rounded p-0 ps-2 col-3 col-md-3 d-none d-md-block">
