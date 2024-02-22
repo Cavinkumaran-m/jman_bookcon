@@ -48,10 +48,7 @@ app.post('/deletewishlist', async(req, res)=>{
         }
     })
   });
-app.post('/del',async(req,res)=>{
-    const t = req.query.id;
-    console.log(t);
-})
+
 ///module.exports = app;
 app.listen(8080 , ()=>{
     console.log(`app running on port 8080`);
