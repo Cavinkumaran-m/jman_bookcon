@@ -22,7 +22,7 @@ function Home(props) {
   const [nPages, setNPages] = useState(0);
   const [Genre, setGenre] = useState(new Array(6).fill(false));
   const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage] = useState(12);
+  const [recordsPerPage] = useState(16);
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const sortRef = useRef(null);
@@ -113,7 +113,7 @@ function Home(props) {
               <div className="col-sm-8">
                 <input
                   className="form-control-sm"
-                  style={{ height: "80%" }}
+                  style={{ height: "80%", border: "3px black solid" }}
                   placeholder="Book Name/Author Name"
                   ref={searchRef}
                 ></input>
@@ -145,7 +145,7 @@ function Home(props) {
 
             {Books !== null && Books.length === 0 && (
               <span className="display-6 mt-sm-4 mt-5 text-danger">
-                No books :(
+                No books :{"("}
               </span>
             )}
             {currentPageBooks !== null && (

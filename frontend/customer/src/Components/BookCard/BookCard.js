@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import style from "./BookCard.module.css";
+import { motion } from "framer-motion";
 
 function BookCard(props) {
   const [hover, setHover] = useState(false);
@@ -14,7 +15,11 @@ function BookCard(props) {
   };
 
   return (
-    <div className="col-sm-6 col-md-4 col-lg-3 mt-2 p-2 py-0">
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      // onHoverStart={{ scale: 1.2 }}
+      className="col-sm-6 col-md-4 col-lg-3 mt-2 p-2 py-0"
+    >
       <div
         className="d-flex text-white border border-3 p-2 pb-2 pt-2 flex-column rounded-4"
         style={{ height: "100%", backgroundColor: "#1f2833" }}
@@ -123,7 +128,7 @@ function BookCard(props) {
         </div>
       )} */}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
