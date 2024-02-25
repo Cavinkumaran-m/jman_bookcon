@@ -138,7 +138,10 @@ function Home(props) {
             </div>
             {/* Results div */}
             {Books === null && (
-              <div className="bg-white rounded mt-4 mb-2">
+              <div className="row m-0">
+                <BookCardLoader />
+                <BookCardLoader />
+                <BookCardLoader />
                 <BookCardLoader />
               </div>
             )}
