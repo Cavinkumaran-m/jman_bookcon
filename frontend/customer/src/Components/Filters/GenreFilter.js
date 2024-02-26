@@ -10,9 +10,17 @@ function GenreFilter({ Genre, handleGenreChange }) {
     "Horror",
   ];
   return (
-    <div className="text-white border border-secondary border-3 mt-3">
-      <div className="border border-secondary border-2 ps-2">Narrow By Tag</div>
-      <br></br>
+    <div
+      className="text-white mt-3"
+      style={{
+        border: "3px solid #c5c6c7",
+        borderRadius: "5px",
+        backgroundColor: " #1f2833",
+      }}
+    >
+      <div className="ps-2" style={{ borderBottom: "3px solid #c5c6c7" }}>
+        Narrow By Tag
+      </div>
       <center>
         <table style={{ width: "80%" }}>
           <tbody>

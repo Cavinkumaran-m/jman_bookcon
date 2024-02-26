@@ -14,8 +14,8 @@ function Header(props) {
     setStore({ isLoggedIn: false, user_id: null, cart_items: null });
   };
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-transparent ps-2">
-      <NavLink className="navbar-brand" to="home">
+    <nav className="navbar navbar-expand-sm navbar-dark bg-dark ps-2">
+      <NavLink className="navbar-brand" to="home" style={{ color: "#66fcf1" }}>
         BookCon
       </NavLink>
       <button
@@ -35,7 +35,7 @@ function Header(props) {
               <NavLink
                 className="nav-item nav-link"
                 to="home"
-                style={{ color: "#66FCF1" }}
+                style={{ color: "#fff" }}
               >
                 Home
                 {/* &#127968; */}
@@ -43,7 +43,7 @@ function Header(props) {
               <NavLink
                 className="nav-item nav-link"
                 to="wishlist"
-                style={{ color: "#66FCF1" }}
+                style={{ color: "#fff" }}
               >
                 WishList
                 {/* &#x2764; */}
@@ -51,7 +51,7 @@ function Header(props) {
               <NavLink
                 className="nav-item nav-link"
                 to="cart"
-                style={{ color: "#66FCF1" }}
+                style={{ color: "#fff" }}
               >
                 My Cart
                 {/* &#128722; */}
