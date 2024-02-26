@@ -16,27 +16,30 @@ const transporter = nodemailer.createTransport({
   },
 });
 // login
-router.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-  // console.log(username, "username isnide login route");
-  let user = await User.findOne({ where: { username } });
-  let role = user.role;
 
-  if (user && (await bcrypt.compare(password, user.password))) {
-    const token = jwt.sign(
-      { userId: user.id, role },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "1h" } // Token expires in 1 hour
-    );
-    res.json({ accessToken: token, role: role });
+router.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  let user = await User.findOne({ where: { email } });
+  // if (user && (await bcrypt.compare(password, user.password))) {
+    console.log(user);
+  if(user&&(password===user.Password)){
+    const payload = {
+      userId: user.id,
+      
+      role: user.role
+    };
+    const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
+    res.json({ accessToken: token, role: user.role });
   } else {
-    res.status(401).json({ message: "Username or password is incorrect" });
+    res.status(401).json({ message: "Email or password is incorrect" });
   }
 });
 
-async function userExists(username) {
-  let user = await User.findOne({ where: { username } });
-  if (user) return { exists: true, type: user.role, user };
+module.exports = router;
+
+async function userExists(email) {
+  let user = await User.findOne({ where: { email } });
+  if (user) return { exists: true, type: user.role,username:user.username, user: user };
 
   return { exists: false };
 }
@@ -58,23 +61,23 @@ function generateOTP(username) {
 
 // Endpoint to request OTP
 router.post("/request-otp", async (req, res) => {
-  const { username } = req.body;
-  const userResult = await userExists(username);
+  const {email} = req.body;
+  const userResult = await userExists(email);
   if (!userResult.exists) {
     return res.status(400).send("User does not exist");
   }
 
-  const { otp, fullHash } = generateOTP(username);
+  const { otp, fullHash } = generateOTP(email);
 
   await userResult.user.update({
-    otp: fullHash, // Store the hashed OTP
-    otpExpires: new Date(Date.now() + 15 * 60 * 1000), // Set expiration 15 mins ahead
+    Otp: fullHash, // Store the hashed OTP
+    OtpExpires: new Date(Date.now() + 15 * 60 * 1000), // Set expiration 15 mins ahead
   });
   const mailOptions = {
     from: "sonadas.8april@gmail.com",
-    to: username,
-    subject: "Your OTP",
-    text: `Your OTP is ${otp}`,
+    to: email,
+    subject: "OTP From BOOKCON",
+    text: `Your OTP is for accound recovery is ${otp}`,
   };
 
   transporter.sendMail(mailOptions, (err, info) => {
@@ -87,31 +90,53 @@ router.post("/request-otp", async (req, res) => {
 });
 
 router.post("/verify-otp", async (req, res) => {
-  const { username, otp } = req.body;
-  const userResult = await userExists(username);
+  const { email, otp } = req.body;
+  const userResult = await userExists(email);
   if (!userResult.exists) {
     return res.status(400).send("User does not exist");
   }
 
   const user = userResult.user;
-  if (!user.otp || new Date() > user.otpExpires) {
+  if (!user.Otp || new Date() > user.OtpExpires) {
     return res.status(400).send("OTP expired or not found");
   }
 
-  const data = `${username}.${otp}.${user.otpExpires.getTime()}`;
+  // Extracting the expiration time and hash from the stored Otp value
+  const [storedHash, expires] = user.Otp.split('.');
+
+  // Ensure the OTP hasn't expired
+  if (new Date() > new Date(parseInt(expires))) {
+    return res.status(400).send("OTP expired");
+  }
+
+  const data = `${email}.${otp}.${expires}`;
   const newCalculatedHash = crypto
     .createHmac("sha256", process.env.OTP_SECRET_KEY)
     .update(data)
     .digest("hex");
-  const [hashValue] = user.otp.split(".");
 
-  if (newCalculatedHash === hashValue) {
+  if (newCalculatedHash === storedHash) {
     res.send("OTP verified successfully");
 
-    await user.update({ otp: null, otpExpires: null });
+    // Correct the fields to null after verification
+    await user.update({ Otp: null, OtpExpires: null });
   } else {
     res.status(400).send("Invalid OTP");
   }
+});
+
+router.post("/reset-password", async (req, res) => {
+  const { email, password } = req.body;
+  const userResult = await userExists(email);
+  console.log("email",email);
+  if (!userResult.exists) {
+    return res.status(400).send("User does not exist");
+  }
+
+  const user = userResult.user;
+  // const hashedPassword = await bcrypt.hash(password, 10);
+  await user.update({ Password: password });
+  res.send("Password reset successfully");
 });
 
 module.exports = router;

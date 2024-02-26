@@ -42,7 +42,7 @@ const LoginPage = () => {
 
     try {
       const response = await Axios.post("/login", {
-        username: email,
+        email: email,
         password: password,
       });
 

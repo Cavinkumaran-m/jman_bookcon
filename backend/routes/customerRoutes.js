@@ -13,9 +13,9 @@ const router = express.Router();
 // ============================
 
 // login without credentials
-router.post("/login", async (req, res) => {
-  res.json({ accessToken: "damaal_dumeel", role: "god" });
-});
+// router.post("/login", async (req, res) => {
+//   res.json({ accessToken: "damaal_dumeel", role: "god" });
+// });
 
 //search
 router.post("/books", async (req, res) => {

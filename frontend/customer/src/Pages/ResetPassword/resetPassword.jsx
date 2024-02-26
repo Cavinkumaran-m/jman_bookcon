@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import React, { useState } from "react";
 import {
   Button,
@@ -14,6 +15,7 @@ import { toast } from "react-toastify";
 import Axios from "../../Components/Utils/Axios";
 
 const ResetPassword = () => {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     newPassword: "",
     confirmPassword: "",
@@ -43,8 +45,17 @@ const ResetPassword = () => {
         return;
       }
       const response = await Axios.post("/reset-password", {
+        email: localStorage.getItem("email"),
         password: values.newPassword,
       });
+      if(response.status===200)
+      {
+        toast.success("Password reset successfull");
+        navigate("/login");
+      }
+      else{
+        toast.error("Error resetting password");
+      }
       console.log(response);
     } catch (error) {
       toast.error("Error resetting password");
