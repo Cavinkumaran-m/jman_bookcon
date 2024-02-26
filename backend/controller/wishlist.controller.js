@@ -1,5 +1,4 @@
 const express = require('express');
-const crypto = require('crypto')
 const path = require('path');
 const cors=require("cors");
 const moment = require('moment');
@@ -10,6 +9,7 @@ const Wishlist = require('../models/wishlist')
 const { request } = require('http');
 
 const app = express.Router();
+
 app.use(cors());
 app.use(express.json());
 
@@ -17,7 +17,7 @@ app.use(express.json());
 //view the wishlist
 app.get('/wishlist',async(req,res)=>{
   try{
-    const allWish = await Wishlist.findAll();
+    const allWish = await Wishlist.findAll({where:{Customer_id:req.body.Customer_id}});
     //console.log(allWish);
     res.status(200).json({
         message : "ok",
@@ -68,8 +68,7 @@ app.delete('/deletewishlist', async(req, res)=>{
 })
   });
 
-
-  //change item from wishlist to cart
+//change item from wishlist to cart
 app.post('/addtocart',async(req,res)=>{
   try{
       const Book_id=req.body.Book_id;

@@ -1,58 +1,88 @@
-const express = require("express");
-const router = express.Router();
-const WishList = require("../models/wishlist");
-const Product= require("../models/book");
-const {Op}= require('sequelize')
+const express = require('express');
+const path = require('path');
+const crypto = require('crypto')
+const cors=require("cors");
+const moment = require('moment');
+const bodyParser = require('body-parser');
+const Sequelize = require('sequelize');
+const sequelize = require('../config/dbconfig');
+const Wishlist = require('../models/wishlist')
+const { request } = require('http');
 
-// get all products
-router.get("", async (req, res) => {
-  try {
-    const allproducts = await WishList.findAll();
-    return res.status(200).send(allproducts);
-  } catch (error) {
-    return res.status(400).send(error);
-  }
-});
+const app = express.Router();
+app.use(cors());
+app.use(express.json());
 
- 
-// get all products of single user by user id
-router.get("/:userId", async (req, res) => {
+app.post('/api/cart/add', async (req, res) => {
   try {
-    const allproducts = await Cart.findAll({
-      where: { userId: req.params.userId },
+    const Customer_id = req.body.Customer_id;
+    const Book_id = req.body.Book_id;
+    const cartQuantity = req.body.cartQuantity;
+
+    // Check if the book is already in the wishlist
+    const wishlistItem = await Wishlist.findOne({
+      where: { Customer_id: Customer_id, Book_id: Book_id }
     });
-    return res.status(200).send(allproducts);
-  } catch (error) {
-    return res.status(400).send(error);
-  }
-});
 
-// delete  single product by itemid
-router.delete("", async (req, res) => {
-  try {
-    const deletedItem = await Cart.destroy({
-      where: {[Op.and]:[{cartId: req.body.cartId},{userId:req.body.userId}] },
-    });
-    if(deletedItem===1){
-      const allproducts= await Cart.findAll({where:{userId:req.body.userId}});
-      return res.status(200).send(allproducts)
+    if (!wishlistItem) {
+      // If the book is not in the wishlist, create a new wishlist item
+      await Wishlist.create({
+        Customer_id: Customer_id,
+        Book_id: Book_id,
+        inCart: true,
+        cartQuantity: cartQuantity
+      });
+    } else {
+      // If the book is already in the wishlist, update the quantity and set inCart to true
+      wishlistItem.cartQuantity = cartQuantity;
+      wishlistItem.inCart = true;
+      await wishlistItem.save();
     }
-    return res.status(404).json({message:"No item found"});
+
+    res.status(200).json({ message: 'Item added to cart successfully' });
   } catch (error) {
-    return res.status(400).send(error);
+    console.error('Error adding to cart:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-// delete quantity of all items of user's cart
-router.delete("/allUserItem/:userId", async (req, res) => {
+app.post('/api/cart/delete', async (req, res) => {
   try {
-    const updatedItem = await Cart.destroy({
-      where: { userId: req.params.userId },
+    const Customer_id = req.body.Customer_id;
+    const Book_id = req.body.Book_id;
+    const wishlistItem = await Wishlist.findOne({
+      where: { Customer_id: Customer_id, Book_id: Book_id }
     });
-    return res.status(201).json(updatedItem);
+
+    if (wishlistItem) {
+            wishlistItem.inCart = false;
+            wishlistItem.cartQuantity =0;
+      await wishlistItem.save();
+    }
+
+    res.status(200).json({ message: 'Item deleted from cart successfully' });
   } catch (error) {
-    return res.status(400).send(error);
+    console.error('Error deleting from cart:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-module.exports = router;
+
+// View user's cart  - Monisha 
+app.get('/viewcart',async(req,res)=>{
+  try{
+    const cartItem = await Wishlist.findAll({where:{Customer_id:req.body.Customer_id,inCart:1}});
+    //console.log(allWish);
+    res.status(200).json({
+        message : "ok",
+        payload : cartItem
+    });
+}catch (error) {
+  console.error('Error deleting from cart:', error);
+  res.status(500).json({ error: 'Internal Server Error' });
+}
+});
+
+
+
+module.exports = app;
