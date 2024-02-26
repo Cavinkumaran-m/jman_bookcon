@@ -1,13 +1,15 @@
-.pagination {
-  display: flex;
-  list-style-type: none;
-  justify-content: center;
+.left_panel {
+  width: 22%;
 }
 
-.pagination li {
-  padding: 5px 10px 5px 10px;
+.right_panel {
+  width: 100%;
+  padding: 0 1rem 0 1rem;
 }
 
-.pagination li a {
-  text-decoration: none;
+@media (min-width: 768px) {
+  .right_panel {
+    width: 78%;
+    padding: 0;
+  }
 }

@@ -10,6 +10,7 @@ import DropDown from "../../Components/InputFields/DropDown";
 import Pagination from "../../Components/Utils/Pagination";
 import { useContext } from "react";
 import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
+import styles from "./Home.module.css";
 
 function Home(props) {
   const { Store } = useContext(UserContext);
@@ -22,7 +23,7 @@ function Home(props) {
   const [nPages, setNPages] = useState(0);
   const [Genre, setGenre] = useState(new Array(6).fill(false));
   const [currentPage, setCurrentPage] = useState(1);
-  const [recordsPerPage] = useState(16);
+  const [recordsPerPage] = useState(24);
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const sortRef = useRef(null);
@@ -92,7 +93,54 @@ function Home(props) {
       <div className="bg-transparent mt-3 px-2">
         <div className="row d-flex justify-content-between m-0 pt-2">
           {/* Left Panel */}
-          <div className="rounded p-0 ps-2 col-3 col-md-3 d-none d-md-block">
+          <div
+            className={`${styles.left_panel} rounded p-0 px-3 d-none d-md-block`}
+          >
+            {/* col-3 col-md-3 for above */}
+            {/* Search Bar */}
+            <div className="d-flex align-items-center row justify-content-between mt-2">
+              <div className="d-flex">
+                <input
+                  className="form-control-sm"
+                  style={{
+                    height: "80%",
+                    width: "85%",
+                    border: "3px black solid",
+                  }}
+                  placeholder="Book Name/Author Name"
+                  ref={searchRef}
+                ></input>
+                <button
+                  className="btn btn-sm rounded-0 text-white flex-grow-1"
+                  style={{ backgroundColor: "#1f2833" }}
+                  onClick={() => {
+                    setLoaded(false);
+                    setBooks(null);
+                    setCurrentPageBooks(null);
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="13"
+                    height="13"
+                    fill="currentColor"
+                    class="bi bi-search"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                  </svg>
+                </button>
+              </div>
+              {/* Sorter */}
+              <div className="d-flex justify-content-around my-2">
+                Sort By
+                <DropDown
+                  values={DropDownValues}
+                  Reference={sortRef}
+                  id="sorter"
+                />
+              </div>
+            </div>
             {/* Narrow by price */}
             <PriceFilter
               priceRange={priceRange}
@@ -108,34 +156,8 @@ function Home(props) {
           </div>
 
           {/* Right Panel */}
-          <div className="col-md-9">
-            <div className="d-flex align-items-center row justify-content-between mt-1">
-              <div className="col-sm-8">
-                <input
-                  className="form-control-sm"
-                  style={{ height: "80%", border: "3px black solid" }}
-                  placeholder="Book Name/Author Name"
-                  ref={searchRef}
-                ></input>
-                <button
-                  className="ms-2 btn btn-sm rounded text-white"
-                  style={{ backgroundColor: "#1f2833" }}
-                  onClick={() => {
-                    setLoaded(false);
-                    setBooks(null);
-                    setCurrentPageBooks(null);
-                  }}
-                >
-                  Search
-                </button>
-              </div>
-              <DropDown
-                className="col-sm-4 d-flex justify-content-sm-end"
-                values={DropDownValues}
-                Reference={sortRef}
-                id="sorter"
-              />
-            </div>
+          <div className={`${styles.right_panel} p-0`}>
+            {/* col-md-9 for above */}
             {/* Results div */}
             {Books === null && (
               <div className="row m-0">
@@ -152,7 +174,7 @@ function Home(props) {
               </span>
             )}
             {currentPageBooks !== null && (
-              <div className="row rounded mt-4 mb-2 px-1">
+              <div className="row rounded mb-2 mx-0">
                 {currentPageBooks.map((book, index) => (
                   <BookCard
                     loggedIn={Store.isLoggedIn}

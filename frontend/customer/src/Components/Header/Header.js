@@ -14,7 +14,7 @@ function Header(props) {
     setStore({ isLoggedIn: false, user_id: null, cart_items: null });
   };
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-dark ps-2">
+    <nav className="navbar navbar-expand-sm navbar-dark bg-dark px-4">
       <NavLink className="navbar-brand" to="home" style={{ color: "#66fcf1" }}>
         BookCon
       </NavLink>
@@ -59,7 +59,7 @@ function Header(props) {
             </div>
 
             <NavLink
-              className="nav-item nav-link me-2"
+              className="nav-item nav-link"
               onClick={logoutHandler}
               to="home"
               style={{ color: "#c5c6c7" }}
@@ -71,7 +71,7 @@ function Header(props) {
         {!Store.isLoggedIn && location.pathname !== "/login" && (
           <>
             <div className="flex-grow-1"></div>
-            <NavLink className="nav-item nav-link text-white me-2" to="login">
+            <NavLink className="nav-item nav-link text-white" to="login">
               Log In
             </NavLink>
           </>

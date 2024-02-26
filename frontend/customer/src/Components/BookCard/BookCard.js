@@ -18,7 +18,7 @@ function BookCard(props) {
     <motion.div
       whileHover={{ scale: 1.05 }}
       // onHoverStart={{ scale: 1.2 }}
-      className="col-sm-6 col-md-4 col-lg-3 mt-2 p-2 py-0"
+      className="col-6 col-sm-6 col-md-3 col-lg-2 mt-2 p-1 py-0"
     >
       <div
         className="d-flex text-white border border-3 p-2 pb-2 pt-2 flex-column rounded-4"
@@ -28,7 +28,12 @@ function BookCard(props) {
       >
         <div className={style.image_container}>
           <center>
-            <img src={props.image} width={"80%"} alt="Product" />
+            <img
+              src={props.image}
+              width={"100%"}
+              height={"100%"}
+              alt="Product"
+            />
           </center>
           {hover && (
             <div
@@ -88,7 +93,8 @@ function BookCard(props) {
                     border: "0px",
                   }}
                 >
-                  {buyHover ? <>Add to Cart &#128722;</> : <>₹ {props.price}</>}
+                  {buyHover ? <>Add to Cart</> : <>₹ {props.price}</>}
+                  {/* &#128722; */}
                 </button>
                 <br></br>
                 <button
