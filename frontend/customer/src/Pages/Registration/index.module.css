@@ -1,5 +1,5 @@
 .register_bg {
-  background-color: #f9fafb;
+  background-color: #67696b;
   padding: 1rem;
 }
 
@@ -10,12 +10,12 @@
   justify-content: center;
   padding: 1.5rem;
   min-height: 100vh; /* Ensure it covers the whole viewport height */
-  width: 100%;
+  width: 90%;
   box-sizing: border-box; /* Makes sure padding doesn't add to the width */
 }
 
 .register_card {
-  background-color: #ffffff;
+  background-color: #a7a5a5;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 100%;
@@ -40,7 +40,7 @@
 }
 
 .form_container {
-  width: 100%; /* Ensures form takes up full card width */
+  width: 90%; /* Ensures form takes up full card width */
 }
 
 /* Other styles remain unchanged */

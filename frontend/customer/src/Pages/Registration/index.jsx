@@ -38,12 +38,15 @@ const Register = () => {
     <Box
       sx={{
         marginTop: "80px",
-      }}>
+      }}
+      maxWidth="sm"
+      margin="auto"
+      >
       <Box
         component="form"
         onSubmit={handleSubmit}
         sx={{
-          padding: "20px",
+          padding: "30px",
           borderRadius: "10px",
           marginTop: "80px",
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
@@ -52,9 +55,8 @@ const Register = () => {
           display: "flex",
           flexDirection: "column",
           gap: "10px",
-          // Specifies the maximum width of the form
-          width: "60%", // Sets the form width to 90% of its container
-          margin: "auto", // Centers the form in the container
+          width: "100%", 
+          margin: "auto",
         }}>
         <Typography
           variant="h4"

@@ -55,7 +55,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs" className={style.container}>
+    <Container component="main" maxWidth="sm" className={style.container}>
       <Paper elevation={3} className={style.paper}>
         <Box className={style.formContainer}>
           <Typography component="h1" variant="h5">

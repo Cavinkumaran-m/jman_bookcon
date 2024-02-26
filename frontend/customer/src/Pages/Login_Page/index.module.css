@@ -14,11 +14,14 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 400px; /* You can adjust this to suit your design */
+  max-width: 280px; /* Reduced from 300px */
+  
+  /* Add transparency to the background */
+  background-color: rgba(255, 255, 255, 0.5);  /* You can adjust this to suit your design */
 }
 
 .formContainer {
-  width: 100%;
+  width: 90%;
 }
 
 .submitButton {
@@ -30,7 +33,7 @@
   display: flex;
   margin-top: 2%;
   justify-content: space-between;
-  width: 100%;
+  width: 90%;
 }
 
 .link {

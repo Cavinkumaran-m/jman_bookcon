@@ -64,7 +64,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Container component="main" maxWidth="md" style={{ marginTop: "80px" }}>
+    <Container component="main" maxWidth="sm" style={{ marginTop: "80px" }}>
       <Paper elevation={3} style={{ padding: "20px", borderRadius: "20px" }}>
         <Box
           style={{
@@ -87,7 +87,7 @@ const LoginPage = () => {
             component="form"
             noValidate
             onSubmit={handleSubmit}
-            style={{ width: "100%" }}>
+            style={{ width: "90%" }}>
             <TextField
               margin="normal"
               required
