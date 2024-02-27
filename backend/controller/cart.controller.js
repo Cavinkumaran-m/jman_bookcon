@@ -6,10 +6,15 @@ const moment = require('moment');
 const bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
 const sequelize = require('../config/dbconfig');
-const Wishlist = require('../models/wishlist')
+const Book = require("../models/book");
+const Wishlist = require('../models/wishlist');
+const Order = require('../models/order');
+const OrderDetails = require('../models/orderDetail');
 const { request } = require('http');
 
-const app = express.Router();
+//const app = express.Router();
+app = express();
+
 app.use(cors());
 app.use(express.json());
 
@@ -72,17 +77,57 @@ app.post('/api/cart/delete', async (req, res) => {
 app.get('/viewcart',async(req,res)=>{
   try{
     const cartItem = await Wishlist.findAll({where:{Customer_id:req.body.Customer_id,inCart:1}});
-    //console.log(allWish);
+    //console.log(cartItem);
     res.status(200).json({
         message : "ok",
         payload : cartItem
     });
-}catch (error) {
-  console.error('Error deleting from cart:', error);
-  res.status(500).json({ error: 'Internal Server Error' });
-}
+  }
+  catch (error) {
+    console.error('Error deleting from cart:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 
+// Checkout Process - Monisha 
+app.post('/checkout',async(req,res)=>{
+  try{
+      const Customer_id = req.body.Customer_id;
+      const cartItems = await Wishlist.findAll({where:{Customer_id:Customer_id,inCart:1}});
 
-module.exports = app;
+      //NEED TO IMPLEMENT STORING THE ADDRESS AND THE COST
+      const currentOrder = await Order.create({
+        _id:crypto.randomUUID(),
+        Customer_id: Customer_id,
+        Pincode:111111,
+        Date:moment().format('YYYY:MM:DD'),
+        Status:"processed"
+      });
+
+      for (let i = 0; i < cartItems.length; i++) {
+        const currentOrderedBook = cartItems[i];
+        const BookPrice = await Book.findByPk(currentOrderedBook.Book_id);
+        const OrderDetailData = {
+          Order_id:currentOrder._id,
+          Book_id:currentOrderedBook.Book_id,
+          No_Of_Pieces:currentOrderedBook.cartQuantity,
+          Cost:BookPrice.Selling_cost,
+        }  
+        const newOrderDetail = OrderDetails.create(OrderDetailData); 
+      }
+      
+      res.status(200).json({
+        message : "ok",
+    });
+  }
+  catch(error){
+    console.error('Error in checking out',error);
+    res.status(500).json({error:'Internal Server Error'})
+  }
+});
+//module.exports = app;
+
+app.listen(8080, () => {
+  console.log(`Server is running on port 8080}`);
+});

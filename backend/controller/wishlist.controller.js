@@ -34,19 +34,26 @@ catch (err){
 //insert into wishlist
 app.post('/addwishlist',async(req,res)=>{
     try{
+      const wishlistItem = await Wishlist.findOne({
+        where: { Customer_id: req.body.Customer_id, Book_id: req.body.Book_id }
+      });
+      console.log("Existing  "+wishlistItem);
+      if(!wishlistItem){
         const wishListData = {
             _id:crypto.randomUUID(),
             Book_id:req.body.Book_id,
             Customer_id:req.body.Customer_id,
-            inCart:0,
+            inCart:false,
             cartQuantity:0
         }
         const newWishList = Wishlist.create(wishListData);
         console.log(newWishList);
+      }
         res.status(200).json({
             message :"Success"
         })
         }catch(err){
+          console.log(err);
           res.status(400).json({
             message:err
           })
