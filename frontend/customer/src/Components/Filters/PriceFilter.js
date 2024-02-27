@@ -7,7 +7,7 @@ function PriceFilter({ priceRange, handlePriceRange }) {
       style={{
         border: "3px solid #c5c6c7",
         borderRadius: "5px",
-        backgroundColor: " #1f2833",
+        backgroundColor: " #22252c",
       }}
     >
       <div className="ps-2" style={{ borderBottom: "3px solid #c5c6c7" }}>

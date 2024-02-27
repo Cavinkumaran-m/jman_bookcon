@@ -1,5 +1,6 @@
 .left_panel {
-  width: 22%;
+  width: 22% !important;
+  position: fixed;
 }
 
 .right_panel {
@@ -9,7 +10,7 @@
 
 @media (min-width: 768px) {
   .right_panel {
-    width: 78%;
+    width: 78% !important;
     padding: 0;
   }
 }

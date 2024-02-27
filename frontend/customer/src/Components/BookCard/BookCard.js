@@ -16,13 +16,13 @@ function BookCard(props) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.05 }}
+      whileHover={{ scale: 1.05, backgroundColor: "#e14658" }}
       // onHoverStart={{ scale: 1.2 }}
-      className="col-6 col-sm-6 col-md-3 col-lg-2 mt-2 p-1 py-0"
+      className="col-6 col-sm-6 col-md-3 col-lg-2 mt-2 p-1 py-0 rounded"
     >
       <div
-        className="d-flex text-white border border-3 p-2 pb-2 pt-2 flex-column rounded-4"
-        style={{ height: "100%", backgroundColor: "#1f2833" }}
+        className="d-flex text-white p-2 pb-2 pt-2 flex-column rounded-4"
+        style={{ height: "100%" }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
@@ -59,12 +59,13 @@ function BookCard(props) {
             <div
               style={{
                 textAlign: "center",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                lineClamp: 2,
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
+                overflow: hover ? "none" : "hidden",
+                textOverflow: hover ? "ellipsis" : "none",
+                whiteSpace: hover ? "normal" : "nowrap",
+                // display: "-webkit-box",
+                // lineClamp: 1,
+                // WebkitLineClamp: 1,
+                // WebkitBoxOrient: "vertical",
               }}
             >
               {/* {props.name.length > 30
@@ -72,7 +73,14 @@ function BookCard(props) {
                 : props.name} */}
               {props.name}
             </div>
-            <div style={{ textAlign: "center" }}>
+            <div
+              style={{
+                textAlign: "center",
+                overflow: hover ? "none" : "hidden",
+                textOverflow: hover ? "ellipsis" : "none",
+                whiteSpace: hover ? "normal" : "nowrap",
+              }}
+            >
               - <em>{props.author}</em>
             </div>
             <div className="flex-grow-1"></div>
@@ -89,7 +97,7 @@ function BookCard(props) {
                   style={{
                     width: "100%",
                     color: buyHover ? "white" : "white",
-                    backgroundColor: "#c5c6c7",
+                    backgroundColor: "#22252c",
                     border: "0px",
                   }}
                 >
@@ -99,7 +107,11 @@ function BookCard(props) {
                 <br></br>
                 <button
                   className="btn btn-dark"
-                  style={{ width: "100%", color: "#66fcf1", border: "0px" }}
+                  style={{
+                    width: "100%",
+                    color: "#e14658",
+                    border: "0px",
+                  }}
                 >
                   Like &#x2764;
                 </button>
@@ -112,7 +124,7 @@ function BookCard(props) {
                   style={{
                     width: "100%",
                     color: buyHover ? "white" : "white",
-                    backgroundColor: "#c5c6c7",
+                    backgroundColor: "#22252c",
                     border: "0px",
                   }}
                 >

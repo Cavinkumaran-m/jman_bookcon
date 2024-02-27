@@ -105,7 +105,6 @@ function Home(props) {
                   style={{
                     height: "80%",
                     width: "85%",
-                    border: "3px black solid",
                   }}
                   placeholder="Book Name/Author Name"
                   ref={searchRef}
@@ -124,7 +123,7 @@ function Home(props) {
                     width="13"
                     height="13"
                     fill="currentColor"
-                    class="bi bi-search"
+                    className="bi bi-search"
                     viewBox="0 0 16 16"
                   >
                     <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
@@ -132,8 +131,8 @@ function Home(props) {
                 </button>
               </div>
               {/* Sorter */}
-              <div className="d-flex justify-content-around my-2">
-                Sort By
+              <div className="d-flex justify-content-end my-3 text-white">
+                Sort By:
                 <DropDown
                   values={DropDownValues}
                   Reference={sortRef}
@@ -154,6 +153,7 @@ function Home(props) {
             {/* Narrow by Tag */}
             <GenreFilter Genre={Genre} handleGenreChange={handleGenreChange} />
           </div>
+          <div style={{ width: "22%" }}></div>
 
           {/* Right Panel */}
           <div className={`${styles.right_panel} p-0`}>

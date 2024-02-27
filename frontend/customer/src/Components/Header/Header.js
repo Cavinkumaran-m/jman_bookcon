@@ -14,8 +14,11 @@ function Header(props) {
     setStore({ isLoggedIn: false, user_id: null, cart_items: null });
   };
   return (
-    <nav className="navbar navbar-expand-sm navbar-dark bg-dark px-4">
-      <NavLink className="navbar-brand" to="home" style={{ color: "#66fcf1" }}>
+    <nav
+      className="navbar navbar-expand-sm navbar-dark bg-dark px-4"
+      style={{ position: "sticky", top: "0px", zIndex: "1" }}
+    >
+      <NavLink className="navbar-brand" to="home" style={{ color: "#e14658" }}>
         BookCon
       </NavLink>
       <button
