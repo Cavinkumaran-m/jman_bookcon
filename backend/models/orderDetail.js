@@ -31,7 +31,7 @@ const OrderDetail = sequelize.define('Order_Details',{
         allowNull:true
     },
     Cost:{
-        type:Sequelize.INTEGER,
+        type:Sequelize.DECIMAL(10,2),
         allowNull:true
     }
 },
