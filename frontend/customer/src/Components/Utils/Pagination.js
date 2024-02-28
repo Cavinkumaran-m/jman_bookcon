@@ -49,8 +49,8 @@ function Pagination({ nPages, currentPage, setCurrentPage }) {
           <a
             className="page-link"
             style={{
-              backgroundColor: "#1f2833",
-              color: "#c5c6c7",
+              backgroundColor: "#4d004d",
+              color: "#ffffff",
               cursor: "pointer",
             }}
             onClick={goToPrevPage}
@@ -64,7 +64,7 @@ function Pagination({ nPages, currentPage, setCurrentPage }) {
               <li key={index}>
                 <a
                   className="page-link"
-                  style={{ backgroundColor: "#1f2833", color: "#c5c6c7" }}
+                  style={{ backgroundColor: "#4d004d", color: "#ffffff" }}
                 >
                   {pgNumber}
                 </a>
@@ -82,8 +82,8 @@ function Pagination({ nPages, currentPage, setCurrentPage }) {
                   onClick={() => setCurrentPage(pgNumber)}
                   className="page-link"
                   style={{
-                    backgroundColor: "#1f2833",
-                    color: "#c5c6c7",
+                    backgroundColor: "#4d004d",
+                    color: "#ffffff",
                     cursor: "pointer",
                   }}
                 >
@@ -98,8 +98,8 @@ function Pagination({ nPages, currentPage, setCurrentPage }) {
             className="page-link"
             onClick={goToNextPage}
             style={{
-              backgroundColor: "#1f2833",
-              color: "#c5c6c7",
+              backgroundColor: "#4d004d",
+              color: "#ffffff",
               cursor: "pointer",
             }}
           >

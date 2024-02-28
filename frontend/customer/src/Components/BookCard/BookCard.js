@@ -16,12 +16,12 @@ function BookCard(props) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.05, backgroundColor: "#e14658" }}
+      whileHover={{ scale: 1.05, backgroundColor: "#e699ff" }}
       // onHoverStart={{ scale: 1.2 }}
       className="col-6 col-sm-6 col-md-3 col-lg-2 mt-2 p-1 py-0 rounded"
     >
       <div
-        className="d-flex text-white p-2 pb-2 pt-2 flex-column rounded-4"
+        className="d-flex text-black p-3 pb-3 pt-3 flex-column rounded-4"
         style={{ height: "100%" }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -41,10 +41,10 @@ function BookCard(props) {
             >
               <div className="flex-grow-1"></div>
               <div>{stars}</div>
-              <div className="bg-dark rounded px-2 text-white">
+              <div className="rounded px-2 text-white">
                 <b>{props.genre}</b>
               </div>
-              <div className="bg-dark rounded px-2 text-white">
+              <div className="rounded px-2 text-white">
                 {props.publishYear === 0 ? "NA" : props.publishYear}
               </div>
             </div>
@@ -97,7 +97,7 @@ function BookCard(props) {
                   style={{
                     width: "100%",
                     color: buyHover ? "white" : "white",
-                    backgroundColor: "#22252c",
+                    backgroundColor: "#4d004d",
                     border: "0px",
                   }}
                 >
@@ -109,7 +109,7 @@ function BookCard(props) {
                   className="btn btn-dark"
                   style={{
                     width: "100%",
-                    color: "#e14658",
+                    color: "#4d004d",
                     border: "0px",
                   }}
                 >
@@ -124,7 +124,7 @@ function BookCard(props) {
                   style={{
                     width: "100%",
                     color: buyHover ? "white" : "white",
-                    backgroundColor: "#22252c",
+                    backgroundColor: "#4d004d",
                     border: "0px",
                   }}
                 >

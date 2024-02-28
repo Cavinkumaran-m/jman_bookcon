@@ -111,7 +111,7 @@ function Home(props) {
                 ></input>
                 <button
                   className="btn btn-sm rounded-0 text-white flex-grow-1"
-                  style={{ backgroundColor: "#1f2833" }}
+                  style={{ backgroundColor: "#4d004d" }}
                   onClick={() => {
                     setLoaded(false);
                     setBooks(null);

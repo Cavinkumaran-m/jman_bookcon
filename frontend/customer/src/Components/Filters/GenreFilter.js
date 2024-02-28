@@ -13,12 +13,12 @@ function GenreFilter({ Genre, handleGenreChange }) {
     <div
       className="text-white mt-3"
       style={{
-        border: "3px solid #c5c6c7",
+        border: "3px solid #000000",
         borderRadius: "5px",
-        backgroundColor: "#22252c",
+        backgroundColor: "#4d004d",
       }}
     >
-      <div className="ps-2" style={{ borderBottom: "3px solid #c5c6c7" }}>
+      <div className="ps-2" style={{ borderBottom: "3px solid #ffffff" }}>
         Narrow By Tag
       </div>
       <center>

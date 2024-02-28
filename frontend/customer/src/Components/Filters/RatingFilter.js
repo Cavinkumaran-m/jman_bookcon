@@ -5,17 +5,17 @@ function RatingFilter({ starRange, handleStarRange }) {
     <div
       className="text-white mt-3"
       style={{
-        border: "3px solid #c5c6c7",
+        border: "3px solid #000000",
         borderRadius: "5px",
-        backgroundColor: " #22252c",
+        backgroundColor: " #4d004d",
       }}
     >
-      <div className="ps-2" style={{ borderBottom: "3px solid #c5c6c7" }}>
+      <div className="ps-2" style={{ borderBottom: "4px solid #ffffff" }}>
         Narrow By Ratings
       </div>
       <center>
         <input
-          style={{ marginTop: "1rem", width: "80%", accentColor: "#c5c6c7" }}
+          style={{ marginTop: "1rem", width: "80%", accentColor: "#ffffff" }}
           type="range"
           min="1"
           max="5"

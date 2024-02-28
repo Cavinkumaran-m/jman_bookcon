@@ -14,11 +14,12 @@ function Header(props) {
     setStore({ isLoggedIn: false, user_id: null, cart_items: null });
   };
   return (
+    
     <nav
       className="navbar navbar-expand-sm navbar-dark bg-dark px-4"
-      style={{ position: "sticky", top: "0px", zIndex: "1" }}
+      style={{ position: "sticky", top: "0px", zIndex: "1" ,backgroundColor:"b3ffff"}}
     >
-      <NavLink className="navbar-brand" to="home" style={{ color: "#e14658" }}>
+      <NavLink className="navbar-brand" to="home" style={{ color: "#b3ffff" }}>
         BookCon
       </NavLink>
       <button
@@ -38,7 +39,7 @@ function Header(props) {
               <NavLink
                 className="nav-item nav-link"
                 to="home"
-                style={{ color: "#fff" }}
+                style={{ color: "#b3ffff" }}
               >
                 Home
                 {/* &#127968; */}
@@ -46,7 +47,7 @@ function Header(props) {
               <NavLink
                 className="nav-item nav-link"
                 to="wishlist"
-                style={{ color: "#fff" }}
+                style={{ color: "#b3ffff" }}
               >
                 WishList
                 {/* &#x2764; */}
@@ -54,7 +55,7 @@ function Header(props) {
               <NavLink
                 className="nav-item nav-link"
                 to="cart"
-                style={{ color: "#fff" }}
+                style={{ color: "#b3ffff" }}
               >
                 My Cart
                 {/* &#128722; */}
@@ -65,7 +66,7 @@ function Header(props) {
               className="nav-item nav-link"
               onClick={logoutHandler}
               to="home"
-              style={{ color: "#c5c6c7" }}
+              style={{ color: "#b3ffff" }}
             >
               Log Out
             </NavLink>
@@ -74,7 +75,7 @@ function Header(props) {
         {!Store.isLoggedIn && location.pathname !== "/login" && (
           <>
             <div className="flex-grow-1"></div>
-            <NavLink className="nav-item nav-link text-white" to="login">
+            <NavLink className="nav-item nav-link" to="login"style={{ color: "#b3ffff" }}>
               Log In
             </NavLink>
           </>

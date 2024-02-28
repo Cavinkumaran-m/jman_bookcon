@@ -5,12 +5,12 @@ function PriceFilter({ priceRange, handlePriceRange }) {
     <div
       className="text-white"
       style={{
-        border: "3px solid #c5c6c7",
+        border: "3px solid #000000",
         borderRadius: "5px",
-        backgroundColor: " #22252c",
+        backgroundColor: " #4d004d",
       }}
     >
-      <div className="ps-2" style={{ borderBottom: "3px solid #c5c6c7" }}>
+      <div className="ps-2" style={{ borderBottom: "3px solid #ffffff" }}>
         Narrow By Price
       </div>
       <center>
@@ -18,7 +18,7 @@ function PriceFilter({ priceRange, handlePriceRange }) {
           style={{
             marginTop: "1rem",
             width: "80%",
-            accentColor: "#c5c6c7",
+            accentColor: "#ffffff",
           }}
           type="range"
           min="100"
