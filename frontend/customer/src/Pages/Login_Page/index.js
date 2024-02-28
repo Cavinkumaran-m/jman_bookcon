@@ -47,7 +47,12 @@ const LoginPage = () => {
       });
 
       if (response.data.accessToken) {
-        setStore({ isLoggedIn: true, user_id: null, cart_items: null });
+        setStore({
+          isLoggedIn: true,
+          user_id: response.data.userId,
+          cart_items: null,
+          token: response.data.accessToken,
+        });
         navigate("/home");
       }
     } catch (error) {
@@ -72,7 +77,8 @@ const LoginPage = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-          }}>
+          }}
+        >
           <Typography
             component="h1"
             variant="h5"
@@ -80,14 +86,16 @@ const LoginPage = () => {
               margin: "20px 0",
               fontWeight: "bold",
               textAlign: "center",
-            }}>
+            }}
+          >
             Sign in to continue for Shopping
           </Typography>
           <Box
             component="form"
             noValidate
             onSubmit={handleSubmit}
-            style={{ width: "90%" }}>
+            style={{ width: "90%" }}
+          >
             <TextField
               margin="normal"
               required
@@ -131,7 +139,8 @@ const LoginPage = () => {
               type="submit"
               fullWidth
               variant="contained"
-              style={{ marginTop: "20px", borderRadius: "20px" }}>
+              style={{ marginTop: "20px", borderRadius: "20px" }}
+            >
               Sign In
             </Button>
             <Box
@@ -139,19 +148,22 @@ const LoginPage = () => {
                 display: "flex",
                 justifyContent: "space-between",
                 marginTop: "20px",
-              }}>
+              }}
+            >
               <MuiLink
                 component={Link}
                 to="/forgot-password"
                 variant="body2"
-                underline="none">
+                underline="none"
+              >
                 Forgot Password?
               </MuiLink>
               <MuiLink
                 component={Link}
                 to="/register"
                 variant="body2"
-                underline="none">
+                underline="none"
+              >
                 Create account
               </MuiLink>
             </Box>

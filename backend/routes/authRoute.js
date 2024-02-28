@@ -21,14 +21,14 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   let user = await User.findOne({ where: { email } });
   // if (user && (await bcrypt.compare(password, user.password))) {
-  console.log(user);
+  // console.log(user);
   if (user && password === user.Password) {
     const payload = {
-      userId: user.id,
-      role: user.role,
+      userId: user._id,
+      role: user.Role,
     };
     const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
-    res.json({ accessToken: token, role: user.role });
+    res.json({ userId: user._id, accessToken: token });
   } else {
     res.status(401).json({ message: "Email or password is incorrect" });
   }

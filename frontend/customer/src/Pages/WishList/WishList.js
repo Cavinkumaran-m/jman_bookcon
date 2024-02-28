@@ -12,10 +12,13 @@ function WishList(props) {
   const { Store } = useContext(UserContext);
 
   useEffect(() => {
-    // Axios.get("trending").then((res) => {
-    // console.log(res.data.payLoad);
-    //   setTrendingBooks(res.data.payLoad);
-    // });
+    Axios.post("wishlist", {
+      token: Store.token,
+      Customer_id: Store.user_id,
+    }).then((res) => {
+      console.log(res.data);
+      // setTrendingBooks(res.data.payLoad);
+    });
     setTimeout(() => {
       setWishList([]);
     }, 1000);
