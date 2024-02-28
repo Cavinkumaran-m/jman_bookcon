@@ -21,12 +21,11 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   let user = await User.findOne({ where: { email } });
   // if (user && (await bcrypt.compare(password, user.password))) {
-    console.log(user);
-  if(user&&(password===user.Password)){
+  console.log(user);
+  if (user && password === user.Password) {
     const payload = {
       userId: user.id,
-      
-      role: user.role
+      role: user.role,
     };
     const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET);
     res.json({ accessToken: token, role: user.role });
@@ -39,7 +38,13 @@ module.exports = router;
 
 async function userExists(email) {
   let user = await User.findOne({ where: { email } });
-  if (user) return { exists: true, type: user.role,username:user.username, user: user };
+  if (user)
+    return {
+      exists: true,
+      type: user.role,
+      username: user.username,
+      user: user,
+    };
 
   return { exists: false };
 }
@@ -61,7 +66,7 @@ function generateOTP(username) {
 
 // Endpoint to request OTP
 router.post("/request-otp", async (req, res) => {
-  const {email} = req.body;
+  const { email } = req.body;
   const userResult = await userExists(email);
   if (!userResult.exists) {
     return res.status(400).send("User does not exist");
@@ -102,7 +107,7 @@ router.post("/verify-otp", async (req, res) => {
   }
 
   // Extracting the expiration time and hash from the stored Otp value
-  const [storedHash, expires] = user.Otp.split('.');
+  const [storedHash, expires] = user.Otp.split(".");
 
   // Ensure the OTP hasn't expired
   if (new Date() > new Date(parseInt(expires))) {
@@ -128,7 +133,7 @@ router.post("/verify-otp", async (req, res) => {
 router.post("/reset-password", async (req, res) => {
   const { email, password } = req.body;
   const userResult = await userExists(email);
-  console.log("email",email);
+  console.log("email", email);
   if (!userResult.exists) {
     return res.status(400).send("User does not exist");
   }

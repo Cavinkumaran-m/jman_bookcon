@@ -1,0 +1,8 @@
+##
+POST http://localhost:8000/api/wishlist HTTP/1.1
+content-type: application/json
+
+{
+    "Customer_id":"4029",
+    "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3MDkxMzMwNzJ9.OeelK_aGJ3DgdiBynCd-LsCmeJIjU5wA7HyPMAqP_y0"
+}

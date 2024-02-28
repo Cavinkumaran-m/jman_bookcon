@@ -2,7 +2,9 @@ const express = require("express");
 const Books = require("../models/book");
 const { Op } = require("sequelize");
 const sequelize = require("../config/dbconfig");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
+const Wishlist = require("../models/wishlist");
 
 // =====================================
 // API Endpoints related to customer-end
@@ -13,13 +15,24 @@ const router = express.Router();
 // ============================
 
 // login without credentials
-router.post("/login", async (req, res) => {
-  res.json({ accessToken: "damaal_dumeel", role: "god" });
-});
+// router.post("/login", async (req, res) => {
+//   res.json({ accessToken: "damaal_dumeel", role: "god" });
+// });
+
+// JWT verification middleware
+const JWTverifier = (req, res, next) => {
+  try {
+    var decoded = jwt.verify(req.body.token, process.env.ACCESS_TOKEN_SECRET);
+    next();
+  } catch (err) {
+    console.log(err);
+    res.json({ status: "error", error: "Invalid JWT" });
+  }
+};
 
 //search
 router.post("/books", async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
 
   // Genre
   const AvailGenres = [
@@ -85,6 +98,25 @@ router.post("/books", async (req, res) => {
     order: [orderQuery],
   });
   res.json({ status: "success", payload: response });
+});
+
+//Wishlist
+router.post("/wishlist", JWTverifier, async (req, res) => {
+  try {
+    const allWish = await Wishlist.findAll({
+      where: { Customer_id: req.body.Customer_id },
+    });
+    res.status(200).json({
+      status: "success",
+      payload: allWish,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      status: "error",
+      error: err,
+    });
+  }
 });
 
 module.exports = router;
