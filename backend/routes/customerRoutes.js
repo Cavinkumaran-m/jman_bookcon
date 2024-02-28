@@ -106,9 +106,35 @@ router.post("/wishlist", JWTverifier, async (req, res) => {
     const allWish = await Wishlist.findAll({
       where: { Customer_id: req.body.Customer_id },
     });
+    const res_data = await Promise.all(
+      allWish.map(async (wish) => {
+        {
+          return {
+            book_details: await Books.findOne({
+              attributes: [
+                "Author",
+                "Cover_Image",
+                "Genre",
+                "Name",
+                "ISBN",
+                "Rating",
+                "Selling_cost",
+                "Year_of_Publication",
+              ],
+              where: {
+                _id: wish["Book_id"],
+              },
+            }),
+            inCart: wish["inCart"],
+            cartQuantity: wish["cartQuantity"],
+          };
+        }
+      })
+    );
+    // console.log(res_data);
     res.status(200).json({
       status: "success",
-      payload: allWish,
+      payload: res_data,
     });
   } catch (err) {
     console.log(err);

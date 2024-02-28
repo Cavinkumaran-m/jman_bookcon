@@ -11,11 +11,11 @@ const Wishlist = sequelize.define(
       allowNull: false,
       primaryKey: true,
     },
-    Book_Id: {
+    Book_id: {
       type: Sequelize.DataTypes.UUID,
       defaultValue: Sequelize.UUIDV1,
       references: {
-        model: "Books",
+        model: Book,
         key: "_id",
       },
     },
@@ -23,7 +23,7 @@ const Wishlist = sequelize.define(
       type: Sequelize.DataTypes.UUID,
       defaultValue: Sequelize.UUIDV1,
       references: {
-        model: "Users",
+        model: User,
         key: "_id",
       },
     },
@@ -42,9 +42,9 @@ const Wishlist = sequelize.define(
   }
 );
 
-Book.hasMany(Wishlist);
-Wishlist.belongsTo(Book);
-User.hasMany(Wishlist);
-Wishlist.belongsTo(User);
+// Book.hasMany(Wishlist);
+// Wishlist.belongsTo(Book);
+// User.hasMany(Wishlist);
+// Wishlist.belongsTo(User);
 
 module.exports = Wishlist;
