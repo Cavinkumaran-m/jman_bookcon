@@ -73,6 +73,28 @@ app.post('/api/cart/delete', async (req, res) => {
 });
 
 
+app.post('/api/cart/updateQuantity', async (req, res) => {
+  try {
+    const { userId, bookId, quantity } = req.body;
+
+       const wishlistItem = await Wishlist.findOne({
+      where: { Customer_id: userId, Book_id: bookId }
+    });
+
+    if (wishlistItem) {
+      // If the wishlist item exists, update the cart quantity
+      wishlistItem.cartQuantity = quantity;
+      await wishlistItem.save();
+    }
+
+    res.status(200).json({ message: 'Cart quantity updated successfully' });
+  } catch (error) {
+    console.error('Error updating cart quantity:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 // View user's cart  - Monisha 
 app.get('/viewcart',async(req,res)=>{
   try{
