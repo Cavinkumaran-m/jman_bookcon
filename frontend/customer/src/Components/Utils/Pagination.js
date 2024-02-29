@@ -43,13 +43,13 @@ function Pagination({ nPages, currentPage, setCurrentPage }) {
   // console.log(nPages + " " + currentPage + " \n" + pageNumbers);
 
   return (
-    <nav>
+    <nav className="my-4">
       <ul className="pagination justify-content-center mt-2 mb-0">
         <li className="page-item">
           <a
             className="page-link"
             style={{
-              backgroundColor: "#4d004d",
+              backgroundColor: "#a479e4",
               color: "#ffffff",
               cursor: "pointer",
             }}
@@ -64,7 +64,7 @@ function Pagination({ nPages, currentPage, setCurrentPage }) {
               <li key={index}>
                 <a
                   className="page-link"
-                  style={{ backgroundColor: "#4d004d", color: "#ffffff" }}
+                  style={{ backgroundColor: "#a479e4", color: "#ffffff" }}
                 >
                   {pgNumber}
                 </a>
@@ -82,7 +82,7 @@ function Pagination({ nPages, currentPage, setCurrentPage }) {
                   onClick={() => setCurrentPage(pgNumber)}
                   className="page-link"
                   style={{
-                    backgroundColor: "#4d004d",
+                    backgroundColor: "#a479e4",
                     color: "#ffffff",
                     cursor: "pointer",
                   }}
@@ -98,7 +98,7 @@ function Pagination({ nPages, currentPage, setCurrentPage }) {
             className="page-link"
             onClick={goToNextPage}
             style={{
-              backgroundColor: "#4d004d",
+              backgroundColor: "#a479e4",
               color: "#ffffff",
               cursor: "pointer",
             }}
