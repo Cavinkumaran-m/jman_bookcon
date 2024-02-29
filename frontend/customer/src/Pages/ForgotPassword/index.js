@@ -23,9 +23,7 @@ const ForgotPassword = () => {
   const validateEmail = (email) => {
     return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
   };
-
-  const handleSubmit =  async (event) => {
-    event.preventDefault();
+  const handleData=async()=>{
     const isValid = validateEmail(email);
     setIsEmailValid(isValid);
 
@@ -54,7 +52,10 @@ const ForgotPassword = () => {
   }
   catch(error )
   {
-    toast.error(" Invalid Details", {
+    console.log(error.response.data);
+    const message = (error?.response?.data)?(error.response.data): "Unknown Error Occured";
+
+    toast.error(message, {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -66,7 +67,11 @@ const ForgotPassword = () => {
 
 
   }
-   
+  }
+
+  const handleSubmit =  async (event) => {
+    event.preventDefault();
+    handleData();
 
     // Add actual logic to send OTP
   };
@@ -92,6 +97,7 @@ const ForgotPassword = () => {
     }
     catch(error)
     {
+      console.log(error);
       toast.error("Invalid Details", {
         position: "top-right",
         autoClose: 5000,
@@ -109,7 +115,7 @@ const ForgotPassword = () => {
 
   const handleResendOTP = () => {
     console.log("Resending OTP...");
-    handleSubmit();
+    handleData();
     // Add logic to resend OTP
   };
 

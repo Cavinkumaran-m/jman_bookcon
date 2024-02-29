@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoute");
 const customerRoutes = require("./routes/customerRoutes");
 const authenticateToken = require("./middleware/authMiddleware");
+const userRoutes = require("./controller/user.controller");
 const sequelize = require("./config/dbconfig");
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -29,7 +30,8 @@ app.use("/api", customerRoutes);
 
 // Public route
 app.use("/api", authRoutes);
-
+//CRUD USER Route
+app.use("/api/user",userRoutes);
 // Protected route
 app.get("/api/protected", authenticateToken, (req, res) => {
   res.json({ message: "You're authorized to access this route" });

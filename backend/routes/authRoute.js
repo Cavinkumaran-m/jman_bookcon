@@ -19,10 +19,14 @@ const transporter = nodemailer.createTransport({
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  let user = await User.findOne({ where: { email } });
-  // if (user && (await bcrypt.compare(password, user.password))) {
-  // console.log(user);
-  if (user && password === user.Password) {
+  let user = await User.findOne({ where: { Email: email } });
+  const hash = crypto
+    .createHmac("sha256", process.env.PASSWORD_SECRET_KEY)
+    .update(password)
+    .digest("hex")
+    .substring(0, 15); 
+  
+  if (user && user.Password && user.Password === hash) { 
     const payload = {
       userId: user._id,
       role: user.Role,
@@ -34,10 +38,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
-module.exports = router;
 
 async function userExists(email) {
-  let user = await User.findOne({ where: { email } });
+  let user = await User.findOne({ where: { Email: email } });
   if (user)
     return {
       exists: true,
@@ -49,19 +52,20 @@ async function userExists(email) {
   return { exists: false };
 }
 
-// Function to generate OTP
-function generateOTP(username) {
+function generateOTP(email) {
   const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6 digit OTP
   const ttl = 15 * 60 * 1000; // 15 minutes in milliseconds
   const expires = Date.now() + ttl;
-  const data = `${username}.${otp}.${expires}`;
+  const trimmedEmail = email.trim(); // Trim the email to remove extra spaces
+  const data = `${trimmedEmail}.${otp}`;
   const hash = crypto
     .createHmac("sha256", process.env.OTP_SECRET_KEY)
     .update(data)
-    .digest("hex");
-  const fullHash = `${hash}.${expires}`;
-
-  return { otp, fullHash };
+    .digest("hex")
+    .substring(0, 15); 
+  console.log("email", trimmedEmail);
+  console.log("otp", otp);
+  return { otp, fullHash: hash };
 }
 
 // Endpoint to request OTP
@@ -96,7 +100,9 @@ router.post("/request-otp", async (req, res) => {
 
 router.post("/verify-otp", async (req, res) => {
   const { email, otp } = req.body;
-  const userResult = await userExists(email);
+  const trimmedEmail = email.trim(); // Trim the email
+  const userResult = await userExists(trimmedEmail);
+  
   if (!userResult.exists) {
     return res.status(400).send("User does not exist");
   }
@@ -105,30 +111,22 @@ router.post("/verify-otp", async (req, res) => {
   if (!user.Otp || new Date() > user.OtpExpires) {
     return res.status(400).send("OTP expired or not found");
   }
-
-  // Extracting the expiration time and hash from the stored Otp value
-  const [storedHash, expires] = user.Otp.split(".");
-
-  // Ensure the OTP hasn't expired
-  if (new Date() > new Date(parseInt(expires))) {
-    return res.status(400).send("OTP expired");
-  }
-
-  const data = `${email}.${otp}.${expires}`;
+  
+  const data = `${trimmedEmail}.${otp.trim()}`; // Ensure both email and otp are trimmed
   const newCalculatedHash = crypto
     .createHmac("sha256", process.env.OTP_SECRET_KEY)
     .update(data)
-    .digest("hex");
-
-  if (newCalculatedHash === storedHash) {
+    .digest("hex")
+    .substring(0, 15); 
+    console.log("otp", user.Otp);
+  if (newCalculatedHash === user.Otp) {
     res.send("OTP verified successfully");
-
-    // Correct the fields to null after verification
     await user.update({ Otp: null, OtpExpires: null });
   } else {
     res.status(400).send("Invalid OTP");
   }
 });
+
 
 router.post("/reset-password", async (req, res) => {
   const { email, password } = req.body;
@@ -139,9 +137,16 @@ router.post("/reset-password", async (req, res) => {
   }
 
   const user = userResult.user;
-  // const hashedPassword = await bcrypt.hash(password, 10);
-  await user.update({ Password: password });
+  const hash = crypto
+    .createHmac("sha256", process.env.PASSWORD_SECRET_KEY)
+    .update(password)
+    .digest("hex")
+    .substring(0, 15); 
+  await user.update({ Password: hash });
   res.send("Password reset successfully");
 });
+
+
+
 
 module.exports = router;
