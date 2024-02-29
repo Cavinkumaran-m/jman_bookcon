@@ -4,7 +4,7 @@ import { useState } from "react";
 import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
 import { useContext } from "react";
 import { useLocation } from "react-router-dom";
-
+import styles from "./Header.module.css"
 function Header(props) {
   const location = useLocation();
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
@@ -16,8 +16,8 @@ function Header(props) {
   return (
     
     <nav
-      className="navbar navbar-expand-sm navbar-dark bg-dark px-4"
-      style={{ position: "sticky", top: "0px", zIndex: "1" ,backgroundColor:"b3ffff"}}
+      className="navbar navbar-expand-sm px-4"
+      style={{ position: "sticky", top: "0px", zIndex: "1" ,backgroundColor:"#4d004d"}}
     >
       <NavLink className="navbar-brand" to="home" style={{ color: "#b3ffff" }}>
         BookCon
