@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 import style from "./BookCard.module.css";
 import { motion } from "framer-motion";
+import { NavLink } from "react-router-dom";
 
 function BookCard(props) {
   const [hover, setHover] = useState(false);
@@ -120,17 +121,25 @@ function BookCard(props) {
             )}
             {!props.loggedIn && (
               <div>
-                <button
-                  className="btn btn-primary mb-1"
-                  style={{
-                    width: "100%",
-                    color: "white",
-                    backgroundColor: "#3881F5",
-                    border: "0px",
-                  }}
-                >
-                  ₹ {props.price}
-                </button>
+                <NavLink to={"../login"}>
+                  <button
+                    onMouseEnter={() => {
+                      setBuyHover(true);
+                    }}
+                    onMouseLeave={() => {
+                      setBuyHover(false);
+                    }}
+                    className="btn btn-primary mb-1"
+                    style={{
+                      width: "100%",
+                      color: "white",
+                      backgroundColor: "#3881F5",
+                      border: "0px",
+                    }}
+                  >
+                    {buyHover ? "Login" : "₹" + props.price}
+                  </button>
+                </NavLink>
               </div>
             )}
           </div>
