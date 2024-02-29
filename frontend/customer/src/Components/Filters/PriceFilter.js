@@ -3,14 +3,14 @@ import React from "react";
 function PriceFilter({ priceRange, handlePriceRange }) {
   return (
     <div
-      className="text-white"
+      className="text-white mt-3"
       style={{
-        border: "3px solid #000000",
+        // border: "3px solid #000000",
         borderRadius: "5px",
-        backgroundColor: " #4d004d",
+        backgroundColor: " #F5AC38",
       }}
     >
-      <div className="ps-2" style={{ borderBottom: "3px solid #ffffff" }}>
+      <div className="ps-2" style={{ borderBottom: "3px solid #fff" }}>
         Narrow By Price
       </div>
       <center>

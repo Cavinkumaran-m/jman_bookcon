@@ -6,7 +6,7 @@ import BookCard from "../../Components/BookCard/BookCard";
 import PriceFilter from "../../Components/Filters/PriceFilter";
 import RatingFilter from "../../Components/Filters/RatingFilter";
 import GenreFilter from "../../Components/Filters/GenreFilter";
-import DropDown from "../../Components/InputFields/DropDown";
+import DropDown from "../../Components/Filters/DropDown";
 import Pagination from "../../Components/Utils/Pagination";
 import { useContext } from "react";
 import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
@@ -101,7 +101,7 @@ function Home(props) {
             <div className="d-flex align-items-center row justify-content-between mt-2">
               <div className="d-flex">
                 <input
-                  className="form-control-sm"
+                  className="form-control-sm rounded-0"
                   style={{
                     height: "80%",
                     width: "85%",
@@ -110,8 +110,11 @@ function Home(props) {
                   ref={searchRef}
                 ></input>
                 <button
-                  className="btn btn-sm rounded-0 text-white flex-grow-1"
-                  style={{ backgroundColor: "#4d004d" }}
+                  className="btn btn-sm text-white flex-grow-1"
+                  style={{
+                    backgroundColor: "#3881F5",
+                    borderRadius: "0px 10px 10px 0px ",
+                  }}
                   onClick={() => {
                     setLoaded(false);
                     setBooks(null);
@@ -130,16 +133,14 @@ function Home(props) {
                   </svg>
                 </button>
               </div>
-              {/* Sorter */}
-              <div className="d-flex justify-content-end my-3 text-white">
-                Sort By:
-                <DropDown
-                  values={DropDownValues}
-                  Reference={sortRef}
-                  id="sorter"
-                />
-              </div>
             </div>
+            {/* Sorter */}
+            <DropDown
+              values={DropDownValues}
+              Reference={sortRef}
+              id="sorter"
+              className={"mt-3"}
+            />
             {/* Narrow by price */}
             <PriceFilter
               priceRange={priceRange}

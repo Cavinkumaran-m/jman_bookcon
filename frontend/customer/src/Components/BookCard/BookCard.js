@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 import style from "./BookCard.module.css";
 import { motion } from "framer-motion";
+import { NavLink } from "react-router-dom";
 
 function BookCard(props) {
   const [hover, setHover] = useState(false);
@@ -16,7 +17,7 @@ function BookCard(props) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.05, backgroundColor: "#e699ff" }}
+      whileHover={{ scale: 1.05, backgroundColor: "#a678e7" }}
       // onHoverStart={{ scale: 1.2 }}
       className="col-6 col-sm-6 col-md-3 col-lg-2 mt-2 p-1 py-0 rounded"
     >
@@ -97,7 +98,7 @@ function BookCard(props) {
                   style={{
                     width: "100%",
                     color: buyHover ? "white" : "white",
-                    backgroundColor: "#4d004d",
+                    backgroundColor: "#3881F5",
                     border: "0px",
                   }}
                 >
@@ -111,6 +112,7 @@ function BookCard(props) {
                     width: "100%",
                     color: "#4d004d",
                     border: "0px",
+                    backgroundColor: hover ? "white" : "#c0c0c0",
                   }}
                 >
                   Like &#x2764;
@@ -119,17 +121,25 @@ function BookCard(props) {
             )}
             {!props.loggedIn && (
               <div>
-                <button
-                  className="btn btn-primary mb-1"
-                  style={{
-                    width: "100%",
-                    color: buyHover ? "white" : "white",
-                    backgroundColor: "#4d004d",
-                    border: "0px",
-                  }}
-                >
-                  ₹ {props.price}
-                </button>
+                <NavLink to={"../login"}>
+                  <button
+                    onMouseEnter={() => {
+                      setBuyHover(true);
+                    }}
+                    onMouseLeave={() => {
+                      setBuyHover(false);
+                    }}
+                    className="btn btn-primary mb-1"
+                    style={{
+                      width: "100%",
+                      color: "white",
+                      backgroundColor: "#3881F5",
+                      border: "0px",
+                    }}
+                  >
+                    {buyHover ? "Login" : "₹" + props.price}
+                  </button>
+                </NavLink>
               </div>
             )}
           </div>
