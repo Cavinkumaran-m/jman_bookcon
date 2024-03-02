@@ -11,6 +11,7 @@ import Pagination from "../../Components/Utils/Pagination";
 import { useContext } from "react";
 import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
 import styles from "./Home.module.css";
+import puss from "../../Images/puss.jpg";
 
 function Home(props) {
   const { Store } = useContext(UserContext);
@@ -28,6 +29,7 @@ function Home(props) {
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const sortRef = useRef(null);
   const searchRef = useRef(null);
+  var debouncer = null;
   const DropDownValues = [
     "Name",
     "Latest",
@@ -71,6 +73,7 @@ function Home(props) {
       genre: Genre,
     })
       .then((res) => {
+        // console.log(res);
         setNPages(Math.ceil(res.data.payload.length / recordsPerPage));
         setBooks(res.data.payload);
         setCurrentPage(1);
@@ -101,6 +104,17 @@ function Home(props) {
             <div className="d-flex align-items-center row justify-content-between mt-2">
               <div className="d-flex">
                 <input
+                  onChange={() => {
+                    if (debouncer !== null) {
+                      clearInterval(debouncer);
+                    }
+                    debouncer = setInterval(() => {
+                      clearInterval(debouncer);
+                      setLoaded(false);
+                      setBooks(null);
+                      setCurrentPageBooks(null);
+                    }, 3000);
+                  }}
                   className="form-control-sm rounded-0"
                   style={{
                     height: "80%",
@@ -116,6 +130,9 @@ function Home(props) {
                     borderRadius: "0px 10px 10px 0px ",
                   }}
                   onClick={() => {
+                    if (debouncer !== null) {
+                      clearInterval(debouncer);
+                    }
                     setLoaded(false);
                     setBooks(null);
                     setCurrentPageBooks(null);
@@ -170,8 +187,19 @@ function Home(props) {
             )}
 
             {Books !== null && Books.length === 0 && (
-              <span className="display-6 mt-sm-4 mt-5 text-danger">
-                No books :{"("}
+              <span className="display-6 mt-sm-4 mt-5">
+                <div className="row m-0">
+                  <center>
+                    <img
+                      src={puss}
+                      // style={{ width: "60%" }}
+                      className="rounded-5 mt-2 col-10 col-sm-6"
+                    ></img>
+                  </center>
+                </div>
+                <div className="display-6 px-5">
+                  Sorry... Unfortunately we don't have the book you want...
+                </div>
               </span>
             )}
             {currentPageBooks !== null && (
@@ -180,6 +208,7 @@ function Home(props) {
                   <BookCard
                     loggedIn={Store.isLoggedIn}
                     home
+                    id={book._id}
                     name={book.Name}
                     author={book.Author}
                     image={book.Cover_Image}
@@ -194,7 +223,7 @@ function Home(props) {
               </div>
             )}
           </div>
-          {currentPageBooks !== null && (
+          {currentPageBooks !== null && nPages > 1 && (
             <Pagination
               nPages={nPages}
               currentPage={currentPage}

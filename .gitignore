@@ -1,3 +1,4 @@
 /frontend/customer/node_modules
+/frontend/customer/.env
 /backend/node_modules
 

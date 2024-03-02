@@ -127,7 +127,7 @@ function Header(props) {
                     }
                     toast.info("Please Login to access WishList Page", {
                       position: "top-center",
-                      autoClose: 5000,
+                      autoClose: 2000,
                       hideProgressBar: false,
                       closeOnClick: true,
                       pauseOnHover: true,
@@ -169,7 +169,7 @@ function Header(props) {
                     }
                     toast.info("Please Login to access Cart Page", {
                       position: "top-center",
-                      autoClose: 5000,
+                      autoClose: 2000,
                       hideProgressBar: false,
                       closeOnClick: true,
                       pauseOnHover: true,

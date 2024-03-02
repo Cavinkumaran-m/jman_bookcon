@@ -3,8 +3,13 @@ import React, { useEffect, useState } from "react";
 import style from "./BookCard.module.css";
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
+import Axios from "../Utils/Axios";
+import { useContext } from "react";
+import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
+import { toast } from "react-toastify";
 
 function BookCard(props) {
+  const { Store } = useContext(UserContext);
   const [hover, setHover] = useState(false);
   const [buyHover, setBuyHover] = useState(false);
   const stars = new Array(props.rating).fill("⭐");
@@ -14,11 +19,62 @@ function BookCard(props) {
   const handleMouseLeave = () => {
     setHover(false);
   };
+  const likeHandler = () => {
+    // console.log(props);
+    Axios.post("wishlist", {
+      token: Store.token,
+      Customer_id: Store.user_id,
+      Book_id: props.id,
+      type: "addWishlist",
+    })
+      .then((res) => {
+        if (res.data.status === "success") {
+          toast.success("Book Added to your wishlist", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const removeWishlistHandler = () => {
+    // console.log(props);
+    // return;
+    Axios.post("wishlist", {
+      token: Store.token,
+      Customer_id: Store.user_id,
+      Book_id: props.id,
+      type: "removeWishlist",
+    })
+      .then((res) => {
+        if (res.data.status === "success") {
+          toast.success("Book Removed from your wishlist", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          props.reload();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <motion.div
       whileHover={{ scale: 1.05, backgroundColor: "#a678e7" }}
-      // onHoverStart={{ scale: 1.2 }}
       className="col-6 col-sm-6 col-md-3 col-lg-2 mt-2 p-1 py-0 rounded"
     >
       <div
@@ -52,6 +108,7 @@ function BookCard(props) {
           )}
         </div>
 
+        {/* If the bookcard is displayed in home page */}
         {props.home && (
           <div
             style={{ height: "100%" }}
@@ -63,15 +120,8 @@ function BookCard(props) {
                 overflow: hover ? "none" : "hidden",
                 textOverflow: hover ? "ellipsis" : "none",
                 whiteSpace: hover ? "normal" : "nowrap",
-                // display: "-webkit-box",
-                // lineClamp: 1,
-                // WebkitLineClamp: 1,
-                // WebkitBoxOrient: "vertical",
               }}
             >
-              {/* {props.name.length > 30
-                ? props.name.slice(0, 30) + "..."
-                : props.name} */}
               {props.name}
             </div>
             <div
@@ -106,17 +156,19 @@ function BookCard(props) {
                   {/* &#128722; */}
                 </button>
                 <br></br>
-                <button
+                <motion.button
+                  whileTap={{ scale: 1.1 }}
+                  onClick={likeHandler}
                   className="btn btn-dark"
                   style={{
                     width: "100%",
-                    color: "#4d004d",
+                    color: "#000",
                     border: "0px",
                     backgroundColor: hover ? "white" : "#c0c0c0",
                   }}
                 >
                   Like &#x2764;
-                </button>
+                </motion.button>
               </div>
             )}
             {!props.loggedIn && (
@@ -145,16 +197,69 @@ function BookCard(props) {
           </div>
         )}
 
-        {/* {!props.home && (
-        <div className="mt-3 d-flex flex-column">
-          <span className="h5">{props.title}</span>
-          <i className="mb-2">{props.author}</i>
-          <span className="h5">Starting Price: Rs.{props.price}</span>
-          <span className="h5">
-            Auction Time: {props.start_time} to {props.end_time}
-          </span>
-        </div>
-      )} */}
+        {/* If the bookcard is displayed in wishlist page */}
+        {props.wishlist && (
+          <div
+            style={{ height: "100%" }}
+            className="d-flex flex-column justify-content-between"
+          >
+            <div
+              style={{
+                textAlign: "center",
+                overflow: hover ? "none" : "hidden",
+                textOverflow: hover ? "ellipsis" : "none",
+                whiteSpace: hover ? "normal" : "nowrap",
+              }}
+            >
+              {props.name}
+            </div>
+            <div
+              style={{
+                textAlign: "center",
+                overflow: hover ? "none" : "hidden",
+                textOverflow: hover ? "ellipsis" : "none",
+                whiteSpace: hover ? "normal" : "nowrap",
+              }}
+            >
+              - <em>{props.author}</em>
+            </div>
+            <div className="flex-grow-1"></div>
+            <div>
+              <button
+                className="btn mb-1"
+                onMouseEnter={() => {
+                  setBuyHover(true);
+                }}
+                onMouseLeave={() => {
+                  setBuyHover(false);
+                }}
+                style={{
+                  width: "100%",
+                  color: buyHover ? "white" : "white",
+                  backgroundColor: "#3881F5",
+                  border: "0px",
+                }}
+              >
+                {buyHover ? <>Add to Cart</> : <>₹ {props.price}</>}
+                {/* &#128722; */}
+              </button>
+              <br></br>
+              <motion.button
+                whileTap={{ scale: 1.1 }}
+                onClick={removeWishlistHandler}
+                className="btn btn-dark"
+                style={{
+                  width: "100%",
+                  color: "#000",
+                  border: "0px",
+                  backgroundColor: hover ? "white" : "#c0c0c0",
+                }}
+              >
+                Remove 🗑
+              </motion.button>
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );

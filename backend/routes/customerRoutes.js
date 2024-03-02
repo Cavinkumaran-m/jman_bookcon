@@ -69,6 +69,7 @@ router.post("/books", async (req, res) => {
 
   const response = await Books.findAll({
     attributes: [
+      "_id",
       "Author",
       "Cover_Image",
       "Genre",
@@ -102,45 +103,94 @@ router.post("/books", async (req, res) => {
 
 //Wishlist
 router.post("/wishlist", JWTverifier, async (req, res) => {
-  try {
-    const allWish = await Wishlist.findAll({
-      where: { Customer_id: req.body.Customer_id },
-    });
-    const res_data = await Promise.all(
-      allWish.map(async (wish) => {
-        {
-          return {
-            book_details: await Books.findOne({
-              attributes: [
-                "Author",
-                "Cover_Image",
-                "Genre",
-                "Name",
-                "ISBN",
-                "Rating",
-                "Selling_cost",
-                "Year_of_Publication",
-              ],
-              where: {
-                _id: wish["Book_id"],
-              },
-            }),
-            inCart: wish["inCart"],
-            cartQuantity: wish["cartQuantity"],
-          };
-        }
-      })
-    );
-    // console.log(res_data);
-    res.status(200).json({
-      status: "success",
-      payload: res_data,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({
-      status: "error",
-      error: err,
+  if (req.body.type === "getWishlist") {
+    try {
+      const allWish = await Wishlist.findAll({
+        where: { Customer_id: req.body.Customer_id },
+      });
+      const res_data = await Promise.all(
+        allWish.map(async (wish) => {
+          {
+            return {
+              book_details: await Books.findOne({
+                attributes: [
+                  "_id",
+                  "Author",
+                  "Cover_Image",
+                  "Genre",
+                  "Name",
+                  "ISBN",
+                  "Rating",
+                  "Selling_cost",
+                  "Year_of_Publication",
+                ],
+                where: {
+                  _id: wish["Book_id"],
+                },
+              }),
+              inCart: wish["inCart"],
+              cartQuantity: wish["cartQuantity"],
+            };
+          }
+        })
+      );
+      // console.log(res_data);
+      res.status(200).json({
+        status: "success",
+        payload: res_data,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        status: "error",
+        error: err,
+      });
+    }
+  } else if (req.body.type === "addWishlist") {
+    // console.log(req.body);
+    // res.json({ status: "success" });
+    // return;
+    try {
+      const wishlistItem = await Wishlist.findOne({
+        where: { Customer_id: req.body.Customer_id, Book_id: req.body.Book_id },
+      });
+      // console.log("Existing  " + wishlistItem);
+      if (!wishlistItem) {
+        const wishListData = {
+          _id: crypto.randomUUID(),
+          Book_id: req.body.Book_id,
+          Customer_id: req.body.Customer_id,
+          inCart: false,
+          cartQuantity: 0,
+        };
+        const newWishList = Wishlist.create(wishListData);
+        // console.log(newWishList);
+      }
+      res.status(200).json({
+        status: "success",
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        status: "error",
+        error: err,
+      });
+    }
+  } else if (req.body.type === "removeWishlist") {
+    // console.log(req.body);
+    // return res.json({ status: "success" });
+    await Wishlist.destroy({
+      where: {
+        Book_id: req.body.Book_id,
+        Customer_id: req.body.Customer_id,
+      },
+    }).then(function () {
+      if (Wishlist) {
+        console.log(Wishlist);
+        res.status(200).json({ status: "success" });
+      } else {
+        res.status(400).json({ status: "error" });
+      }
     });
   }
 });

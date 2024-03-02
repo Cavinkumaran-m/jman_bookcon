@@ -10,23 +10,24 @@ import tree from "../../Images/tree.png";
 function WishList(props) {
   const [wishList, setWishList] = useState(null);
   const { Store } = useContext(UserContext);
+  const [garbage, reload] = useState(true);
+  const reloader = () => {
+    reload((prev) => !prev);
+  };
 
   useEffect(() => {
     Axios.post("wishlist", {
       token: Store.token,
       Customer_id: Store.user_id,
+      type: "getWishlist",
     }).then((res) => {
-      console.log(res.data);
-      // setTrendingBooks(res.data.payLoad);
+      setWishList(res.data.payload);
     });
-    setTimeout(() => {
-      setWishList([]);
-    }, 1000);
-  }, []);
+  }, [garbage]);
 
   return (
     <>
-      <div className="bg-transparent mt-3 px-2">
+      <div className=" px-4">
         <div className="row d-flex justify-content-between m-0 p-0 pt-2">
           {/* Results div */}
           {wishList === null && (
@@ -65,20 +66,23 @@ function WishList(props) {
             </>
           )}
           {wishList !== null && wishList.length !== 0 && (
-            <div className="row rounded mt-4 mb-2 px-1">
+            <div className="row rounded mb-2 px-1">
+              <div className="display-5">Your Wish List Items</div>
               {wishList.map((book, index) => (
                 <BookCard
                   loggedIn={Store.isLoggedIn}
-                  home
-                  name={book.Name}
-                  author={book.Author}
-                  image={book.Cover_Image}
-                  price={book.Selling_cost}
-                  genre={book.Genre}
-                  isbn={book.ISBN}
-                  rating={book.Rating}
+                  wishlist
+                  reload={reloader}
+                  id={book.book_details._id}
+                  name={book.book_details.Name}
+                  author={book.book_details.Author}
+                  image={book.book_details.Cover_Image}
+                  price={book.book_details.Selling_cost}
+                  genre={book.book_details.Genre}
+                  isbn={book.book_details.ISBN}
+                  rating={book.book_details.Rating}
                   key={index}
-                  publishYear={book.Year_of_Publication}
+                  publishYear={book.book_details.Year_of_Publication}
                 ></BookCard>
               ))}
             </div>
