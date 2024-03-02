@@ -7,6 +7,7 @@ import {
   Box,
   Typography,
 } from "@mui/material";
+import { NavLink } from "react-router-dom";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonIcon from "@mui/icons-material/Person";
 import LockIcon from "@mui/icons-material/Lock";
@@ -15,13 +16,18 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 
 const Register = () => {
-  const [user, setUser] = useState({ name: "", email: "", password: "", date: "" });
-
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+    date: "",
+  });
 
   const [emailError, setEmailError] = useState(false);
 
   const validateEmail = (email) => {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
   };
 
@@ -40,15 +46,15 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(user.name.length<3){
+    if (user.name.length < 3) {
       toast.error("Name should be atleast 3 characters");
       return;
     }
-    if(user.email.length<3 || !validateEmail(user.email)){
+    if (user.email.length < 3 || !validateEmail(user.email)) {
       toast.error("Email is not valid");
       return;
     }
-    if(user.password.length<3){
+    if (user.password.length < 3) {
       toast.error("Password should be atleast 3 characters");
       return;
     }
@@ -58,28 +64,30 @@ const Register = () => {
       Email: user.email,
       Password: user.password,
       Date: user.date,
-      Role: "user", 
+      Role: "user",
     };
 
     try {
-      const response = await Axios.post('/user/adduser',userData);
+      const response = await Axios.post("/user/adduser", userData);
 
       if (response.status == 200) {
         toast.success("User registered successfully");
         setUser({ name: "", email: "", password: "", date: user.date });
       } else {
         console.log(response);
-      
-        const message = (response?.data?.message)?response.data.message:"Failed to register";
+
+        const message = response?.data?.message
+          ? response.data.message
+          : "Failed to register";
         toast.error(message);
       }
     } catch (error) {
-      const message = (error?.response?.data?.message)?error.response.data.message:"Failed to register";
-        toast.error(message);
-     
+      const message = error?.response?.data?.message
+        ? error.response.data.message
+        : "Failed to register";
+      toast.error(message);
     }
   };
-
 
   return (
     <Box
@@ -88,7 +96,7 @@ const Register = () => {
       }}
       maxWidth="sm"
       margin="auto"
-      >
+    >
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -102,9 +110,10 @@ const Register = () => {
           display: "flex",
           flexDirection: "column",
           gap: "10px",
-          width: "100%", 
+          width: "100%",
           margin: "auto",
-        }}>
+        }}
+      >
         <Typography
           variant="h4"
           component="h1"
@@ -113,7 +122,8 @@ const Register = () => {
             mb: 2,
             textAlign: "center",
             fontWeight: "bold",
-          }}>
+          }}
+        >
           Sign Up
         </Typography>
         <TextField
@@ -131,7 +141,7 @@ const Register = () => {
             ),
           }}
         />
-         <TextField
+        <TextField
           type="email"
           name="email"
           placeholder="Email"
@@ -139,7 +149,9 @@ const Register = () => {
           onChange={handleChange}
           fullWidth
           error={emailError && user.email !== ""}
-          helperText={emailError && user.email !== "" ? "Please enter a valid email" : ""}
+          helperText={
+            emailError && user.email !== "" ? "Please enter a valid email" : ""
+          }
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -167,14 +179,18 @@ const Register = () => {
           type="submit"
           variant="contained"
           color="primary"
-          sx={{ mt: 2 }}>
+          sx={{ mt: 2 }}
+        >
           Register
         </Button>
         <Box textAlign="center" sx={{ mt: 2 }}>
           Already have an account?{" "}
-          <a href="/login" style={{ textDecoration: "none", color: "#007bff" }}>
+          <NavLink
+            to="/login"
+            style={{ textDecoration: "none", color: "#007bff" }}
+          >
             Login
-          </a>
+          </NavLink>
         </Box>
       </Box>
     </Box>

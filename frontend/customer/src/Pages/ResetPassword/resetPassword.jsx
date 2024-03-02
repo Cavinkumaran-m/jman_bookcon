@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import {
   Button,
@@ -48,12 +48,10 @@ const ResetPassword = () => {
         email: localStorage.getItem("email"),
         password: values.newPassword,
       });
-      if(response.status===200)
-      {
+      if (response.status === 200) {
         toast.success("Password reset successfull");
         navigate("/login");
-      }
-      else{
+      } else {
         toast.error("Error resetting password");
       }
       console.log(response);
@@ -75,7 +73,8 @@ const ResetPassword = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-        }}>
+        }}
+      >
         <Typography component="h1" variant="h5">
           Reset Password
         </Typography>
@@ -108,7 +107,8 @@ const ResetPassword = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2 }}>
+            sx={{ mt: 3, mb: 2 }}
+          >
             Reset Password
           </Button>
         </Box>

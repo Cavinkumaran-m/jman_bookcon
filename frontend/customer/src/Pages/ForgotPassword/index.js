@@ -7,10 +7,10 @@ import {
   Container,
   Paper,
 } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import style from "./index.module.css";
 import { toast } from "react-toastify";
-import Axios from "../../Components/Utils/Axios"
+import Axios from "../../Components/Utils/Axios";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const ForgotPassword = () => {
   const validateEmail = (email) => {
     return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
   };
-  const handleData=async()=>{
+  const handleData = async () => {
     const isValid = validateEmail(email);
     setIsEmailValid(isValid);
 
@@ -32,71 +32,66 @@ const ForgotPassword = () => {
       return; // Stop here if the email is not valid
     }
 
-
     // Assuming the email is valid, proceed with OTP sending logic
     console.log("Sending OTP to:", email);
     setShowOTPField(true);
     try {
       const response = await Axios.post("/request-otp", {
-      email: email,
-    });
-    toast.success("OTP Sent", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  }
-  catch(error )
-  {
-    console.log(error.response.data);
-    const message = (error?.response?.data)?(error.response.data): "Unknown Error Occured";
+        email: email,
+      });
+      toast.success("OTP Sent", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } catch (error) {
+      console.log(error.response.data);
+      const message = error?.response?.data
+        ? error.response.data
+        : "Unknown Error Occured";
 
-    toast.error(message, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+      toast.error(message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
 
-
-  }
-  }
-
-  const handleSubmit =  async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     handleData();
 
     // Add actual logic to send OTP
   };
 
-  const handleVerifyOTP = async() => {
+  const handleVerifyOTP = async () => {
     console.log("Verifying OTP:", otp);
-    try{
+    try {
       const response = await Axios.post("/verify-otp", {
-      email: email,
-      otp: otp,
-    });
-    toast.success("OTP Verified", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-    localStorage.setItem("email", email);
-    navigate('/reset-password');
-    }
-    catch(error)
-    {
+        email: email,
+        otp: otp,
+      });
+      toast.success("OTP Verified", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      localStorage.setItem("email", email);
+      navigate("/reset-password");
+    } catch (error) {
       console.log(error);
       toast.error("Invalid Details", {
         position: "top-right",
@@ -108,7 +103,6 @@ const ForgotPassword = () => {
         progress: undefined,
       });
       return; // Stop here if OTP verification fails
-    
     }
     // navigate("/dashboard");
   };
@@ -157,8 +151,7 @@ const ForgotPassword = () => {
                 variant="contained"
                 className={style.submitButton}
                 disabled={!isEmailValid || !email}
-               
-                >
+              >
                 Get OTP
               </Button>
             )}
@@ -183,7 +176,8 @@ const ForgotPassword = () => {
                   fullWidth
                   variant="contained"
                   className={style.verifyButton}
-                  onClick={handleVerifyOTP}>
+                  onClick={handleVerifyOTP}
+                >
                   Verify OTP
                 </Button>
 
@@ -193,12 +187,16 @@ const ForgotPassword = () => {
                   variant="contained"
                   className={style.resendButton}
                   sx={{ mt: 2 }}
-                  onClick={handleResendOTP}>
+                  onClick={handleResendOTP}
+                >
                   Resend OTP
                 </Button>
               </>
             )}
           </form>
+          <NavLink to="/login">
+            <button className="mt-2 btn btn-primary">Cancel</button>
+          </NavLink>
         </Box>
       </Paper>
     </Container>
