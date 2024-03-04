@@ -7,10 +7,12 @@ import Axios from "../Utils/Axios";
 import { useContext } from "react";
 import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
 import { toast } from "react-toastify";
+import BookModal from "../../Pages/BookDetail/bookDetail";
 
 function BookCard(props) {
   const { Store } = useContext(UserContext);
   const [hover, setHover] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [buyHover, setBuyHover] = useState(false);
   const stars = new Array(props.rating).fill("⭐");
   const handleMouseEnter = () => {
@@ -71,6 +73,16 @@ function BookCard(props) {
         console.log(err);
       });
   };
+  const handleOpenModal = () => {
+    
+    setModalOpen(true);
+
+  };
+  const handleClose = () => {
+    console.log("here");
+    setModalOpen(false);
+    console.log(modalOpen);
+  }
 
   return (
     <motion.div
@@ -82,6 +94,7 @@ function BookCard(props) {
         style={{ height: "100%" }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        onClick={() => handleOpenModal()}
       >
         <div className={style.image_container}>
           <center>
@@ -197,6 +210,7 @@ function BookCard(props) {
           </div>
         )}
 
+
         {/* If the bookcard is displayed in wishlist page */}
         {props.wishlist && (
           <div
@@ -260,6 +274,19 @@ function BookCard(props) {
             </div>
           </div>
         )}
+        {modalOpen === true && (
+        
+          <BookModal
+            book={props}
+            addToWishlist={likeHandler}
+            setOpen={setModalOpen}
+            addToCart={likeHandler}
+            open={modalOpen}
+            handleClose={handleClose}
+          
+          
+          />
+      )}
       </div>
     </motion.div>
   );
