@@ -195,4 +195,41 @@ router.post("/wishlist", JWTverifier, async (req, res) => {
   }
 });
 
+// Cart
+router.post("/cart", JWTverifier, async (req, res) => {
+  if (req.body.type === "addToCart") {
+    try {
+      const Customer_id = req.body.Customer_id;
+      const Book_id = req.body.Book_id;
+
+      // Check if the book is already in the wishlist
+      const wishlistItem = await Wishlist.findOne({
+        where: { Customer_id: Customer_id, Book_id: Book_id },
+      });
+
+      if (!wishlistItem) {
+        // If the book is not in the wishlist, create a new wishlist item
+        await Wishlist.create({
+          Customer_id: Customer_id,
+          Book_id: Book_id,
+          inCart: true,
+          cartQuantity: 1,
+        });
+      } else {
+        // If the book is already in the wishlist, update the quantity and set inCart to true
+        wishlistItem.cartQuantity =
+          wishlistItem.cartQuantity === 0 ? 1 : wishlistItem.cartQuantity + 1;
+        // console.log(wishlistItem.cartQuantity);
+        wishlistItem.inCart = true;
+        await wishlistItem.save();
+      }
+
+      res.status(200).json({ status: "success" });
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      res.status(500).json({ status: "error", error: error });
+    }
+  }
+});
+
 module.exports = router;

@@ -24,9 +24,8 @@ function BookCard(props) {
   };
 
   const likeHandler = () => {
-     console.log(props);
-     if(!(props?.loggedIn))
-     {
+    //  console.log(props);
+    if (!props?.loggedIn) {
       toast.error("Please Log in first ", {
         position: "top-center",
         autoClose: 2000,
@@ -38,8 +37,8 @@ function BookCard(props) {
       });
 
       return;
-     }
-    
+    }
+
     Axios.post("wishlist", {
       token: Store.token,
       Customer_id: Store.user_id,
@@ -71,8 +70,8 @@ function BookCard(props) {
         });
         console.log(err);
       });
-    
-      console.log(modalOpen);
+
+    // console.log(modalOpen);
   };
 
   const removeWishlistHandler = () => {
@@ -103,16 +102,38 @@ function BookCard(props) {
       });
   };
   const handleOpenModal = () => {
-    
     setModalOpen(true);
-
   };
   const handleClose = () => {
     console.log("here");
     setModalOpen(false);
-   
     console.log(modalOpen);
-  }
+  };
+
+  const cartHandler = () => {
+    Axios.post("cart", {
+      token: Store.token,
+      Customer_id: Store.user_id,
+      Book_id: props.id,
+      type: "addToCart",
+    })
+      .then((res) => {
+        if (res.data.status === "success") {
+          toast.success("Book Added to the Cart", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <motion.div
@@ -124,16 +145,17 @@ function BookCard(props) {
         style={{ height: "100%" }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-       
       >
-        <div className={style.image_container}  onClick={() => handleOpenModal()}>
+        <div
+          className={style.image_container}
+          onClick={() => handleOpenModal()}
+        >
           <center>
             <img
               src={props.image}
               width={"100%"}
               height={"100%"}
               alt="Product"
-             
             />
           </center>
           {hover && (
@@ -189,6 +211,7 @@ function BookCard(props) {
                   onMouseLeave={() => {
                     setBuyHover(false);
                   }}
+                  onClick={cartHandler}
                   style={{
                     width: "100%",
                     color: buyHover ? "white" : "white",
@@ -241,7 +264,6 @@ function BookCard(props) {
           </div>
         )}
 
-
         {/* If the bookcard is displayed in wishlist page */}
         {props.wishlist && (
           <div
@@ -278,6 +300,7 @@ function BookCard(props) {
                 onMouseLeave={() => {
                   setBuyHover(false);
                 }}
+                onClick={cartHandler}
                 style={{
                   width: "100%",
                   color: buyHover ? "white" : "white",
@@ -306,17 +329,14 @@ function BookCard(props) {
           </div>
         )}
         {modalOpen && (
-        
           <BookModal
             book={props}
             addToWishlist={likeHandler}
-            addToCart={likeHandler}
+            addToCart={cartHandler}
             key={modalOpen}
             handleClose={handleClose}
-          
-          
           />
-      )}
+        )}
       </div>
     </motion.div>
   );
