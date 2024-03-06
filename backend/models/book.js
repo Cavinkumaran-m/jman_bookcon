@@ -26,10 +26,6 @@ const Book = sequelize.define(
       type: Sequelize.DECIMAL(10, 2),
       allowNull: true,
     },
-    Total_Stock: {
-      type: Sequelize.INTEGER,
-      allowNull: true,
-    },
     Available_pieces: {
       type: Sequelize.INTEGER,
       allowNull: true,

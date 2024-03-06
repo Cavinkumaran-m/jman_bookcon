@@ -20,7 +20,8 @@ const getBooks = async (req, res) => {
     catch (err){
         //console.log(err)
         res.status(status.badRequest).json({
-            message:message.error
+            message:message.error,
+            payload:err
         })
     }
 }

@@ -15,7 +15,7 @@ export const topOrders = async () => {
 
 export const allOrders = async () => {
     try {
-        const response = await axios.get(local_url+'orders/');
+        const response = await axios.get(local_url);
         return response.data.payload; 
     } catch (error) {
         console.error('Error fetching top orders:', error);
