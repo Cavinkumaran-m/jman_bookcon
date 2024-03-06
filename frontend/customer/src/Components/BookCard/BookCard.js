@@ -15,6 +15,7 @@ function BookCard(props) {
   const [modalOpen, setModalOpen] = useState(false);
   const [buyHover, setBuyHover] = useState(false);
   const stars = new Array(props.rating).fill("⭐");
+ 
   const handleMouseEnter = () => {
     setHover(true);
   };
@@ -22,7 +23,22 @@ function BookCard(props) {
     setHover(false);
   };
   const likeHandler = () => {
-    // console.log(props);
+     console.log(props);
+     if(!(props?.loggedIn))
+     {
+      toast.error("Please Log in first ", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
+      return;
+     }
+    
     Axios.post("wishlist", {
       token: Store.token,
       Customer_id: Store.user_id,

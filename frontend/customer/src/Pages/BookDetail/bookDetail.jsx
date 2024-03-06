@@ -11,10 +11,18 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { useEffect } from 'react';
 
 const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const displayRating = (rating) => {
+    return rating > 0 ? new Array(rating).fill('⭐').join('') : "No rating";
+  };
+  useEffect(() => {
+    console.log("Modal Open State: ", open);
+    // Any other actions you want to perform when modalOpen changes
+  }, [open]); // Dependency array tells React to rerun the effect when modalOpen changes
 
   return (
     <Dialog
@@ -58,11 +66,11 @@ const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
                 Genre: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.genre}</Typography>
               </Typography>
               <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Rating: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.rating}</Typography>
-              </Typography>
-              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Price: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.price}</Typography>
-              </Typography>
+            Rating: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{displayRating(book?.rating)}</Typography>
+          </Typography>
+          <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+            Price: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>₹{book?.price}</Typography>
+          </Typography>
             </Box>
           </Grid>
         </Grid>
