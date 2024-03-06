@@ -16,7 +16,6 @@ const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-
   return (
     <Dialog
       fullScreen={fullScreen}
@@ -24,7 +23,7 @@ const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
     >
-      <DialogTitle id="responsive-dialog-title">
+      <DialogTitle id="responsive-dialog-title" sx={{ textAlign: 'center' }}>
         {book?.name}
         <IconButton
           aria-label="close"
@@ -68,13 +67,31 @@ const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={addToCart} color="primary">
-          Add to Cart
-        </Button>
-        <Button onClick={addToWishlist} color="secondary">
-          Add to Wishlist
-        </Button>
+      <DialogActions sx={{ justifyContent: 'space-between', padding: theme.spacing(3) }}>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Button
+              onClick={addToCart}
+              color="primary"
+              variant="contained"
+              fullWidth
+              sx={{ backgroundColor: 'blue' }}
+            >
+              Add to Cart
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button
+              onClick={addToWishlist}
+              color="primary"
+              variant="contained"
+              fullWidth
+              sx={{ backgroundColor: 'blue' }}
+            >
+              Add to Wishlist
+            </Button>
+          </Grid>
+        </Grid>
       </DialogActions>
     </Dialog>
   );

@@ -43,6 +43,15 @@ function BookCard(props) {
         }
       })
       .catch((err) => {
+        toast.error("Failed to add Book to your wishlist", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         console.log(err);
       });
   };
