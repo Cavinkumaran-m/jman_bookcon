@@ -48,9 +48,9 @@ const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
               <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
                 Author: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.author}</Typography>
               </Typography>
-              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
+              {/* <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
                 Publisher: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.publisher}</Typography>
-              </Typography>
+              </Typography> */}
               <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
                 Year of Publication: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.publishYear}</Typography>
               </Typography>
