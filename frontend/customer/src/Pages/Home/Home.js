@@ -10,7 +10,7 @@ import DropDown from "../../Components/Filters/DropDown";
 import Pagination from "../../Components/Utils/Pagination";
 import { useContext } from "react";
 import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
-import styles from "./Home.module.css";
+import styles from "../../Assets/Home.module.css";
 import puss from "../../Images/puss.jpg";
 
 function Home(props) {
@@ -101,7 +101,7 @@ function Home(props) {
           >
             {/* col-3 col-md-3 for above */}
             {/* Search Bar */}
-            <div className="d-flex align-items-center row justify-content-between mt-2">
+            <div className="d-flex align-items-center row justify-content-between mt-4">
               <div className="d-flex">
                 <input
                   onChange={() => {
@@ -156,7 +156,7 @@ function Home(props) {
               values={DropDownValues}
               Reference={sortRef}
               id="sorter"
-              className={"mt-3"}
+              className={"mt-4"}
             />
             {/* Narrow by price */}
             <PriceFilter

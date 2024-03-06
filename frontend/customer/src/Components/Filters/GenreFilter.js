@@ -11,24 +11,24 @@ function GenreFilter({ Genre, handleGenreChange }) {
   ];
   return (
     <div
-      className="text-white mt-3"
+      className="text-primary mt-4"
       style={{
         // border: "3px solid #000",
         borderRadius: "5px",
-        backgroundColor: "#F5AC38",
+        backgroundColor: "#ebebeb",
       }}
     >
-      <div className="ps-2" style={{ borderBottom: "3px solid #fff" }}>
+      <div className="ps-2" style={{ fontWeight:"bold",borderBottom: "5px solid #fff" }}>
         Narrow By Tag
       </div>
       <center>
-        <table style={{ width: "80%" }}>
+        <table style={{fontWeight:"bold", width: "80%" }}>
           <tbody>
             {genreNames.map((genre, index) => (
               <tr key={index}>
                 <td>
                   <input
-                    style={{ accentColor: "#66fcf1" }}
+                    style={{ fontWeight:"bold",accentColor: "#3881f5" }}
                     type="checkbox"
                     id={genre}
                     name="genre"

@@ -8,7 +8,7 @@ import {
   Paper,
 } from "@mui/material";
 import { Link, useNavigate, NavLink } from "react-router-dom";
-import style from "./index.module.css";
+import style from "../../Assets/ForgotPassword.module.css";
 import { toast } from "react-toastify";
 import Axios from "../../Components/Utils/Axios";
 

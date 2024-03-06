@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
-import style from "./BookCard.module.css";
+import style from "../../Assets/BookCard.module.css";
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 import Axios from "../Utils/Axios";
@@ -15,14 +15,31 @@ function BookCard(props) {
   const [modalOpen, setModalOpen] = useState(false);
   const [buyHover, setBuyHover] = useState(false);
   const stars = new Array(props.rating).fill("⭐");
+
   const handleMouseEnter = () => {
     setHover(true);
   };
   const handleMouseLeave = () => {
     setHover(false);
   };
+
   const likeHandler = () => {
-    // console.log(props);
+     console.log(props);
+     if(!(props?.loggedIn))
+     {
+      toast.error("Please Log in first ", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+
+      return;
+     }
+    
     Axios.post("wishlist", {
       token: Store.token,
       Customer_id: Store.user_id,
@@ -43,9 +60,21 @@ function BookCard(props) {
         }
       })
       .catch((err) => {
+        toast.error("Failed to add Book to your wishlist", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
         console.log(err);
       });
+    
+      console.log(modalOpen);
   };
+
   const removeWishlistHandler = () => {
     // console.log(props);
     // return;
@@ -81,12 +110,13 @@ function BookCard(props) {
   const handleClose = () => {
     console.log("here");
     setModalOpen(false);
+   
     console.log(modalOpen);
   }
 
   return (
     <motion.div
-      whileHover={{ scale: 1.05, backgroundColor: "#a678e7" }}
+      whileHover={{ scale: 1.05, backgroundColor: "#e3e3e3" }}
       className="col-6 col-sm-6 col-md-3 col-lg-2 mt-2 p-1 py-0 rounded"
     >
       <div
@@ -94,15 +124,16 @@ function BookCard(props) {
         style={{ height: "100%" }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        onClick={() => handleOpenModal()}
+       
       >
-        <div className={style.image_container}>
+        <div className={style.image_container}  onClick={() => handleOpenModal()}>
           <center>
             <img
               src={props.image}
               width={"100%"}
               height={"100%"}
               alt="Product"
+             
             />
           </center>
           {hover && (
@@ -274,14 +305,13 @@ function BookCard(props) {
             </div>
           </div>
         )}
-        {modalOpen === true && (
+        {modalOpen && (
         
           <BookModal
             book={props}
             addToWishlist={likeHandler}
-            setOpen={setModalOpen}
             addToCart={likeHandler}
-            open={modalOpen}
+            key={modalOpen}
             handleClose={handleClose}
           
           

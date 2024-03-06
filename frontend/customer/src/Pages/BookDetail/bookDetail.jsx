@@ -11,24 +11,45 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import Paper from '@mui/material/Paper';
+import { useState } from 'react';
+import BookIcon from '@mui/icons-material/Book';
+import StarRateIcon from '@mui/icons-material/StarRate';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'; 
 
-const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
+const BookModal = ({ book, open,handleClose, addToCart, addToWishlist }) => {
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-
-
+const displayRating = (rating) => {
+    return rating > 0 ? new Array(rating).fill('⭐').join('') : "No rating";
+  };
+  const detailElements = [
+    { icon: AccountCircleIcon, title: "Author", detail: book?.author },
+    { icon: CalendarTodayIcon, title: "Year of Publication", detail: book?.publishYear },
+    { icon: LocalOfferIcon, title: "Genre", detail: book?.genre },
+    { icon: StarRateIcon, title: "Rating", detail: displayRating(book?.rating) },
+    { icon: AttachMoneyIcon, title: "Price", detail: `₹${book?.price}` }
+  ];
   return (
     <Dialog
       fullScreen={fullScreen}
-      open={open}
+      open={true}
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
     >
-      <DialogTitle id="responsive-dialog-title">
+      <DialogTitle id="responsive-dialog-title" sx={{ textAlign: 'center', fontWeight: 'bold', margin:1}}>
         {book?.name}
         <IconButton
           aria-label="close"
-          onClick={handleClose}
+          onClick={()=>{
+            handleClose();
+            
+          }}
           sx={{
             position: 'absolute',
             right: 8,
@@ -46,35 +67,53 @@ const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <Box>
-              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Author: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.author}</Typography>
-              </Typography>
-              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Publisher: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.publisher}</Typography>
-              </Typography>
-              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Year of Publication: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.publishYear}</Typography>
-              </Typography>
-              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Genre: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.genre}</Typography>
-              </Typography>
-              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Rating: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.rating}</Typography>
-              </Typography>
-              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Price: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.price}</Typography>
-              </Typography>
+            {detailElements.map((item, index) => (
+              <Paper key={index} variant="outlined" sx={{ p: 1, mb: 2, display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                  <item.icon sx={{ mr: 2 }} />
+                  <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body1">
+                      {item.detail}
+                    </Typography>
+                  </Box>
+                </Box>
+              </Paper>
+            ))}
+
             </Box>
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={addToCart} color="primary">
-          Add to Cart
-        </Button>
-        <Button onClick={addToWishlist} color="secondary">
-          Add to Wishlist
-        </Button>
+      <DialogActions sx={{ justifyContent: 'space-between', padding: theme.spacing(3) }}>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Button
+              onClick={addToCart}
+              color="primary"
+              variant="contained"
+              fullWidth
+              sx={{ backgroundColor: 'blue' }}
+              startIcon={<ShoppingCartIcon />}
+            >
+              Add to Cart
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button
+              onClick={addToWishlist}
+              color="primary"
+              variant="contained"
+              fullWidth
+              sx={{ backgroundColor: 'blue' }}
+              startIcon={<StarRateIcon />}
+            >
+              Add to Wishlist
+            </Button>
+          </Grid>
+        </Grid>
       </DialogActions>
     </Dialog>
   );
