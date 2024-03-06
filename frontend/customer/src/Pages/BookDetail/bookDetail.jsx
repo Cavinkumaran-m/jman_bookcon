@@ -22,12 +22,19 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'; 
 
 const BookModal = ({ book, open,handleClose, addToCart, addToWishlist }) => {
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 const displayRating = (rating) => {
     return rating > 0 ? new Array(rating).fill('⭐').join('') : "No rating";
   };
-
+  const detailElements = [
+    { icon: AccountCircleIcon, title: "Author", detail: book?.author },
+    { icon: CalendarTodayIcon, title: "Year of Publication", detail: book?.publishYear },
+    { icon: LocalOfferIcon, title: "Genre", detail: book?.genre },
+    { icon: StarRateIcon, title: "Rating", detail: displayRating(book?.rating) },
+    { icon: AttachMoneyIcon, title: "Price", detail: `₹${book?.price}` }
+  ];
   return (
     <Dialog
       fullScreen={fullScreen}
@@ -35,7 +42,7 @@ const displayRating = (rating) => {
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
     >
-      <DialogTitle id="responsive-dialog-title" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
+      <DialogTitle id="responsive-dialog-title" sx={{ textAlign: 'center', fontWeight: 'bold', margin:1}}>
         {book?.name}
         <IconButton
           aria-label="close"
@@ -60,17 +67,22 @@ const displayRating = (rating) => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <Box>
-              {[{icon: <AccountCircleIcon sx={{ verticalAlign: 'bottom', mr: 2 }} />, title: "Author", detail: book?.author},
-                {icon: <CalendarTodayIcon sx={{ verticalAlign: 'bottom', mr: 2 }} />, title: "Year of Publication", detail: book?.publishYear},
-                {icon: <LocalOfferIcon sx={{ verticalAlign: 'bottom', mr: 2 }} />, title: "Genre", detail: book?.genre},
-                {icon: <StarRateIcon sx={{ verticalAlign: 'bottom', mr: 2 }} />, title: "Rating", detail: displayRating(book?.rating)},
-                {icon: <AttachMoneyIcon sx={{ verticalAlign: 'bottom', mr: 2 }} />, title: "Price", detail: `₹${book?.price}`}].map((item, index) => (
-                <Paper key={index} variant="outlined" sx={{ p: 1, mb: 2, mt: index === 0 ? 0 : 2 }}>
-                  <Typography variant="subtitle1" component="div" sx={{ fontWeight: 'bold' }}>
-                    {item.icon} {item.title}: <Typography variant="body1" component="span" sx={{ fontWeight: 'normal' }}>{item.detail}</Typography>
-                  </Typography>
-                </Paper>
-              ))}
+            {detailElements.map((item, index) => (
+              <Paper key={index} variant="outlined" sx={{ p: 1, mb: 2, display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                  <item.icon sx={{ mr: 2 }} />
+                  <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
+                      {item.title}
+                    </Typography>
+                    <Typography variant="body1">
+                      {item.detail}
+                    </Typography>
+                  </Box>
+                </Box>
+              </Paper>
+            ))}
+
             </Box>
           </Grid>
         </Grid>
