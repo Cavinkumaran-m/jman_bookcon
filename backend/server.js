@@ -29,11 +29,11 @@ sequelize
   });
 app.use(bodyParser.json());
 
-//admin routers 
+//admin routers
 app.use("/admin/books", adminBooks_router);
 app.use("/admin/stats", adminStats_router);
 app.use("/admin/users", adminUser_router);
-app.use('/admin/orders/', order_router);
+app.use("/admin/orders/", order_router);
 
 // Customer-end route
 app.use("/api", customerRoutes);
@@ -41,7 +41,7 @@ app.use("/api", customerRoutes);
 // Public route
 app.use("/api", authRoutes);
 //CRUD USER Route
-app.use("/api/user",userRoutes);
+app.use("/api/user", userRoutes);
 // Protected route
 app.get("/api/protected", authenticateToken, (req, res) => {
   res.json({ message: "You're authorized to access this route" });
