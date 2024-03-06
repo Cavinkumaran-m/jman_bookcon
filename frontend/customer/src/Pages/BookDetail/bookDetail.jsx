@@ -19,8 +19,7 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'; // For Author
-import InfoIcon from '@mui/icons-material/Info'; // For additional details
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'; 
 
 const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
   const theme = useTheme();

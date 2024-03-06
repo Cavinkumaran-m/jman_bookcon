@@ -24,8 +24,8 @@ function BookCard(props) {
   };
   useEffect(() => {
     console.log("Modal Open State: ", modalOpen);
-    // Any other actions you want to perform when modalOpen changes
-  }, [modalOpen]); // Dependency array tells React to rerun the effect when modalOpen changes
+    
+  }, [modalOpen]);
 
   const likeHandler = () => {
      console.log(props);
