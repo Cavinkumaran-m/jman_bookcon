@@ -105,9 +105,9 @@ function BookCard(props) {
     setModalOpen(true);
   };
   const handleClose = () => {
-    console.log("here");
+    // console.log("here");
     setModalOpen(false);
-    console.log(modalOpen);
+    // console.log(modalOpen);
   };
 
   const cartHandler = () => {

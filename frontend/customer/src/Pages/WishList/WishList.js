@@ -23,6 +23,14 @@ function WishList(props) {
     }).then((res) => {
       setWishList(res.data.payload);
     });
+    Axios.post("cart", {
+      token: Store.token,
+      Customer_id: Store.user_id,
+      type: "getCart",
+    }).then((res) => {
+      console.log("Cart Items");
+      console.log(res.data.payload);
+    });
   }, [garbage]);
 
   return (
