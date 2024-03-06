@@ -58,6 +58,10 @@ const Book = sequelize.define(
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    Deleted: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false
+    }
   },
   {
     freezeTableName: true,
