@@ -4,11 +4,11 @@ function DropDown({ Reference, id, values, className, styles }) {
   return (
     <div className={className} style={styles}>
       <select
-        className="rounded"
+        className="rounded text-primary"
         name={id}
         id={id}
         ref={Reference}
-        style={{ width: "100%", height: "30px", backgroundColor: "#F6B44C" }}
+        style={{ width: "100%", height: "40px", fontWeight:"bold",backgroundColor: "#ebebeb" ,padding:"5px",paddingRight:"5px"}}
       >
         <option value="Name" hidden>
           Sort by

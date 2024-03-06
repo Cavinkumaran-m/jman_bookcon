@@ -86,7 +86,7 @@ function BookCard(props) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.05, backgroundColor: "#a678e7" }}
+      whileHover={{ scale: 1.05, backgroundColor: "#e3e3e3" }}
       className="col-6 col-sm-6 col-md-3 col-lg-2 mt-2 p-1 py-0 rounded"
     >
       <div

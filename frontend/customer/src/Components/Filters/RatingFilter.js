@@ -3,19 +3,19 @@ import React from "react";
 function RatingFilter({ starRange, handleStarRange }) {
   return (
     <div
-      className="text-white mt-3"
+      className="text-primary mt-4"
       style={{
         // border: "3px solid #000000",
         borderRadius: "5px",
-        backgroundColor: " #F5AC38",
+        backgroundColor: " #ebebeb",
       }}
     >
-      <div className="ps-2" style={{ borderBottom: "3px solid #fff" }}>
+      <div className="ps-2" style={{ fontWeight :"bold",borderBottom: "5px solid #ffffff" }}>
         Narrow By Ratings
       </div>
       <center>
         <input
-          style={{ marginTop: "1rem", width: "80%", accentColor: "#ffffff" }}
+          style={{ marginTop: "1rem", width: "80%", accentColor: "#3881f5" }}
           type="range"
           min="1"
           max="5"
@@ -24,7 +24,7 @@ function RatingFilter({ starRange, handleStarRange }) {
           onChange={handleStarRange}
         ></input>
         <br></br>
-        <span>{starRange}&#11088;</span>
+        <span><b>{starRange}&#11088;</b></span>
       </center>
     </div>
   );

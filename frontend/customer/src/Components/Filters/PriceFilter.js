@@ -3,22 +3,23 @@ import React from "react";
 function PriceFilter({ priceRange, handlePriceRange }) {
   return (
     <div
-      className="text-white mt-3"
+      className="text-primary mt-4"
       style={{
         // border: "3px solid #000000",
         borderRadius: "5px",
-        backgroundColor: " #F5AC38",
+        backgroundColor: " #ebebeb",
       }}
     >
-      <div className="ps-2" style={{ borderBottom: "3px solid #fff" }}>
+      <div className="ps-2" style={{ fontWeight :"bold",borderBottom: "5px solid #ffffff" }}>
         Narrow By Price
       </div>
       <center>
         <input
           style={{
             marginTop: "1rem",
-            width: "80%",
-            accentColor: "#ffffff",
+            width: "90%",
+            fontWeight :"bold",
+            accentColor: "#3881f5",
           }}
           type="range"
           min="100"
@@ -28,7 +29,7 @@ function PriceFilter({ priceRange, handlePriceRange }) {
           onChange={handlePriceRange}
         ></input>
         <br></br>
-        <span>Under ₹{priceRange}</span>
+        <span><b>Under ₹{priceRange}</b></span>
       </center>
     </div>
   );
