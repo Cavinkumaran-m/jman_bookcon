@@ -22,6 +22,11 @@ function BookCard(props) {
   const handleMouseLeave = () => {
     setHover(false);
   };
+  useEffect(() => {
+    console.log("Modal Open State: ", modalOpen);
+    // Any other actions you want to perform when modalOpen changes
+  }, [modalOpen]); // Dependency array tells React to rerun the effect when modalOpen changes
+
   const likeHandler = () => {
      console.log(props);
      if(!(props?.loggedIn))
@@ -106,6 +111,7 @@ function BookCard(props) {
   const handleClose = () => {
     console.log("here");
     setModalOpen(false);
+   
     console.log(modalOpen);
   }
 
@@ -299,7 +305,7 @@ function BookCard(props) {
             </div>
           </div>
         )}
-        {modalOpen === true && (
+        {modalOpen && (
         
           <BookModal
             book={props}

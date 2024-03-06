@@ -11,18 +11,24 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useEffect } from 'react';
+import Paper from '@mui/material/Paper';
+
+import BookIcon from '@mui/icons-material/Book';
+import StarRateIcon from '@mui/icons-material/StarRate';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle'; // For Author
+import InfoIcon from '@mui/icons-material/Info'; // For additional details
 
 const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
   const displayRating = (rating) => {
     return rating > 0 ? new Array(rating).fill('⭐').join('') : "No rating";
   };
-  useEffect(() => {
-    console.log("Modal Open State: ", open);
-    // Any other actions you want to perform when modalOpen changes
-  }, [open]); // Dependency array tells React to rerun the effect when modalOpen changes
 
   return (
     <Dialog
@@ -31,11 +37,11 @@ const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
     >
-      <DialogTitle id="responsive-dialog-title" sx={{ textAlign: 'center' }}>
+      <DialogTitle id="responsive-dialog-title" sx={{ textAlign: 'center', fontWeight: 'bold' }}>
         {book?.name}
         <IconButton
           aria-label="close"
-          onClick={handleClose}
+          onClick={()=>handleClose()}
           sx={{
             position: 'absolute',
             right: 8,
@@ -53,24 +59,17 @@ const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <Box>
-              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Author: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.author}</Typography>
-              </Typography>
-              {/* <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Publisher: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.publisher}</Typography>
-              </Typography> */}
-              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Year of Publication: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.publishYear}</Typography>
-              </Typography>
-              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-                Genre: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{book?.genre}</Typography>
-              </Typography>
-              <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-            Rating: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>{displayRating(book?.rating)}</Typography>
-          </Typography>
-          <Typography gutterBottom variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
-            Price: <Typography variant="subtitle1" component="span" sx={{ fontWeight: 'normal' }}>₹{book?.price}</Typography>
-          </Typography>
+              {[{icon: <AccountCircleIcon sx={{ verticalAlign: 'bottom', mr: 2 }} />, title: "Author", detail: book?.author},
+                {icon: <CalendarTodayIcon sx={{ verticalAlign: 'bottom', mr: 2 }} />, title: "Year of Publication", detail: book?.publishYear},
+                {icon: <LocalOfferIcon sx={{ verticalAlign: 'bottom', mr: 2 }} />, title: "Genre", detail: book?.genre},
+                {icon: <StarRateIcon sx={{ verticalAlign: 'bottom', mr: 2 }} />, title: "Rating", detail: displayRating(book?.rating)},
+                {icon: <AttachMoneyIcon sx={{ verticalAlign: 'bottom', mr: 2 }} />, title: "Price", detail: `₹${book?.price}`}].map((item, index) => (
+                <Paper key={index} variant="outlined" sx={{ p: 1, mb: 2, mt: index === 0 ? 0 : 2 }}>
+                  <Typography variant="subtitle1" component="div" sx={{ fontWeight: 'bold' }}>
+                    {item.icon} {item.title}: <Typography variant="body1" component="span" sx={{ fontWeight: 'normal' }}>{item.detail}</Typography>
+                  </Typography>
+                </Paper>
+              ))}
             </Box>
           </Grid>
         </Grid>
@@ -84,6 +83,7 @@ const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
               variant="contained"
               fullWidth
               sx={{ backgroundColor: 'blue' }}
+              startIcon={<ShoppingCartIcon />}
             >
               Add to Cart
             </Button>
@@ -95,6 +95,7 @@ const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
               variant="contained"
               fullWidth
               sx={{ backgroundColor: 'blue' }}
+              startIcon={<StarRateIcon />}
             >
               Add to Wishlist
             </Button>
