@@ -15,17 +15,13 @@ function BookCard(props) {
   const [modalOpen, setModalOpen] = useState(false);
   const [buyHover, setBuyHover] = useState(false);
   const stars = new Array(props.rating).fill("⭐");
- 
+
   const handleMouseEnter = () => {
     setHover(true);
   };
   const handleMouseLeave = () => {
     setHover(false);
   };
-  useEffect(() => {
-    console.log("Modal Open State: ", modalOpen);
-    
-  }, [modalOpen]);
 
   const likeHandler = () => {
      console.log(props);
@@ -75,7 +71,10 @@ function BookCard(props) {
         });
         console.log(err);
       });
+    
+      console.log(modalOpen);
   };
+
   const removeWishlistHandler = () => {
     // console.log(props);
     // return;
@@ -125,15 +124,16 @@ function BookCard(props) {
         style={{ height: "100%" }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        onClick={() => handleOpenModal()}
+       
       >
-        <div className={style.image_container}>
+        <div className={style.image_container}  onClick={() => handleOpenModal()}>
           <center>
             <img
               src={props.image}
               width={"100%"}
               height={"100%"}
               alt="Product"
+             
             />
           </center>
           {hover && (
@@ -310,9 +310,8 @@ function BookCard(props) {
           <BookModal
             book={props}
             addToWishlist={likeHandler}
-            setOpen={setModalOpen}
             addToCart={likeHandler}
-            open={modalOpen}
+            key={modalOpen}
             handleClose={handleClose}
           
           

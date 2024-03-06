@@ -12,7 +12,7 @@ import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Paper from '@mui/material/Paper';
-
+import { useState } from 'react';
 import BookIcon from '@mui/icons-material/Book';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -21,18 +21,17 @@ import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'; 
 
-const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
+const BookModal = ({ book, open,handleClose, addToCart, addToWishlist }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-
-  const displayRating = (rating) => {
+const displayRating = (rating) => {
     return rating > 0 ? new Array(rating).fill('⭐').join('') : "No rating";
   };
 
   return (
     <Dialog
       fullScreen={fullScreen}
-      open={open}
+      open={true}
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
     >
@@ -40,7 +39,10 @@ const BookModal = ({ book, open, handleClose, addToCart, addToWishlist }) => {
         {book?.name}
         <IconButton
           aria-label="close"
-          onClick={()=>handleClose()}
+          onClick={()=>{
+            handleClose();
+            
+          }}
           sx={{
             position: 'absolute',
             right: 8,
