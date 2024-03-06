@@ -10,7 +10,7 @@ import DropDown from "../../Components/Filters/DropDown";
 import Pagination from "../../Components/Utils/Pagination";
 import { useContext } from "react";
 import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
-import styles from "./Home.module.css";
+import styles from "../../Assets/Home.module.css";
 import puss from "../../Images/puss.jpg";
 
 function Home(props) {

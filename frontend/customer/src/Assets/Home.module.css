@@ -1,0 +1,17 @@
+.left_panel {
+    width: 22% !important;
+    position: fixed;
+  }
+  
+  .right_panel {
+    width: 100%;
+    padding: 0 1rem 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .right_panel {
+      width: 78% !important;
+      padding: 0;
+    }
+  }
+  

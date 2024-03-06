@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
-import style from "./BookCard.module.css";
+import style from "../../Assets/BookCard.module.css";
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 import Axios from "../Utils/Axios";
