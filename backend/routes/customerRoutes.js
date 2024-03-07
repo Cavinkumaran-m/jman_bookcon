@@ -5,6 +5,10 @@ const sequelize = require("../config/dbconfig");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const Wishlist = require("../models/wishlist");
+const Order = require("../models/order");
+const OrderDetails = require("../models/orderDetail");
+const moment = require('moment');
+
 
 // =====================================
 // API Endpoints related to customer-end
@@ -271,7 +275,87 @@ router.post("/cart", JWTverifier, async (req, res) => {
         error: err,
       });
     }
-  } 
+  } else if (req.body.type === "removeFromCart") {
+    try {
+      const Customer_id = req.body.Customer_id;
+      const Book_id = req.body.Book_id;
+
+      const cartItem = await Wishlist.findOne({
+        where: { Customer_id: Customer_id, Book_id: Book_id },
+      });
+
+      if (cartItem) {
+        cartItem.inCart = false;
+        cartItem.cartQuantity = 0;
+        await cartItem.save();
+      }
+
+      res.status(200).json({ status: "success" });
+    } catch (error) {
+      console.error("Error removing from cart:", error);
+      res.status(500).json({ status: "error", error: error });
+    }
+  } else if (req.body.type === "updateCartQuantity") {
+    try {
+      const Customer_id = req.body.Customer_id;
+      const Book_id = req.body.Book_id;
+      const cartQuantity = req.body.quantity;
+      const cartItem = await Wishlist.findOne({
+        where: { Customer_id: Customer_id, Book_id: Book_id },
+      });
+
+      if (cartItem) {
+        if(cartQuantity != 0){
+          cartItem.cartQuantity = cartQuantity;
+        }else{
+          cartItem.inCart = false;
+          cartItem.cartQuantity = 0;
+        }
+        await cartItem.save();
+      }
+
+      res.status(200).json({ status: "success" });
+    } catch (error) {
+      console.error("Error updating cart quantity:", error);
+      res.status(500).json({ status: "error", error: error });
+    }
+  }
+});
+
+router.post("/checkout", JWTverifier, async (req, res) => {
+  try{
+    const Customer_id = req.body.Customer_id;
+    const cartItems = await Wishlist.findAll({where:{Customer_id:Customer_id,inCart:1}});
+
+    //NEED TO IMPLEMENT STORING THE ADDRESS AND THE COST
+    const currentOrder = await Order.create({
+      _id:crypto.randomUUID(),
+      Customer_id: Customer_id,
+      Pincode:111111,
+      Date:moment().format('YYYY:MM:DD'),
+      Status:"processed"
+    });
+
+    for (let i = 0; i < cartItems.length; i++) {
+      const currentOrderedBook = cartItems[i];
+      const BookPrice = await Books.findByPk(currentOrderedBook.Book_id);
+      const OrderDetailData = {
+        Order_id:currentOrder._id,
+        Book_id:currentOrderedBook.Book_id,
+        No_Of_Pieces:currentOrderedBook.cartQuantity,
+        Cost:BookPrice.Selling_cost,
+      }  
+      const newOrderDetail = OrderDetails.create(OrderDetailData); 
+    }
+    
+    res.status(200).json({
+      message : "ok",
+  });
+}
+catch(error){
+  console.error('Error in checking out',error);
+  res.status(500).json({error:'Internal Server Error'})
+}
 });
 
 module.exports = router;
