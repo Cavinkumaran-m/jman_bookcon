@@ -41,7 +41,7 @@ export default function SignInSide() {
       email: data.get('email'),
       password: data.get('password'),
     });
-
+  }
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
