@@ -230,18 +230,48 @@ router.post("/cart", JWTverifier, async (req, res) => {
     }
   } else if (req.body.type === "getCart") {
     try {
-      const cartItem = await Wishlist.findAll({
+      const allWish = await Wishlist.findAll({
         where: { Customer_id: req.body.Customer_id, inCart: true },
       });
+      // console.log(allWish);
+      const res_data = await Promise.all(
+        allWish.map(async (wish) => {
+          {
+            return {
+              quantity:wish["cartQuantity"],
+              book_details: await Books.findOne({
+                attributes: [
+                  "_id",
+                  "Author",
+                  "Cover_Image",
+                  "Genre",
+                  "Name",
+                  "ISBN",
+                  "Rating",
+                  "Selling_cost",
+                  "Year_of_Publication",
+                ],
+                where: {
+                  _id: wish["Book_id"],
+                },
+              }),
+            };
+          }
+        })
+      );
+      // console.log(res_data);
       res.status(200).json({
         status: "success",
-        payload: cartItem,
+        payload: res_data,
       });
-    } catch (error) {
-      console.error("Error getting items from cart:", error);
-      res.status(500).json({ status: "error", error: err });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        status: "error",
+        error: err,
+      });
     }
-  }
+  } 
 });
 
 module.exports = router;
