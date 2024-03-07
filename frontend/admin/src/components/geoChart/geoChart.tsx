@@ -44,8 +44,6 @@ const GeoChart = () => {
                 />}
         </div>
     </div>
-
-
   );
 }
 

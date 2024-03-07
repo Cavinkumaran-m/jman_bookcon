@@ -27,7 +27,11 @@ function Copyright(props: any) {
 }
 
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
+const defaultTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 export default function SignInSide() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -37,7 +41,6 @@ export default function SignInSide() {
       email: data.get('email'),
       password: data.get('password'),
     });
-  };
 
   return (
     <ThemeProvider theme={defaultTheme}>
