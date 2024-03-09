@@ -47,6 +47,10 @@ const LoginPage = () => {
       });
 
       if (response.data.status === "success") {
+        if (response.data.payload.role === 1) {
+          window.location.replace("http://localhost:5173");
+          return;
+        }
         setStore({
           isLoggedIn: true,
           user_id: response.data.payload.userId,

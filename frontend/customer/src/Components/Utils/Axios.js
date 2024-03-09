@@ -5,11 +5,6 @@ const Axios = axios.create({
   withCredentials: true,
 });
 
-// const handleRedirect = () => {
-//   const navigate = useNavigate();
-//   navigate("/login");
-// };
-
 Axios.interceptors.response.use(
   (response) => response,
   (error) => {

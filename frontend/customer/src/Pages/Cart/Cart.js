@@ -2,15 +2,15 @@ import React, { useEffect, useState, useContext } from "react";
 import Axios from "../../Components/Utils/Axios";
 import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
 import { NavLink } from "react-router-dom";
-import tree from "../../Images/tree.png";
+import emptyCart from "../../Images/cart.png";
 
-function Cart(props) {
+function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const { Store } = useContext(UserContext);
-  const [garbage, reload] = useState(true);
-  const reloader = () => {
-    reload((prev) => !prev);
-  };
+  // const [garbage, reload] = useState(true);
+  // const reloader = () => {
+  //   reload((prev) => !prev);
+  // };
 
   const fetchCartItems = async () => {
     try {
@@ -463,9 +463,9 @@ function Cart(props) {
             <>
               <span
                 className="rounded-3 display-6 mt-sm-4 mt-5 py-3 bg-dark"
-                style={{ color: "#66fcf1", textAlign: "center" }}
+                style={{ color: "#3881F5", textAlign: "center" }}
               >
-                <img src={tree} width={"200px"}></img>
+                <img src={emptyCart} width={"200px"}></img>
                 <br></br>
                 Browse Our Limitless Collections and find your NEXT GREAT
                 READ!!!

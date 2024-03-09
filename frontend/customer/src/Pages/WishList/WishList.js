@@ -42,7 +42,7 @@ function WishList(props) {
             <>
               <span
                 className="rounded-3 display-6 mt-sm-4 mt-5 py-3 bg-dark"
-                style={{ color: "#66fcf1", textAlign: "center" }}
+                style={{ color: "#3881F5", textAlign: "center" }}
               >
                 <img src={tree} width={"200px"}></img>
                 <br></br>
