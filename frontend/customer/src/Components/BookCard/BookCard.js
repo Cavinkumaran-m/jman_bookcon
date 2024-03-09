@@ -40,7 +40,6 @@ function BookCard(props) {
     }
 
     Axios.post("wishlist", {
-      token: Store.token,
       Customer_id: Store.user_id,
       Book_id: props.id,
       type: "addWishlist",
@@ -78,7 +77,6 @@ function BookCard(props) {
     // console.log(props);
     // return;
     Axios.post("wishlist", {
-      token: Store.token,
       Customer_id: Store.user_id,
       Book_id: props.id,
       type: "removeWishlist",
@@ -112,7 +110,6 @@ function BookCard(props) {
 
   const cartHandler = () => {
     Axios.post("cart", {
-      token: Store.token,
       Customer_id: Store.user_id,
       Book_id: props.id,
       type: "addToCart",

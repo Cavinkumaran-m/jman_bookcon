@@ -7,8 +7,7 @@ const router = express.Router();
 const Wishlist = require("../models/wishlist");
 const Order = require("../models/order");
 const OrderDetails = require("../models/orderDetail");
-const moment = require('moment');
-
+const moment = require("moment");
 
 // =====================================
 // API Endpoints related to customer-end
@@ -23,14 +22,17 @@ const moment = require('moment');
 //   res.json({ accessToken: "damaal_dumeel", role: "god" });
 // });
 
-// JWT verification middleware
-const JWTverifier = (req, res, next) => {
+// Session verification middleware
+const Sessionverifier = (req, res, next) => {
   try {
-    var decoded = jwt.verify(req.body.token, process.env.ACCESS_TOKEN_SECRET);
+    if (!req.session.isAuth) {
+      res.status(440).json({ status: "error", error: "session_expired" });
+      return;
+    }
     next();
   } catch (err) {
     console.log(err);
-    res.json({ status: "error", error: "Invalid JWT" });
+    res.json({ status: "error", error: err });
   }
 };
 
@@ -106,7 +108,7 @@ router.post("/books", async (req, res) => {
 });
 
 //Wishlist
-router.post("/wishlist", JWTverifier, async (req, res) => {
+router.post("/wishlist", Sessionverifier, async (req, res) => {
   if (req.body.type === "getWishlist") {
     try {
       const allWish = await Wishlist.findAll({
@@ -199,7 +201,7 @@ router.post("/wishlist", JWTverifier, async (req, res) => {
 });
 
 // Cart
-router.post("/cart", JWTverifier, async (req, res) => {
+router.post("/cart", Sessionverifier, async (req, res) => {
   if (req.body.type === "addToCart") {
     try {
       const Customer_id = req.body.Customer_id;
@@ -242,7 +244,7 @@ router.post("/cart", JWTverifier, async (req, res) => {
         allWish.map(async (wish) => {
           {
             return {
-              quantity:wish["cartQuantity"],
+              quantity: wish["cartQuantity"],
               book_details: await Books.findOne({
                 attributes: [
                   "_id",
@@ -305,9 +307,9 @@ router.post("/cart", JWTverifier, async (req, res) => {
       });
 
       if (cartItem) {
-        if(cartQuantity != 0){
+        if (cartQuantity != 0) {
           cartItem.cartQuantity = cartQuantity;
-        }else{
+        } else {
           cartItem.inCart = false;
           cartItem.cartQuantity = 0;
         }
@@ -322,40 +324,41 @@ router.post("/cart", JWTverifier, async (req, res) => {
   }
 });
 
-router.post("/checkout", JWTverifier, async (req, res) => {
-  try{
+router.post("/checkout", Sessionverifier, async (req, res) => {
+  try {
     const Customer_id = req.body.Customer_id;
-    const cartItems = await Wishlist.findAll({where:{Customer_id:Customer_id,inCart:1}});
+    const cartItems = await Wishlist.findAll({
+      where: { Customer_id: Customer_id, inCart: 1 },
+    });
 
     //NEED TO IMPLEMENT STORING THE ADDRESS AND THE COST
     const currentOrder = await Order.create({
-      _id:crypto.randomUUID(),
+      _id: crypto.randomUUID(),
       Customer_id: Customer_id,
-      Pincode:111111,
-      Date:moment().format('YYYY:MM:DD'),
-      Status:"processed"
+      Pincode: 111111,
+      Date: moment().format("YYYY:MM:DD"),
+      Status: "processed",
     });
 
     for (let i = 0; i < cartItems.length; i++) {
       const currentOrderedBook = cartItems[i];
       const BookPrice = await Books.findByPk(currentOrderedBook.Book_id);
       const OrderDetailData = {
-        Order_id:currentOrder._id,
-        Book_id:currentOrderedBook.Book_id,
-        No_Of_Pieces:currentOrderedBook.cartQuantity,
-        Cost:BookPrice.Selling_cost,
-      }  
-      const newOrderDetail = OrderDetails.create(OrderDetailData); 
+        Order_id: currentOrder._id,
+        Book_id: currentOrderedBook.Book_id,
+        No_Of_Pieces: currentOrderedBook.cartQuantity,
+        Cost: BookPrice.Selling_cost,
+      };
+      const newOrderDetail = OrderDetails.create(OrderDetailData);
     }
-    
+
     res.status(200).json({
-      message : "ok",
-  });
-}
-catch(error){
-  console.error('Error in checking out',error);
-  res.status(500).json({error:'Internal Server Error'})
-}
+      message: "ok",
+    });
+  } catch (error) {
+    console.error("Error in checking out", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 module.exports = router;

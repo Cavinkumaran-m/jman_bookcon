@@ -3,16 +3,41 @@ import { toast } from "react-toastify";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import Axios from "../Utils/Axios";
+
 function Header(props) {
   const location = useLocation();
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
   const { Store, setStore } = useContext(UserContext);
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
   const logoutHandler = () => {
-    setStore({ isLoggedIn: false, user_id: null, cart_items: null });
+    Axios.get("/logout")
+      .then((res) => {
+        if (res.data.status === "success") {
+          setStore({ isLoggedIn: false, user_id: null, cart_items: null });
+        } else {
+          console.log(res);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
+
+  useEffect(() => {
+    Axios.get("/checkSession").then((res) => {
+      if (res.data.status === "success") {
+        setStore({
+          isLoggedIn: true,
+          user_id: res.data.payload.userId,
+          cart_items: null,
+        });
+      }
+    });
+  }, []);
+
   return (
     <nav
       className="navbar navbar-expand-sm px-4"

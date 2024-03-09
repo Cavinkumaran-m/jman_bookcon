@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 8000;
 const cors = require("cors");
 app.use(
   cors({
-    origin: "*", // Your frontend origin
+    origin: ["http://localhost:3000", "http://localhost:5173"], // Your frontend origin
     credentials: true, // To allow cookies and authentication data
   })
 );
@@ -28,6 +28,32 @@ sequelize
     console.error("Error creating tables:", error);
   });
 app.use(bodyParser.json());
+
+// ======================
+// MYSQL SESSION HANDLING
+// ======================
+const session = require("express-session");
+const MySQLStore = require("express-mysql-session")(session);
+const options = {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PWD,
+  database: "SESSION_DB",
+  createDatabaseTable: true,
+};
+const sessionStore = new MySQLStore(options);
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET_KEY,
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      expires: 1000 * 60 * 30,
+    },
+  })
+);
 
 //admin routers
 app.use("/admin/books", adminBooks_router);

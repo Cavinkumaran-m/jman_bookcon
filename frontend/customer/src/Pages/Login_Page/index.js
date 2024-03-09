@@ -46,12 +46,11 @@ const LoginPage = () => {
         password: password,
       });
 
-      if (response.data.accessToken) {
+      if (response.data.status === "success") {
         setStore({
           isLoggedIn: true,
-          user_id: response.data.userId,
+          user_id: response.data.payload.userId,
           cart_items: null,
-          token: response.data.accessToken,
         });
         navigate("/home");
       }
