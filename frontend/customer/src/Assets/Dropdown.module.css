@@ -1,0 +1,9 @@
+.dropdown {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("../Images/downArrow.png");
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-position-x: 98%;
+}
