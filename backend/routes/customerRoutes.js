@@ -292,7 +292,9 @@ router.post("/cart", Sessionverifier, async (req, res) => {
         await cartItem.save();
       }
 
-      res.status(200).json({ status: "success" });
+        res.status(200).json({
+        status: "success",
+      });
     } catch (error) {
       console.error("Error removing from cart:", error);
       res.status(500).json({ status: "error", error: error });
@@ -301,14 +303,14 @@ router.post("/cart", Sessionverifier, async (req, res) => {
     try {
       const Customer_id = req.body.Customer_id;
       const Book_id = req.body.Book_id;
-      const cartQuantity = req.body.quantity;
+      const varcartQuantity = req.body.quantity;
       const cartItem = await Wishlist.findOne({
         where: { Customer_id: Customer_id, Book_id: Book_id },
       });
 
       if (cartItem) {
-        if (cartQuantity != 0) {
-          cartItem.cartQuantity = cartQuantity;
+        if (varcartQuantity != 0) {
+          cartItem.cartQuantity = varcartQuantity;
         } else {
           cartItem.inCart = false;
           cartItem.cartQuantity = 0;
@@ -327,6 +329,13 @@ router.post("/cart", Sessionverifier, async (req, res) => {
 router.post("/checkout", Sessionverifier, async (req, res) => {
   try {
     const Customer_id = req.body.Customer_id;
+    const Street = req.body.Street;
+    const City = req.body.City;
+    const State = req.body.State;
+    const Country = req.body.Country;
+    const Pincode = req.body.Pincode;
+    const Cost = req.body.Cost;
+
     const cartItems = await Wishlist.findAll({
       where: { Customer_id: Customer_id, inCart: 1 },
     });
@@ -335,12 +344,20 @@ router.post("/checkout", Sessionverifier, async (req, res) => {
     const currentOrder = await Order.create({
       _id: crypto.randomUUID(),
       Customer_id: Customer_id,
-      Pincode: 111111,
+      Street:Street,
+      City:City,
+      State:State,
+      Country:Country,
+      Pincode: Pincode,
+      Cost:Cost,
       Date: moment().format("YYYY:MM:DD"),
       Status: "processed",
+      Cart: 0
     });
 
     for (let i = 0; i < cartItems.length; i++) {
+
+      //To add each book into order details
       const currentOrderedBook = cartItems[i];
       const BookPrice = await Books.findByPk(currentOrderedBook.Book_id);
       const OrderDetailData = {
@@ -350,9 +367,21 @@ router.post("/checkout", Sessionverifier, async (req, res) => {
         Cost: BookPrice.Selling_cost,
       };
       const newOrderDetail = OrderDetails.create(OrderDetailData);
+
+      // To delete book from cart 
+      const deleteFromCart = await Wishlist.findOne({
+        where: { Customer_id: Customer_id, Book_id: currentOrderedBook.Book_id },
+      });
+      if (deleteFromCart) {
+        deleteFromCart.inCart = false;
+        deleteFromCart.cartQuantity = 0;
+        await deleteFromCart.save();
+      }
+
     }
 
     res.status(200).json({
+      status:"success",
       message: "ok",
     });
   } catch (error) {

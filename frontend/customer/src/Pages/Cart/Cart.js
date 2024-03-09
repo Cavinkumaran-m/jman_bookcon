@@ -4,69 +4,89 @@ import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
 import { NavLink } from "react-router-dom";
 import emptyCart from "../../Images/cart.png";
 
-function Cart() {
+function Cart(props) {
   const [cartItems, setCartItems] = useState([]);
   const { Store } = useContext(UserContext);
   // const [garbage, reload] = useState(true);
   // const reloader = () => {
   //   reload((prev) => !prev);
   // };
+  const [street,setStreet] = useState('');
+  const [city,setCity] = useState('');
+  const [stateName,setStateName] = useState('');
+  const [country, setCountry] = useState('');
+  const [pincode, setPincode] = useState('');
 
   const fetchCartItems = async () => {
-    try {
-      const response = await Axios.post("cart", {
-        Customer_id: Store.user_id,
-        type: "getCart",
-      });
-      setCartItems(response.data.payload);
-    } catch (error) {
-      console.error("Error fetching cart items:", error);
-    }
+    
+    Axios.post("cart", {
+      Customer_id: Store.user_id,
+      type: "getCart",
+    }).then((res) => {
+      setCartItems(res.data.payload);
+    });
   };
 
-  const handleDelete = async (Book_id, keyValue) => {
-    try {
-      const delRes = await Axios.post("cart", {
+
+  // DELETE NOT WORKING 
+  const handleDelete = (Book_id,e)=>{
+    e.preventDefault();
+    Axios.post("cart", {
         Customer_id: Store.user_id,
         type: "removeFromCart",
         Book_id: Book_id,
+      })
+        .then((res)=>{
+          if(res.data.status === "success"){
+            console.log("Entry then");
+            fetchCartItems();
+          }
+        })
+        .catch((err) => {
+        console.error("Error",err);
       });
-
-      //  TO DYNAMICALLY RENDER THE BOOTSTRAP TABLE AFTER DELETE NOT WORKING !!!!!!!!!
-
-      const updatedCartItems = cartItems.filter((item) => item.id !== keyValue);
-      setCartItems(updatedCartItems);
-    } catch (error) {
-      console.error("Error deleting from cart:", error);
-    }
   };
 
-  const handleUpdateQuantity = async (Book_id, newQuantity) => {
-    try {
-      console.log("New Quantity " + newQuantity);
-      await Axios.post("cart", {
-        Customer_id: Store.user_id,
-        bookId: Book_id,
-        quantity: newQuantity,
-        type: "updateCartQuantity",
-      });
-    } catch (error) {
+  const handleUpdateQuantity = async (Book_id, newQuantity,e) => {
+    e.preventDefault();
+        Axios.post("cart", {
+      Customer_id: Store.user_id,
+      Book_id: Book_id,
+      quantity: newQuantity,
+      type: "updateCartQuantity",
+      })
+      .then((res)=>{
+        if(res.data.status === "success"){
+          console.log("Entry then");
+          fetchCartItems();
+        }
+      })
+    .catch ((error)=> {
       console.error("Error updating cart quantity:", error);
-    }
+    });
   };
 
-  const handleCheckout = async () => {
-    try {
-      await Axios.post("checkout", {
+  const handleCheckout = async (e) => {
+    e.preventDefault();
+    console.log(street,city,stateName,country,pincode);
+    Axios.post("checkout", {
         Customer_id: Store.user_id,
-      });
-
-      console.log("Checkout successful");
-      setCartItems(null);
-      fetchCartItems();
-    } catch (error) {
+        Street:street,
+        City:city,
+        State:stateName,
+        Country:country,
+        Pincode:pincode,
+        Cost:grandTotal
+      })
+      .then((res)=>{
+        if(res.data.status === "success"){
+          console.log("Entry then");
+          fetchCartItems();
+        }
+      })
+    .catch ((error) =>{
       console.error("Error during checkout:", error);
-    }
+    });
   };
 
   const updatedCart = cartItems.map((cartItem, index) => {
@@ -103,7 +123,7 @@ function Cart() {
               <div className="container">
                 <div className="row pb-4 mb-5">
                   <div className="col-lg-8 mb-5 mb-lg-0">
-                    <form method="post" action>
+                    <form >
                       <div className="table-responsive">
                         {/* Table for displaying the items in a cart */}
                         <table
@@ -242,8 +262,8 @@ function Cart() {
                                       display: "inline-block",
                                       border: "1px solid #000",
                                     }}
-                                    onClick={() =>
-                                      handleDelete(item.book_details._id, index)
+                                    onClick={(e)=>
+                                      handleDelete(item.book_details._id,e)
                                     }
                                   >
                                     {" "}
@@ -264,10 +284,11 @@ function Cart() {
                                       fontSize: "20px",
                                       display: "inline-block",
                                     }}
-                                    onClick={() =>
+                                    onClick={(e) =>
                                       handleUpdateQuantity(
                                         item.book_details._id,
-                                        item.quantity + 1
+                                        item.quantity + 1,
+                                        e
                                       )
                                     }
                                   >
@@ -288,10 +309,11 @@ function Cart() {
                                       fontSize: "20px",
                                       display: "inline-block",
                                     }}
-                                    onClick={() =>
+                                    onClick={(e) =>
                                       handleUpdateQuantity(
                                         item.book_details._id,
-                                        item.quantity - 1
+                                        item.quantity - 1,
+                                        e
                                       )
                                     }
                                   >
@@ -364,6 +386,7 @@ function Cart() {
                                   class="form-control"
                                   placeholder="Street name"
                                   id="Street"
+                                  onChange={e => setStreet(e.target.value)}
                                 />
                               </td>
                             </tr>
@@ -379,6 +402,7 @@ function Cart() {
                                   class="form-control"
                                   placeholder="City name"
                                   id="City"
+                                  onChange={e => setCity(e.target.value)}
                                 />
                               </td>
                             </tr>
@@ -394,6 +418,7 @@ function Cart() {
                                   class="form-control"
                                   placeholder="State name"
                                   id="State"
+                                  onChange={e => setStateName(e.target.value)}
                                 />
                               </td>
                             </tr>
@@ -409,6 +434,7 @@ function Cart() {
                                   class="form-control"
                                   placeholder="Country name"
                                   id="Country"
+                                  onChange={e => setCountry(e.target.value)}
                                 />
                               </td>
                             </tr>
@@ -424,6 +450,7 @@ function Cart() {
                                   class="form-control"
                                   placeholder="Pincode"
                                   id="Pincode"
+                                  onChange={e => setPincode(e.target.value)}
                                 />
                               </td>
                             </tr>
@@ -447,6 +474,7 @@ function Cart() {
                         </table>
                         <button
                           type="button"
+                          
                           onClick={handleCheckout}
                           className="btn btn-dark btn-modern w-100 text-uppercase bg-color-hover-primary border-color-hover-primary border-radius-0 text-3 py-3"
                         >
