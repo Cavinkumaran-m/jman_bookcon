@@ -40,6 +40,15 @@ const ResetPassword = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      if (values.newPassword.length < 8 || values.newPassword.length>16) {
+        toast.error("Password should be atleast 8  and maximum 16 characters");
+        return;
+      }
+      const passwordPattern = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,16}$/;
+      if (!passwordPattern.test(values.newPassword)) {
+        toast.error("Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character");
+        return;
+      }
       if (values.newPassword !== values.confirmPassword) {
         toast.error("Passwords do not match");
         return;

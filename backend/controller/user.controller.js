@@ -34,7 +34,7 @@ app.post('/adduser',async(req,res)=>{
     .createHmac("sha256", process.env.PASSWORD_SECRET_KEY)
     .update(req.body.Password)
     .digest("hex")
-    .substring(0, 15); 
+  
     const UserData = {
       _id:crypto.randomUUID(),
         Username:req.body.Username,

@@ -24,7 +24,7 @@ router.post("/login", async (req, res) => {
     .createHmac("sha256", process.env.PASSWORD_SECRET_KEY)
     .update(password)
     .digest("hex")
-    .substring(0, 15);
+  
 
   if (user && user.Password && user.Password === hash) {
     // const payload = {
@@ -88,7 +88,7 @@ function generateOTP(email) {
     .createHmac("sha256", process.env.OTP_SECRET_KEY)
     .update(data)
     .digest("hex")
-    .substring(0, 15);
+    
   console.log("email", trimmedEmail);
   console.log("otp", otp);
   return { otp, fullHash: hash };
@@ -143,7 +143,7 @@ router.post("/verify-otp", async (req, res) => {
     .createHmac("sha256", process.env.OTP_SECRET_KEY)
     .update(data)
     .digest("hex")
-    .substring(0, 15);
+ 
   console.log("otp", user.Otp);
   if (newCalculatedHash === user.Otp) {
     res.send("OTP verified successfully");
@@ -166,7 +166,7 @@ router.post("/reset-password", async (req, res) => {
     .createHmac("sha256", process.env.PASSWORD_SECRET_KEY)
     .update(password)
     .digest("hex")
-    .substring(0, 15);
+ 
   await user.update({ Password: hash });
   res.send("Password reset successfully");
 });
