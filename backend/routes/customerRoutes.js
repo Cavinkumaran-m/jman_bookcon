@@ -38,7 +38,7 @@ const Sessionverifier = (req, res, next) => {
 
 //search
 router.post("/books", async (req, res) => {
-  // console.log(req.body);
+  console.log(req.body);
 
   // Genre
   const AvailGenres = [
@@ -87,8 +87,18 @@ router.post("/books", async (req, res) => {
     ],
     where: {
       Genre: { [Op.or]: genre },
-      Rating: { [Op.gte]: req.body.rating },
-      Selling_cost: { [Op.lte]: req.body.price },
+      Rating: {
+        [Op.and]: [
+          { [Op.gte]: req.body.rating[0] },
+          { [Op.lte]: req.body.rating[1] },
+        ],
+      },
+      Selling_cost: {
+        [Op.and]: [
+          { [Op.gte]: req.body.price[0] },
+          { [Op.lte]: req.body.price[1] },
+        ],
+      },
       [Op.or]: [
         {
           Author: {
@@ -205,43 +215,41 @@ router.post("/cart", Sessionverifier, async (req, res) => {
     try {
       const Customer_id = req.body.Customer_id;
       const Book_id = req.body.Book_id;
-      var checkVar = 0;      
-      
+      var checkVar = 0;
+
       // Check if the book is already in the wishlist
       const wishlistItem = await Wishlist.findOne({
         where: { Customer_id: Customer_id, Book_id: Book_id },
       });
       const selectBook = await Books.findByPk(Book_id);
 
-      if(selectBook.Available_pieces > 0 && selectBook.Deleted == 0){
-        
-          if (!wishlistItem) {
-            // If the book is not in the wishlist, create a new wishlist item
-            await Wishlist.create({
-              Customer_id: Customer_id,
-              Book_id: Book_id,
-              inCart: true,
-              cartQuantity: 1,
-            });
+      if (selectBook.Available_pieces > 0 && selectBook.Deleted == 0) {
+        if (!wishlistItem) {
+          // If the book is not in the wishlist, create a new wishlist item
+          await Wishlist.create({
+            Customer_id: Customer_id,
+            Book_id: Book_id,
+            inCart: true,
+            cartQuantity: 1,
+          });
+        } else {
+          // If the book is already in the wishlist, update the quantity and set inCart to true
+          if (wishlistItem.cartQuantity < selectBook.Available_pieces) {
+            wishlistItem.cartQuantity =
+              wishlistItem.cartQuantity === 0
+                ? 1
+                : wishlistItem.cartQuantity + 1;
+            // console.log(wishlistItem.cartQuantity);
+            wishlistItem.inCart = true;
+            await wishlistItem.save();
           } else {
-            // If the book is already in the wishlist, update the quantity and set inCart to true
-            if(wishlistItem.cartQuantity < selectBook.Available_pieces){
-              wishlistItem.cartQuantity =
-                wishlistItem.cartQuantity === 0 ? 1 : wishlistItem.cartQuantity + 1;
-              // console.log(wishlistItem.cartQuantity);
-              wishlistItem.inCart = true;
-              await wishlistItem.save();
-            }else{
-              checkVar = 1;
-              res.status(200).json({status:"empty"});
-            }
+            checkVar = 1;
+            res.status(200).json({ status: "empty" });
           }
-          if(checkVar == 0)
-              res.status(200).json({ status: "success" });
-        
-      }
-      else{
-      res.status(200).json({status:"empty"});
+        }
+        if (checkVar == 0) res.status(200).json({ status: "success" });
+      } else {
+        res.status(200).json({ status: "empty" });
       }
     } catch (error) {
       console.error("Error adding to cart:", error);
@@ -306,7 +314,7 @@ router.post("/cart", Sessionverifier, async (req, res) => {
         await cartItem.save();
       }
 
-        res.status(200).json({
+      res.status(200).json({
         status: "success",
       });
     } catch (error) {
@@ -358,20 +366,19 @@ router.post("/checkout", Sessionverifier, async (req, res) => {
     const currentOrder = await Order.create({
       _id: crypto.randomUUID(),
       Customer_id: Customer_id,
-      Street:Street,
-      City:City,
-      State:State,
-      Country:Country,
+      Street: Street,
+      City: City,
+      State: State,
+      Country: Country,
       Pincode: Pincode,
-      Cost:Cost,
+      Cost: Cost,
       Date: moment().format("YYYY:MM:DD"),
       Status: "processed",
-      Cart: 0
+      Cart: 0,
     });
 
-    //To add each book into order details  
+    //To add each book into order details
     for (let i = 0; i < cartItems.length; i++) {
-
       const currentOrderedBook = cartItems[i];
       const BookPrice = await Books.findByPk(currentOrderedBook.Book_id);
       const OrderDetailData = {
@@ -382,26 +389,28 @@ router.post("/checkout", Sessionverifier, async (req, res) => {
       };
       const newOrderDetail = OrderDetails.create(OrderDetailData);
 
-      // To update the stock of a product 
-      if(BookPrice){
+      // To update the stock of a product
+      if (BookPrice) {
         BookPrice.Available_pieces -= currentOrderedBook.cartQuantity;
         await BookPrice.save();
       }
 
-      // To delete book from cart 
+      // To delete book from cart
       const deleteFromCart = await Wishlist.findOne({
-        where: { Customer_id: Customer_id, Book_id: currentOrderedBook.Book_id },
+        where: {
+          Customer_id: Customer_id,
+          Book_id: currentOrderedBook.Book_id,
+        },
       });
       if (deleteFromCart) {
         deleteFromCart.inCart = false;
         deleteFromCart.cartQuantity = 0;
         await deleteFromCart.save();
       }
-
     }
 
     res.status(200).json({
-      status:"success",
+      status: "success",
       message: "ok",
     });
   } catch (error) {

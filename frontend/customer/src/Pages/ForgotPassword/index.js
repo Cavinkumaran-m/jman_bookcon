@@ -34,36 +34,37 @@ const ForgotPassword = () => {
 
     // Assuming the email is valid, proceed with OTP sending logic
     console.log("Sending OTP to:", email);
-    setShowOTPField(true);
-    try {
-      const response = await Axios.post("/request-otp", {
-        email: email,
-      });
-      toast.success("OTP Sent", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    } catch (error) {
-      console.log(error.response.data);
-      const message = error?.response?.data
-        ? error.response.data
-        : "Unknown Error Occured";
 
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+    Axios.post("/request-otp", {
+      email: email,
+    })
+      .then((res) => {
+        if (res.data.status === "success") {
+          toast.success("OTP Sent", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setShowOTPField(true);
+        } else {
+          toast.error(res.data.error, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    }
   };
 
   const handleSubmit = async (event) => {
@@ -75,38 +76,39 @@ const ForgotPassword = () => {
 
   const handleVerifyOTP = async () => {
     console.log("Verifying OTP:", otp);
-    try {
-      const response = await Axios.post("/verify-otp", {
-        email: email,
-        otp: otp,
+    await Axios.post("/verify-otp", {
+      email: email,
+      otp: otp,
+    })
+      .then((res) => {
+        if (res.data.status === "success") {
+          toast.success("OTP Verified", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          // localStorage.setItem("email", email);
+          navigate("/reset-password");
+        } else {
+          toast.error(res.data.error, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      toast.success("OTP Verified", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      localStorage.setItem("email", email);
-      navigate("/reset-password");
-    } catch (error) {
-      console.log(error);
-      toast.error("Invalid Details", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-      return; // Stop here if OTP verification fails
-    }
-    // navigate("/dashboard");
   };
-
   const handleResendOTP = () => {
     console.log("Resending OTP...");
     handleData();

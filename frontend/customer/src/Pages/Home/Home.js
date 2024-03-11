@@ -19,8 +19,10 @@ function Home(props) {
   const [currentPageBooks, setCurrentPageBooks] = useState(null);
   const [loaded, setLoaded] = useState();
   const [pageLoaded, setPageLoaded] = useState(true);
-  const [priceRange, setPriceRange] = useState(5000);
-  const [starRange, setStarRange] = useState(5);
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(500);
+  const [minStar, setMinStar] = useState(1);
+  const [maxStar, setMaxStar] = useState(5);
   const [nPages, setNPages] = useState(0);
   const [Genre, setGenre] = useState(new Array(6).fill(false));
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,12 +40,14 @@ function Home(props) {
     "highestPrice",
     "userReview",
   ];
-  const handlePriceRange = (event) => {
-    setPriceRange(event.target.value);
+  const handlePriceRange = (e) => {
+    setMinPrice(e.minValue);
+    setMaxPrice(e.maxValue);
   };
 
-  const handleStarRange = (event) => {
-    setStarRange(event.target.value);
+  const handleStarRange = (e) => {
+    setMinStar(e.minValue);
+    setMaxStar(e.maxValue);
   };
 
   const handleGenreChange = (position) => {
@@ -68,8 +72,8 @@ function Home(props) {
     Axios.post("/books", {
       query: searchRef.current.value,
       sort: sortRef.current.value,
-      price: priceRange,
-      rating: starRange,
+      price: [minPrice, maxPrice],
+      rating: [minStar, maxStar],
       genre: Genre,
     })
       .then((res) => {
@@ -160,12 +164,14 @@ function Home(props) {
             />
             {/* Narrow by price */}
             <PriceFilter
-              priceRange={priceRange}
+              minPrice={minPrice}
+              maxPrice={maxPrice}
               handlePriceRange={handlePriceRange}
             />
             {/* Narrow by Review */}
             <RatingFilter
-              starRange={starRange}
+              minStar={minStar}
+              maxStar={maxStar}
               handleStarRange={handleStarRange}
             />
             {/* Narrow by Tag */}

@@ -99,7 +99,7 @@ router.post("/request-otp", async (req, res) => {
   const { email } = req.body;
   const userResult = await userExists(email);
   if (!userResult.exists) {
-    return res.status(400).send("User does not exist");
+    return res.json({ status: "error", error: "User does not exist" });
   }
 
   const { otp, fullHash } = generateOTP(email);
@@ -118,9 +118,9 @@ router.post("/request-otp", async (req, res) => {
   transporter.sendMail(mailOptions, (err, info) => {
     if (err) {
       console.error("Error sending email:", err);
-      return res.status(500).send("Error sending OTP");
+      return res.json({ status: "error", error: "Error sending OTP" });
     }
-    res.send("OTP sent successfully");
+    res.json({ status: "success" });
   });
 });
 
@@ -130,12 +130,12 @@ router.post("/verify-otp", async (req, res) => {
   const userResult = await userExists(trimmedEmail);
 
   if (!userResult.exists) {
-    return res.status(400).send("User does not exist");
+    return res.json({ status: "error", error: "User does not exist" });
   }
 
   const user = userResult.user;
   if (!user.Otp || new Date() > user.OtpExpires) {
-    return res.status(400).send("OTP expired or not found");
+    return res.json({ status: "error", error: "OTP expired or not found" });
   }
 
   const data = `${trimmedEmail}.${otp.trim()}`; // Ensure both email and otp are trimmed
@@ -146,10 +146,10 @@ router.post("/verify-otp", async (req, res) => {
  
   console.log("otp", user.Otp);
   if (newCalculatedHash === user.Otp) {
-    res.send("OTP verified successfully");
+    res.json({ status: "success" });
     await user.update({ Otp: null, OtpExpires: null });
   } else {
-    res.status(400).send("Invalid OTP");
+    return res.json({ status: "error", error: "Invalid OTP" });
   }
 });
 
