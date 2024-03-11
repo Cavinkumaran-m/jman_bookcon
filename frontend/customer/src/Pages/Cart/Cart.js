@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import Axios from "../../Components/Utils/Axios";
 import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 import emptyCart from "../../Images/cart.png";
 
 function Cart(props) {
@@ -28,7 +29,6 @@ function Cart(props) {
   };
 
 
-  // DELETE NOT WORKING 
   const handleDelete = (Book_id,e)=>{
     e.preventDefault();
     Axios.post("cart", {
@@ -38,7 +38,15 @@ function Cart(props) {
       })
         .then((res)=>{
           if(res.data.status === "success"){
-            console.log("Entry then");
+            toast.success("Book Removed from your cart", {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
             fetchCartItems();
           }
         })
@@ -57,7 +65,15 @@ function Cart(props) {
       })
       .then((res)=>{
         if(res.data.status === "success"){
-          console.log("Entry then");
+          toast.success("Book Quantity Updated", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
           fetchCartItems();
         }
       })
@@ -80,7 +96,15 @@ function Cart(props) {
       })
       .then((res)=>{
         if(res.data.status === "success"){
-          console.log("Entry then");
+          toast.success("Order has been placed successfully", {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
           fetchCartItems();
         }
       })
