@@ -1,0 +1,19 @@
+.multi-range-slider {
+  border: none !important;
+  box-shadow: none;
+}
+
+.multi-range-slider .bar-inner {
+  box-shadow: none;
+}
+
+.multi-range-slider .thumb .caption * {
+  display: none;
+}
+
+.multi-range-slider .thumb::before {
+  width: 13px;
+  box-shadow: none;
+  height: 13px;
+  margin: -2px -5px;
+}
