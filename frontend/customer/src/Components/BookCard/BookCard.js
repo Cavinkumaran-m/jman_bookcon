@@ -115,8 +115,19 @@ function BookCard(props) {
       type: "addToCart",
     })
       .then((res) => {
+        
         if (res.data.status === "success") {
           toast.success("Book Added to the Cart", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } else if(res.data.status === "empty"){
+          toast.error("No available pieces", {
             position: "top-center",
             autoClose: 2000,
             hideProgressBar: false,

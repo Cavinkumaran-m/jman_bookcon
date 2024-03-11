@@ -159,7 +159,6 @@ router.post("/wishlist", Sessionverifier, async (req, res) => {
       const wishlistItem = await Wishlist.findOne({
         where: { Customer_id: req.body.Customer_id, Book_id: req.body.Book_id },
       });
-      // console.log("Existing  " + wishlistItem);
       if (!wishlistItem) {
         const wishListData = {
           _id: crypto.randomUUID(),
@@ -169,7 +168,7 @@ router.post("/wishlist", Sessionverifier, async (req, res) => {
           cartQuantity: 0,
         };
         const newWishList = Wishlist.create(wishListData);
-        // console.log(newWishList);
+        //console.log(newWishList);
       }
       res.status(200).json({
         status: "success",
@@ -206,30 +205,44 @@ router.post("/cart", Sessionverifier, async (req, res) => {
     try {
       const Customer_id = req.body.Customer_id;
       const Book_id = req.body.Book_id;
-
+      var checkVar = 0;      
+      
       // Check if the book is already in the wishlist
       const wishlistItem = await Wishlist.findOne({
         where: { Customer_id: Customer_id, Book_id: Book_id },
       });
+      const selectBook = await Books.findByPk(Book_id);
 
-      if (!wishlistItem) {
-        // If the book is not in the wishlist, create a new wishlist item
-        await Wishlist.create({
-          Customer_id: Customer_id,
-          Book_id: Book_id,
-          inCart: true,
-          cartQuantity: 1,
-        });
-      } else {
-        // If the book is already in the wishlist, update the quantity and set inCart to true
-        wishlistItem.cartQuantity =
-          wishlistItem.cartQuantity === 0 ? 1 : wishlistItem.cartQuantity + 1;
-        // console.log(wishlistItem.cartQuantity);
-        wishlistItem.inCart = true;
-        await wishlistItem.save();
+      if(selectBook.Available_pieces > 0 && selectBook.Deleted == 0){
+        
+          if (!wishlistItem) {
+            // If the book is not in the wishlist, create a new wishlist item
+            await Wishlist.create({
+              Customer_id: Customer_id,
+              Book_id: Book_id,
+              inCart: true,
+              cartQuantity: 1,
+            });
+          } else {
+            // If the book is already in the wishlist, update the quantity and set inCart to true
+            if(wishlistItem.cartQuantity < selectBook.Available_pieces){
+              wishlistItem.cartQuantity =
+                wishlistItem.cartQuantity === 0 ? 1 : wishlistItem.cartQuantity + 1;
+              // console.log(wishlistItem.cartQuantity);
+              wishlistItem.inCart = true;
+              await wishlistItem.save();
+            }else{
+              checkVar = 1;
+              res.status(200).json({status:"empty"});
+            }
+          }
+          if(checkVar == 0)
+              res.status(200).json({ status: "success" });
+        
       }
-
-      res.status(200).json({ status: "success" });
+      else{
+      res.status(200).json({status:"empty"});
+      }
     } catch (error) {
       console.error("Error adding to cart:", error);
       res.status(500).json({ status: "error", error: error });
@@ -255,6 +268,7 @@ router.post("/cart", Sessionverifier, async (req, res) => {
                   "ISBN",
                   "Rating",
                   "Selling_cost",
+                  "Available_pieces",
                   "Year_of_Publication",
                 ],
                 where: {
@@ -340,7 +354,7 @@ router.post("/checkout", Sessionverifier, async (req, res) => {
       where: { Customer_id: Customer_id, inCart: 1 },
     });
 
-    //NEED TO IMPLEMENT STORING THE ADDRESS AND THE COST
+    //Creating one order
     const currentOrder = await Order.create({
       _id: crypto.randomUUID(),
       Customer_id: Customer_id,
@@ -355,9 +369,9 @@ router.post("/checkout", Sessionverifier, async (req, res) => {
       Cart: 0
     });
 
+    //To add each book into order details  
     for (let i = 0; i < cartItems.length; i++) {
 
-      //To add each book into order details
       const currentOrderedBook = cartItems[i];
       const BookPrice = await Books.findByPk(currentOrderedBook.Book_id);
       const OrderDetailData = {
@@ -367,6 +381,12 @@ router.post("/checkout", Sessionverifier, async (req, res) => {
         Cost: BookPrice.Selling_cost,
       };
       const newOrderDetail = OrderDetails.create(OrderDetailData);
+
+      // To update the stock of a product 
+      if(BookPrice){
+        BookPrice.Available_pieces -= currentOrderedBook.cartQuantity;
+        await BookPrice.save();
+      }
 
       // To delete book from cart 
       const deleteFromCart = await Wishlist.findOne({

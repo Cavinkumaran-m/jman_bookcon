@@ -55,31 +55,44 @@ function Cart(props) {
       });
   };
 
-  const handleUpdateQuantity = async (Book_id, newQuantity,e) => {
+  const handleUpdateQuantity = async (Book_id, newQuantity,availableStock,e) => {
     e.preventDefault();
-        Axios.post("cart", {
-      Customer_id: Store.user_id,
-      Book_id: Book_id,
-      quantity: newQuantity,
-      type: "updateCartQuantity",
-      })
-      .then((res)=>{
-        if(res.data.status === "success"){
-          toast.success("Book Quantity Updated", {
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-          fetchCartItems();
-        }
-      })
-    .catch ((error)=> {
-      console.error("Error updating cart quantity:", error);
-    });
+    console.log(newQuantity,availableStock);
+    if(availableStock >= newQuantity){
+          Axios.post("cart", {
+        Customer_id: Store.user_id,
+        Book_id: Book_id,
+        quantity: newQuantity,
+        type: "updateCartQuantity",
+        })
+        .then((res)=>{
+          if(res.data.status === "success"){
+            toast.success("Book Quantity Updated", {
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            fetchCartItems();
+          }
+        })
+      .catch ((error)=> {
+        console.error("Error updating cart quantity:", error);
+      });
+    }else{
+        toast.error("No available pieces left", {
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+    }
   };
 
   const handleCheckout = async (e) => {
@@ -312,6 +325,7 @@ function Cart(props) {
                                       handleUpdateQuantity(
                                         item.book_details._id,
                                         item.quantity + 1,
+                                        item.book_details.Available_pieces,
                                         e
                                       )
                                     }
@@ -337,6 +351,7 @@ function Cart(props) {
                                       handleUpdateQuantity(
                                         item.book_details._id,
                                         item.quantity - 1,
+                                        item.book_details.Available_pieces,
                                         e
                                       )
                                     }
