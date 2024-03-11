@@ -20,6 +20,7 @@ import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'; 
+import FavoriteIcon from '@mui/icons-material/Favorite'; // Import the heart icon
 
 const BookModal = ({ book, open,handleClose, addToCart, addToWishlist }) => {
 
@@ -108,7 +109,7 @@ const displayRating = (rating) => {
               variant="contained"
               fullWidth
               sx={{ backgroundColor: 'blue' }}
-              startIcon={<StarRateIcon />}
+              startIcon={<FavoriteIcon />}
             >
               Add to Wishlist
             </Button>

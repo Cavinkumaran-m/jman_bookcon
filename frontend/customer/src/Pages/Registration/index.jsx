@@ -54,11 +54,15 @@ const Register = () => {
       toast.error("Email is not valid");
       return;
     }
-    if (user.password.length < 3) {
-      toast.error("Password should be atleast 3 characters");
+    if (user.password.length < 8 || user.password.length>16) {
+      toast.error("Password should be atleast 8  and maximum 16 characters");
       return;
     }
-
+    const passwordPattern = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,16}$/;
+    if (!passwordPattern.test(user.password)) {
+      toast.error("Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character");
+      return;
+    }
     const userData = {
       Username: user.name,
       Email: user.email,
@@ -179,7 +183,8 @@ const Register = () => {
           type="submit"
           variant="contained"
           color="primary"
-          sx={{ mt: 2 }}
+          sx={{ mt: 2,display: "inline-block",  borderRadius: "20px",
+          mx: "auto" }}
         >
           Register
         </Button>

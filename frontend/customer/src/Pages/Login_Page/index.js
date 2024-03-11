@@ -137,9 +137,15 @@ const LoginPage = () => {
             />
             <Button
               type="submit"
-              fullWidth
+              // fullWidth
               variant="contained"
-              style={{ marginTop: "20px", borderRadius: "20px" }}
+              style={{   marginTop: "20px",
+              borderRadius: "20px",
+              display: "block", // Change this to "block" to allow `margin: auto` to work
+              marginLeft: "auto",
+              marginRight: "auto",
+              width: "fit-content" // This ensures the button width only fits its content
+           }}
             >
               Sign In
             </Button>
