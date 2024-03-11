@@ -23,8 +23,7 @@ router.post("/login", async (req, res) => {
   const hash = crypto
     .createHmac("sha256", process.env.PASSWORD_SECRET_KEY)
     .update(password)
-    .digest("hex")
-    .substring(0, 15);
+    .digest("hex");
 
   if (user && user.Password && user.Password === hash) {
     // const payload = {
@@ -87,8 +86,7 @@ function generateOTP(email) {
   const hash = crypto
     .createHmac("sha256", process.env.OTP_SECRET_KEY)
     .update(data)
-    .digest("hex")
-    .substring(0, 15);
+    .digest("hex");
   console.log("email", trimmedEmail);
   console.log("otp", otp);
   return { otp, fullHash: hash };
@@ -99,7 +97,7 @@ router.post("/request-otp", async (req, res) => {
   const { email } = req.body;
   const userResult = await userExists(email);
   if (!userResult.exists) {
-    return res.status(400).send("User does not exist");
+    return res.json({ status: "error", error: "User does not exist" });
   }
 
   const { otp, fullHash } = generateOTP(email);
@@ -118,9 +116,9 @@ router.post("/request-otp", async (req, res) => {
   transporter.sendMail(mailOptions, (err, info) => {
     if (err) {
       console.error("Error sending email:", err);
-      return res.status(500).send("Error sending OTP");
+      return res.json({ status: "error", error: "Error sending OTP" });
     }
-    res.send("OTP sent successfully");
+    res.json({ status: "success" });
   });
 });
 
@@ -130,26 +128,25 @@ router.post("/verify-otp", async (req, res) => {
   const userResult = await userExists(trimmedEmail);
 
   if (!userResult.exists) {
-    return res.status(400).send("User does not exist");
+    return res.json({ status: "error", error: "User does not exist" });
   }
 
   const user = userResult.user;
   if (!user.Otp || new Date() > user.OtpExpires) {
-    return res.status(400).send("OTP expired or not found");
+    return res.json({ status: "error", error: "OTP expired or not found" });
   }
 
   const data = `${trimmedEmail}.${otp.trim()}`; // Ensure both email and otp are trimmed
   const newCalculatedHash = crypto
     .createHmac("sha256", process.env.OTP_SECRET_KEY)
     .update(data)
-    .digest("hex")
-    .substring(0, 15);
+    .digest("hex");
   console.log("otp", user.Otp);
   if (newCalculatedHash === user.Otp) {
-    res.send("OTP verified successfully");
+    res.json({ status: "success" });
     await user.update({ Otp: null, OtpExpires: null });
   } else {
-    res.status(400).send("Invalid OTP");
+    return res.json({ status: "error", error: "Invalid OTP" });
   }
 });
 
@@ -165,8 +162,7 @@ router.post("/reset-password", async (req, res) => {
   const hash = crypto
     .createHmac("sha256", process.env.PASSWORD_SECRET_KEY)
     .update(password)
-    .digest("hex")
-    .substring(0, 15);
+    .digest("hex");
   await user.update({ Password: hash });
   res.send("Password reset successfully");
 });

@@ -27,15 +27,17 @@ function Header(props) {
   };
 
   useEffect(() => {
-    Axios.get("/checkSession").then((res) => {
-      if (res.data.status === "success") {
-        setStore({
-          isLoggedIn: true,
-          user_id: res.data.payload.userId,
-          cart_items: null,
-        });
-      }
-    });
+    Axios.get("/checkSession")
+      .then((res) => {
+        if (res.data.status === "success") {
+          setStore({
+            isLoggedIn: true,
+            user_id: res.data.payload.userId,
+            cart_items: null,
+          });
+        }
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   return (

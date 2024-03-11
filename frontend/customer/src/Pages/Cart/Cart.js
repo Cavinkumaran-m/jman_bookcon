@@ -12,14 +12,13 @@ function Cart(props) {
   // const reloader = () => {
   //   reload((prev) => !prev);
   // };
-  const [street,setStreet] = useState('');
-  const [city,setCity] = useState('');
-  const [stateName,setStateName] = useState('');
-  const [country, setCountry] = useState('');
-  const [pincode, setPincode] = useState('');
+  const [street, setStreet] = useState("");
+  const [city, setCity] = useState("");
+  const [stateName, setStateName] = useState("");
+  const [country, setCountry] = useState("");
+  const [pincode, setPincode] = useState("");
 
   const fetchCartItems = async () => {
-    
     Axios.post("cart", {
       Customer_id: Store.user_id,
       type: "getCart",
@@ -28,44 +27,48 @@ function Cart(props) {
     });
   };
 
-
-  const handleDelete = (Book_id,e)=>{
+  const handleDelete = (Book_id, e) => {
     e.preventDefault();
     Axios.post("cart", {
-        Customer_id: Store.user_id,
-        type: "removeFromCart",
-        Book_id: Book_id,
+      Customer_id: Store.user_id,
+      type: "removeFromCart",
+      Book_id: Book_id,
+    })
+      .then((res) => {
+        if (res.data.status === "success") {
+          toast.success("Book Removed from your cart", {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          fetchCartItems();
+        }
       })
-        .then((res)=>{
-          if(res.data.status === "success"){
-            toast.success("Book Removed from your cart", {
-              position: "top-center",
-              autoClose: 2000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-            });
-            fetchCartItems();
-          }
-        })
-        .catch((err) => {
-        console.error("Error",err);
+      .catch((err) => {
+        console.error("Error", err);
       });
   };
 
-  const handleUpdateQuantity = async (Book_id, newQuantity,availableStock,e) => {
+  const handleUpdateQuantity = async (
+    Book_id,
+    newQuantity,
+    availableStock,
+    e
+  ) => {
     e.preventDefault();
-    if(availableStock >= newQuantity){
-          Axios.post("cart", {
+    if (availableStock >= newQuantity) {
+      Axios.post("cart", {
         Customer_id: Store.user_id,
         Book_id: Book_id,
         quantity: newQuantity,
         type: "updateCartQuantity",
-        })
-        .then((res)=>{
-          if(res.data.status === "success"){
+      })
+        .then((res) => {
+          if (res.data.status === "success") {
             toast.success("Book Quantity Updated", {
               position: "top-center",
               autoClose: 2000,
@@ -78,19 +81,19 @@ function Cart(props) {
             fetchCartItems();
           }
         })
-      .catch ((error)=> {
-        console.error("Error updating cart quantity:", error);
-      });
-    }else{
-        toast.error("No available pieces", {
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+        .catch((error) => {
+          console.error("Error updating cart quantity:", error);
         });
+    } else {
+      toast.error("No available pieces", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     }
   };
 
@@ -98,16 +101,16 @@ function Cart(props) {
     e.preventDefault();
     fetchCartItems();
     Axios.post("checkout", {
-        Customer_id: Store.user_id,
-        Street:street,
-        City:city,
-        State:stateName,
-        Country:country,
-        Pincode:pincode,
-        Cost:grandTotal
-      })
-      .then((res)=>{
-        if(res.data.status === "success"){
+      Customer_id: Store.user_id,
+      Street: street,
+      City: city,
+      State: stateName,
+      Country: country,
+      Pincode: pincode,
+      Cost: grandTotal,
+    })
+      .then((res) => {
+        if (res.data.status === "success") {
           toast.success("Order has been placed successfully", {
             position: "top-center",
             autoClose: 3000,
@@ -120,9 +123,9 @@ function Cart(props) {
           fetchCartItems();
         }
       })
-    .catch ((error) =>{
-      console.error("Error during checkout:", error);
-    });
+      .catch((error) => {
+        console.error("Error during checkout:", error);
+      });
   };
 
   const updatedCart = cartItems.map((cartItem, index) => {
@@ -159,7 +162,7 @@ function Cart(props) {
               <div className="container">
                 <div className="row pb-4 mb-5">
                   <div className="col-lg-8 mb-5 mb-lg-0">
-                    <form >
+                    <form>
                       <div className="table-responsive">
                         {/* Table for displaying the items in a cart */}
                         <table
@@ -187,19 +190,33 @@ function Cart(props) {
                               </th>
                               <th style={{ width: "10%" }}></th>{" "}
                               {/* Column to Display the delete book from cart button */}
-                              <th className="product-increment text-uppercase" style={{ width: "10%" }}><span
+                              <th
+                                className="product-increment text-uppercase"
+                                style={{ width: "10%" }}
+                              >
+                                <span
                                   style={{
                                     fontSize: "1.1em",
                                     fontWeight: "bold",
                                   }}
-                                >Increment</span></th>
+                                >
+                                  Increment
+                                </span>
+                              </th>
                               {/* Column to increase the quantity in cart */}
-                              <th className="product-decrement text-uppercase" style={{ width: "10%" }}><span
+                              <th
+                                className="product-decrement text-uppercase"
+                                style={{ width: "10%" }}
+                              >
+                                <span
                                   style={{
                                     fontSize: "1.1em",
                                     fontWeight: "bold",
                                   }}
-                                >Decrement</span></th>
+                                >
+                                  Decrement
+                                </span>
+                              </th>
                               {/* Column to decrease the quantity in cart */}
                               <th
                                 className="product-price text-uppercase"
@@ -287,16 +304,21 @@ function Cart(props) {
                                           fontStyle: "italic",
                                           fontSize: "0.9em",
                                           color: "#555",
-                                          display:"block"
+                                          display: "block",
                                         }}
                                       >
                                         {item.book_details.Author}
                                       </span>
-                                      <span style={{fontSize:"1em"}}>
-                                          Stock Left : 
-                                          <span style={{fontWeight:"bold", color:"#008000"}}>
-                                            {item.book_details.Available_pieces}
-                                          </span>
+                                      <span style={{ fontSize: "1em" }}>
+                                        Stock Left :
+                                        <span
+                                          style={{
+                                            fontWeight: "bold",
+                                            color: "#008000",
+                                          }}
+                                        >
+                                          {item.book_details.Available_pieces}
+                                        </span>
                                       </span>
                                     </div>
                                   </div>
@@ -315,8 +337,8 @@ function Cart(props) {
                                       display: "inline-block",
                                       border: "1px solid #000",
                                     }}
-                                    onClick={(e)=>
-                                      handleDelete(item.book_details._id,e)
+                                    onClick={(e) =>
+                                      handleDelete(item.book_details._id, e)
                                     }
                                   >
                                     {" "}
@@ -441,7 +463,7 @@ function Cart(props) {
                                   class="form-control"
                                   placeholder="Street name"
                                   id="Street"
-                                  onChange={e => setStreet(e.target.value)}
+                                  onChange={(e) => setStreet(e.target.value)}
                                 />
                               </td>
                             </tr>
@@ -457,7 +479,7 @@ function Cart(props) {
                                   class="form-control"
                                   placeholder="City name"
                                   id="City"
-                                  onChange={e => setCity(e.target.value)}
+                                  onChange={(e) => setCity(e.target.value)}
                                 />
                               </td>
                             </tr>
@@ -473,7 +495,7 @@ function Cart(props) {
                                   class="form-control"
                                   placeholder="State name"
                                   id="State"
-                                  onChange={e => setStateName(e.target.value)}
+                                  onChange={(e) => setStateName(e.target.value)}
                                 />
                               </td>
                             </tr>
@@ -489,7 +511,7 @@ function Cart(props) {
                                   class="form-control"
                                   placeholder="Country name"
                                   id="Country"
-                                  onChange={e => setCountry(e.target.value)}
+                                  onChange={(e) => setCountry(e.target.value)}
                                 />
                               </td>
                             </tr>
@@ -505,7 +527,7 @@ function Cart(props) {
                                   class="form-control"
                                   placeholder="Pincode"
                                   id="Pincode"
-                                  onChange={e => setPincode(e.target.value)}
+                                  onChange={(e) => setPincode(e.target.value)}
                                 />
                               </td>
                             </tr>
@@ -528,19 +550,20 @@ function Cart(props) {
                           </tbody>
                         </table>
                         <button
-                          type="button"        
+                          type="button"
                           onClick={handleCheckout}
                           className="btn btn-dark btn-modern text-uppercase bg-color-hover-primary border-color-hover-primary border-radius-0 text-3 py-3"
                           style={{
-                            width:"auto", 
-                            display:"grid", 
-                            textAlign: "center", 
-                            margin:"auto"}}>
-
+                            width: "auto",
+                            display: "grid",
+                            textAlign: "center",
+                            margin: "auto",
+                          }}
+                        >
                           Proceed to Checkout{" "}
                           <i className="fas fa-arrow-right ms-2" />
                         </button>
-                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
