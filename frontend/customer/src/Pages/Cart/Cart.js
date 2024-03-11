@@ -57,7 +57,6 @@ function Cart(props) {
 
   const handleUpdateQuantity = async (Book_id, newQuantity,availableStock,e) => {
     e.preventDefault();
-    console.log(newQuantity,availableStock);
     if(availableStock >= newQuantity){
           Axios.post("cart", {
         Customer_id: Store.user_id,
@@ -83,7 +82,7 @@ function Cart(props) {
         console.error("Error updating cart quantity:", error);
       });
     }else{
-        toast.error("No available pieces left", {
+        toast.error("No available pieces", {
           position: "top-center",
           autoClose: 2000,
           hideProgressBar: false,
@@ -97,7 +96,7 @@ function Cart(props) {
 
   const handleCheckout = async (e) => {
     e.preventDefault();
-    console.log(street,city,stateName,country,pincode);
+    fetchCartItems();
     Axios.post("checkout", {
         Customer_id: Store.user_id,
         Street:street,
@@ -178,7 +177,7 @@ function Cart(props) {
                               >
                                 <span
                                   style={{
-                                    fontSize: "1.2em",
+                                    fontSize: "1.1em",
                                     fontWeight: "bold",
                                     marginRight: "10px",
                                   }}
@@ -188,9 +187,19 @@ function Cart(props) {
                               </th>
                               <th style={{ width: "10%" }}></th>{" "}
                               {/* Column to Display the delete book from cart button */}
-                              <th style={{ width: "10%" }}></th>{" "}
+                              <th className="product-increment text-uppercase" style={{ width: "10%" }}><span
+                                  style={{
+                                    fontSize: "1.1em",
+                                    fontWeight: "bold",
+                                  }}
+                                >Increment</span></th>
                               {/* Column to increase the quantity in cart */}
-                              <th style={{ width: "10%" }}></th>{" "}
+                              <th className="product-decrement text-uppercase" style={{ width: "10%" }}><span
+                                  style={{
+                                    fontSize: "1.1em",
+                                    fontWeight: "bold",
+                                  }}
+                                >Decrement</span></th>
                               {/* Column to decrease the quantity in cart */}
                               <th
                                 className="product-price text-uppercase"
@@ -198,7 +207,7 @@ function Cart(props) {
                               >
                                 <span
                                   style={{
-                                    fontSize: "1.2em",
+                                    fontSize: "1.1em",
                                     fontWeight: "bold",
                                   }}
                                 >
@@ -211,7 +220,7 @@ function Cart(props) {
                               >
                                 <span
                                   style={{
-                                    fontSize: "1.2em",
+                                    fontSize: "1.1em",
                                     fontWeight: "bold",
                                   }}
                                 >
@@ -278,9 +287,16 @@ function Cart(props) {
                                           fontStyle: "italic",
                                           fontSize: "0.9em",
                                           color: "#555",
+                                          display:"block"
                                         }}
                                       >
                                         {item.book_details.Author}
+                                      </span>
+                                      <span style={{fontSize:"1em"}}>
+                                          Stock Left : 
+                                          <span style={{fontWeight:"bold", color:"#008000"}}>
+                                            {item.book_details.Available_pieces}
+                                          </span>
                                       </span>
                                     </div>
                                   </div>
@@ -294,7 +310,7 @@ function Cart(props) {
                                       width: "80px",
                                       height: "40px",
                                       backgroundColor: "#e1e3e6",
-                                      color: "#3881f5",
+                                      color: "#000000",
                                       fontWeight: "bold",
                                       display: "inline-block",
                                       border: "1px solid #000",
@@ -316,9 +332,9 @@ function Cart(props) {
                                       width: "80px",
                                       height: "40px",
                                       backgroundColor: "transparent",
-                                      color: "#3881f5",
+                                      color: "#000000",
                                       fontWeight: "bold",
-                                      fontSize: "20px",
+                                      // fontSize: "20px",
                                       display: "inline-block",
                                     }}
                                     onClick={(e) =>
@@ -330,7 +346,7 @@ function Cart(props) {
                                       )
                                     }
                                   >
-                                    +
+                                    +1
                                   </button>
                                 </td>
                                 <td className="text-center align-middle">
@@ -342,9 +358,9 @@ function Cart(props) {
                                       width: "80px",
                                       height: "40px",
                                       backgroundColor: "transparent",
-                                      color: "#3881f5",
+                                      color: "#000000",
                                       fontWeight: "bold",
-                                      fontSize: "20px",
+                                      // fontSize: "20px",
                                       display: "inline-block",
                                     }}
                                     onClick={(e) =>
@@ -356,7 +372,7 @@ function Cart(props) {
                                       )
                                     }
                                   >
-                                    -
+                                    -1
                                   </button>
                                 </td>
                                 <td
@@ -512,15 +528,19 @@ function Cart(props) {
                           </tbody>
                         </table>
                         <button
-                          type="button"
-                          
+                          type="button"        
                           onClick={handleCheckout}
-                          className="btn btn-dark btn-modern w-100 text-uppercase bg-color-hover-primary border-color-hover-primary border-radius-0 text-3 py-3"
-                        >
+                          className="btn btn-dark btn-modern text-uppercase bg-color-hover-primary border-color-hover-primary border-radius-0 text-3 py-3"
+                          style={{
+                            width:"auto", 
+                            display:"grid", 
+                            textAlign: "center", 
+                            margin:"auto"}}>
+
                           Proceed to Checkout{" "}
                           <i className="fas fa-arrow-right ms-2" />
                         </button>
-                      </div>
+                        </div>
                     </div>
                   </div>
                 </div>
