@@ -5,6 +5,9 @@ const sequelize = require("../config/dbconfig");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 const Wishlist = require("../models/wishlist");
+const Order = require("../models/order");
+const OrderDetails = require("../models/orderDetail");
+const moment = require("moment");
 
 // =====================================
 // API Endpoints related to customer-end
@@ -19,14 +22,17 @@ const Wishlist = require("../models/wishlist");
 //   res.json({ accessToken: "damaal_dumeel", role: "god" });
 // });
 
-// JWT verification middleware
-const JWTverifier = (req, res, next) => {
+// Session verification middleware
+const Sessionverifier = (req, res, next) => {
   try {
-    var decoded = jwt.verify(req.body.token, process.env.ACCESS_TOKEN_SECRET);
+    if (!req.session.isAuth) {
+      res.status(440).json({ status: "error", error: "session_expired" });
+      return;
+    }
     next();
   } catch (err) {
     console.log(err);
-    res.json({ status: "error", error: "Invalid JWT" });
+    res.json({ status: "error", error: err });
   }
 };
 
@@ -102,12 +108,13 @@ router.post("/books", async (req, res) => {
 });
 
 //Wishlist
-router.post("/wishlist", JWTverifier, async (req, res) => {
+router.post("/wishlist", Sessionverifier, async (req, res) => {
   if (req.body.type === "getWishlist") {
     try {
       const allWish = await Wishlist.findAll({
-        where: { Customer_id: req.body.Customer_id },
+        where: { Customer_id: req.body.Customer_id, inCart: false },
       });
+      // console.log(allWish);
       const res_data = await Promise.all(
         allWish.map(async (wish) => {
           {
@@ -128,8 +135,6 @@ router.post("/wishlist", JWTverifier, async (req, res) => {
                   _id: wish["Book_id"],
                 },
               }),
-              inCart: wish["inCart"],
-              cartQuantity: wish["cartQuantity"],
             };
           }
         })
@@ -154,7 +159,6 @@ router.post("/wishlist", JWTverifier, async (req, res) => {
       const wishlistItem = await Wishlist.findOne({
         where: { Customer_id: req.body.Customer_id, Book_id: req.body.Book_id },
       });
-      // console.log("Existing  " + wishlistItem);
       if (!wishlistItem) {
         const wishListData = {
           _id: crypto.randomUUID(),
@@ -164,7 +168,7 @@ router.post("/wishlist", JWTverifier, async (req, res) => {
           cartQuantity: 0,
         };
         const newWishList = Wishlist.create(wishListData);
-        // console.log(newWishList);
+        //console.log(newWishList);
       }
       res.status(200).json({
         status: "success",
@@ -192,6 +196,217 @@ router.post("/wishlist", JWTverifier, async (req, res) => {
         res.status(400).json({ status: "error" });
       }
     });
+  }
+});
+
+// Cart
+router.post("/cart", Sessionverifier, async (req, res) => {
+  if (req.body.type === "addToCart") {
+    try {
+      const Customer_id = req.body.Customer_id;
+      const Book_id = req.body.Book_id;
+      var checkVar = 0;      
+      
+      // Check if the book is already in the wishlist
+      const wishlistItem = await Wishlist.findOne({
+        where: { Customer_id: Customer_id, Book_id: Book_id },
+      });
+      const selectBook = await Books.findByPk(Book_id);
+
+      if(selectBook.Available_pieces > 0 && selectBook.Deleted == 0){
+        
+          if (!wishlistItem) {
+            // If the book is not in the wishlist, create a new wishlist item
+            await Wishlist.create({
+              Customer_id: Customer_id,
+              Book_id: Book_id,
+              inCart: true,
+              cartQuantity: 1,
+            });
+          } else {
+            // If the book is already in the wishlist, update the quantity and set inCart to true
+            if(wishlistItem.cartQuantity < selectBook.Available_pieces){
+              wishlistItem.cartQuantity =
+                wishlistItem.cartQuantity === 0 ? 1 : wishlistItem.cartQuantity + 1;
+              // console.log(wishlistItem.cartQuantity);
+              wishlistItem.inCart = true;
+              await wishlistItem.save();
+            }else{
+              checkVar = 1;
+              res.status(200).json({status:"empty"});
+            }
+          }
+          if(checkVar == 0)
+              res.status(200).json({ status: "success" });
+        
+      }
+      else{
+      res.status(200).json({status:"empty"});
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      res.status(500).json({ status: "error", error: error });
+    }
+  } else if (req.body.type === "getCart") {
+    try {
+      const allWish = await Wishlist.findAll({
+        where: { Customer_id: req.body.Customer_id, inCart: true },
+      });
+      // console.log(allWish);
+      const res_data = await Promise.all(
+        allWish.map(async (wish) => {
+          {
+            return {
+              quantity: wish["cartQuantity"],
+              book_details: await Books.findOne({
+                attributes: [
+                  "_id",
+                  "Author",
+                  "Cover_Image",
+                  "Genre",
+                  "Name",
+                  "ISBN",
+                  "Rating",
+                  "Selling_cost",
+                  "Available_pieces",
+                  "Year_of_Publication",
+                ],
+                where: {
+                  _id: wish["Book_id"],
+                },
+              }),
+            };
+          }
+        })
+      );
+      // console.log(res_data);
+      res.status(200).json({
+        status: "success",
+        payload: res_data,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        status: "error",
+        error: err,
+      });
+    }
+  } else if (req.body.type === "removeFromCart") {
+    try {
+      const Customer_id = req.body.Customer_id;
+      const Book_id = req.body.Book_id;
+
+      const cartItem = await Wishlist.findOne({
+        where: { Customer_id: Customer_id, Book_id: Book_id },
+      });
+
+      if (cartItem) {
+        cartItem.inCart = false;
+        cartItem.cartQuantity = 0;
+        await cartItem.save();
+      }
+
+        res.status(200).json({
+        status: "success",
+      });
+    } catch (error) {
+      console.error("Error removing from cart:", error);
+      res.status(500).json({ status: "error", error: error });
+    }
+  } else if (req.body.type === "updateCartQuantity") {
+    try {
+      const Customer_id = req.body.Customer_id;
+      const Book_id = req.body.Book_id;
+      const varcartQuantity = req.body.quantity;
+      const cartItem = await Wishlist.findOne({
+        where: { Customer_id: Customer_id, Book_id: Book_id },
+      });
+
+      if (cartItem) {
+        if (varcartQuantity != 0) {
+          cartItem.cartQuantity = varcartQuantity;
+        } else {
+          cartItem.inCart = false;
+          cartItem.cartQuantity = 0;
+        }
+        await cartItem.save();
+      }
+
+      res.status(200).json({ status: "success" });
+    } catch (error) {
+      console.error("Error updating cart quantity:", error);
+      res.status(500).json({ status: "error", error: error });
+    }
+  }
+});
+
+router.post("/checkout", Sessionverifier, async (req, res) => {
+  try {
+    const Customer_id = req.body.Customer_id;
+    const Street = req.body.Street;
+    const City = req.body.City;
+    const State = req.body.State;
+    const Country = req.body.Country;
+    const Pincode = req.body.Pincode;
+    const Cost = req.body.Cost;
+
+    const cartItems = await Wishlist.findAll({
+      where: { Customer_id: Customer_id, inCart: 1 },
+    });
+
+    //Creating one order
+    const currentOrder = await Order.create({
+      _id: crypto.randomUUID(),
+      Customer_id: Customer_id,
+      Street:Street,
+      City:City,
+      State:State,
+      Country:Country,
+      Pincode: Pincode,
+      Cost:Cost,
+      Date: moment().format("YYYY:MM:DD"),
+      Status: "processed",
+      Cart: 0
+    });
+
+    //To add each book into order details  
+    for (let i = 0; i < cartItems.length; i++) {
+
+      const currentOrderedBook = cartItems[i];
+      const BookPrice = await Books.findByPk(currentOrderedBook.Book_id);
+      const OrderDetailData = {
+        Order_id: currentOrder._id,
+        Book_id: currentOrderedBook.Book_id,
+        No_Of_Pieces: currentOrderedBook.cartQuantity,
+        Cost: BookPrice.Selling_cost,
+      };
+      const newOrderDetail = OrderDetails.create(OrderDetailData);
+
+      // To update the stock of a product 
+      if(BookPrice){
+        BookPrice.Available_pieces -= currentOrderedBook.cartQuantity;
+        await BookPrice.save();
+      }
+
+      // To delete book from cart 
+      const deleteFromCart = await Wishlist.findOne({
+        where: { Customer_id: Customer_id, Book_id: currentOrderedBook.Book_id },
+      });
+      if (deleteFromCart) {
+        deleteFromCart.inCart = false;
+        deleteFromCart.cartQuantity = 0;
+        await deleteFromCart.save();
+      }
+
+    }
+
+    res.status(200).json({
+      status:"success",
+      message: "ok",
+    });
+  } catch (error) {
+    console.error("Error in checking out", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 

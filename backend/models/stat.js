@@ -6,7 +6,10 @@ const Stat= sequelize.define('Stats',{
         allowNull:false, 
         primaryKey:true
     }, 
-    Cost:{
+    Cost_Volume:{
+        type:Sequelize.DECIMAL(10,2),
+    },
+    Sales_Volume:{
         type:Sequelize.DECIMAL(10,2),
     },
     New_Users:{

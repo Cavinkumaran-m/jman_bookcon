@@ -3,11 +3,11 @@ import React from "react";
 function RatingFilter({ starRange, handleStarRange }) {
   return (
     <div
-      className="text-primary mt-4"
+      className="text-black mt-4"
       style={{
-        // border: "3px solid #000000",
+        border: "1px solid #000000",
         borderRadius: "5px",
-        backgroundColor: " #ebebeb",
+        backgroundColor: " #f8f6f6",
       }}
     >
       <div className="ps-2" style={{ fontWeight :"bold",borderBottom: "5px solid #ffffff" }}>

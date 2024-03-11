@@ -26,10 +26,6 @@ const Book = sequelize.define(
       type: Sequelize.DECIMAL(10, 2),
       allowNull: true,
     },
-    Total_Stock: {
-      type: Sequelize.INTEGER,
-      allowNull: true,
-    },
     Available_pieces: {
       type: Sequelize.INTEGER,
       allowNull: true,
@@ -58,6 +54,10 @@ const Book = sequelize.define(
       type: Sequelize.INTEGER,
       allowNull: false,
     },
+    Deleted: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false
+    }
   },
   {
     freezeTableName: true,
