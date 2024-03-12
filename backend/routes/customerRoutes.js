@@ -200,7 +200,7 @@ router.post("/wishlist", Sessionverifier, async (req, res) => {
       },
     }).then(function () {
       if (Wishlist) {
-        console.log(Wishlist);
+        // console.log(Wishlist);
         res.status(200).json({ status: "success" });
       } else {
         res.status(400).json({ status: "error" });
@@ -345,33 +345,57 @@ router.post("/cart", Sessionverifier, async (req, res) => {
       console.error("Error updating cart quantity:", error);
       res.status(500).json({ status: "error", error: error });
     }
+  }else if(req.body.type =="checkCart"){
+    try{
+      const varCustomer_id = req.body.Customer_id;
+      const cartItems = await Wishlist.findAll({
+        where: { Customer_id: varCustomer_id, inCart: 1 },
+      });
+      var checkDelete = 0;
+      for(let i = 0;i<cartItems.length;i++){
+        // const currentOrderedBook = cartItems[i];
+        const BookDetails = await Books.findByPk(cartItems[i].Book_id);
+        if(BookDetails.Deleted==1){
+              checkDelete = 1;
+              res.status(200).json({status:"Deleted",message:"Currently unavailable - "+BookDetails.Name});
+              break;
+        }
+      }
+      if(checkDelete == 0){
+        res.status(200).json({status:"success"});
+      }
+
+    }catch(error){
+      console.error("Error in checking cart items",error);
+      res.status(500).json({status:"error",error:error})
+    }
   }
 });
 
 router.post("/checkout", Sessionverifier, async (req, res) => {
   try {
     const Customer_id = req.body.Customer_id;
-    const Street = req.body.Street;
-    const City = req.body.City;
-    const State = req.body.State;
-    const Country = req.body.Country;
-    const Pincode = req.body.Pincode;
-    const Cost = req.body.Cost;
+    const varStreet = req.body.Street;
+    const varCity = req.body.City;
+    const varState = req.body.State;
+    const varCountry = req.body.Country;
+    const varPincode = req.body.Pincode;
+    const varCost = req.body.Cost;
 
     const cartItems = await Wishlist.findAll({
       where: { Customer_id: Customer_id, inCart: 1 },
     });
 
-    //Creating one order
+    // Creating one order
     const currentOrder = await Order.create({
       _id: crypto.randomUUID(),
       Customer_id: Customer_id,
-      Street: Street,
-      City: City,
-      State: State,
-      Country: Country,
-      Pincode: Pincode,
-      Cost: Cost,
+      Street: varStreet,
+      City: varCity,
+      State: varState,
+      Country: varCountry,
+      Pincode: varPincode,
+      Cost: varCost,
       Date: moment().format("YYYY:MM:DD"),
       Status: "processed",
       Cart: 0,
