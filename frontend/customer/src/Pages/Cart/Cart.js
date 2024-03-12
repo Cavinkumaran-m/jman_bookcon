@@ -140,7 +140,7 @@ function Cart(props) {
 
   const grandTotal = updatedCart.reduce((accumulator, cartItem) => {
     return accumulator + cartItem.total;
-  }, 0);
+  }, 0).toFixed(2);
 
   const totalItems = updatedCart.reduce((accumulator, cartItem) => {
     return accumulator + cartItem.quantity;
@@ -188,7 +188,7 @@ function Cart(props) {
                                   Book Details
                                 </span>
                               </th>
-                              <th style={{ width: "10%" }}></th>{" "}
+                              <th style={{ width: "10%" }}></th>
                               {/* Column to Display the delete book from cart button */}
                               <th
                                 className="product-increment text-uppercase"
@@ -270,7 +270,6 @@ function Cart(props) {
                                 }}
                               >
                                 <td>
-                                  {" "}
                                   {/* To display the book cover, name and author */}
                                   <div
                                     style={{
@@ -324,7 +323,7 @@ function Cart(props) {
                                   </div>
                                 </td>
                                 <td className="text-center align-middle">
-                                  {" "}
+                                  
                                   {/* To display the delete button*/}
                                   <button
                                     className="btn d-flex justify-content-center align-items-center"
@@ -341,12 +340,11 @@ function Cart(props) {
                                       handleDelete(item.book_details._id, e)
                                     }
                                   >
-                                    {" "}
                                     Delete
                                   </button>
                                 </td>
                                 <td className="text-center align-middle">
-                                  {" "}
+                                  
                                   {/* To display the increment book quantity*/}
                                   <button
                                     className="btn"
@@ -372,7 +370,7 @@ function Cart(props) {
                                   </button>
                                 </td>
                                 <td className="text-center align-middle">
-                                  {" "}
+                                  
                                   {/* To display the decrement book quantity*/}
                                   <button
                                     className="btn"
@@ -422,7 +420,7 @@ function Cart(props) {
                                     paddingLeft: "20px",
                                   }}
                                 >
-                                  {item.total}
+                                  {(item.total).toFixed(2)}
                                 </td>
                               </tr>
                             ))}
@@ -447,12 +445,14 @@ function Cart(props) {
                         </h4>
                         <table className="shop_table cart-totals mb-4">
                           <thead>
-                            <th style={{ width: "40%" }}></th>
-                            <th style={{ width: "60%" }}></th>
+                            <tr>
+                              <th style={{ width: "40%" }}></th>
+                              <th style={{ width: "60%" }}></th>
+                            </tr>
                           </thead>
                           <tbody>
                             <tr style={{ height: "50px" }}>
-                              <td classname="align-middle">
+                              <td className="align-middle">
                                 <span style={{ fontWeight: "bold" }}>
                                   Street :
                                 </span>
@@ -460,7 +460,7 @@ function Cart(props) {
                               <td>
                                 <input
                                   type="text"
-                                  class="form-control"
+                                  className="form-control"
                                   placeholder="Street name"
                                   id="Street"
                                   onChange={(e) => setStreet(e.target.value)}
@@ -468,7 +468,7 @@ function Cart(props) {
                               </td>
                             </tr>
                             <tr style={{ height: "50px" }}>
-                              <td classname="align-middle">
+                              <td className="align-middle">
                                 <span style={{ fontWeight: "bold" }}>
                                   City :
                                 </span>
@@ -476,7 +476,7 @@ function Cart(props) {
                               <td>
                                 <input
                                   type="text"
-                                  class="form-control"
+                                  className="form-control"
                                   placeholder="City name"
                                   id="City"
                                   onChange={(e) => setCity(e.target.value)}
@@ -484,7 +484,7 @@ function Cart(props) {
                               </td>
                             </tr>
                             <tr style={{ height: "50px" }}>
-                              <td classname="align-middle">
+                              <td className="align-middle">
                                 <span style={{ fontWeight: "bold" }}>
                                   State :
                                 </span>
@@ -492,7 +492,7 @@ function Cart(props) {
                               <td>
                                 <input
                                   type="text"
-                                  class="form-control"
+                                  className="form-control"
                                   placeholder="State name"
                                   id="State"
                                   onChange={(e) => setStateName(e.target.value)}
@@ -500,7 +500,7 @@ function Cart(props) {
                               </td>
                             </tr>
                             <tr style={{ height: "50px" }}>
-                              <td classname="align-middle">
+                              <td className="align-middle">
                                 <span style={{ fontWeight: "bold" }}>
                                   Country :
                                 </span>
@@ -508,7 +508,7 @@ function Cart(props) {
                               <td>
                                 <input
                                   type="text"
-                                  class="form-control"
+                                  className="form-control"
                                   placeholder="Country name"
                                   id="Country"
                                   onChange={(e) => setCountry(e.target.value)}
@@ -516,7 +516,7 @@ function Cart(props) {
                               </td>
                             </tr>
                             <tr style={{ height: "50px" }}>
-                              <td classname="align-middle">
+                              <td className="align-middle">
                                 <span style={{ fontWeight: "bold" }}>
                                   Pincode :
                                 </span>
@@ -524,7 +524,7 @@ function Cart(props) {
                               <td>
                                 <input
                                   type="text"
-                                  class="form-control"
+                                  className="form-control"
                                   placeholder="Pincode"
                                   id="Pincode"
                                   onChange={(e) => setPincode(e.target.value)}
@@ -542,7 +542,7 @@ function Cart(props) {
                             <tr style={{ height: "50px" }}>
                               <td className="align-middler ">
                                 <span style={{ fontWeight: "bold" }}>
-                                  Total Price :{" "}
+                                  Total Price :
                                 </span>
                               </td>
                               <td className="align-middle ">{grandTotal}</td>
@@ -560,7 +560,7 @@ function Cart(props) {
                             margin: "auto",
                           }}
                         >
-                          Proceed to Checkout{" "}
+                          Proceed to Checkout
                           <i className="fas fa-arrow-right ms-2" />
                         </button>
                       </div>
