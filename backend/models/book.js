@@ -5,7 +5,7 @@ const Book = sequelize.define(
   {
     _id: {
       type: Sequelize.DataTypes.UUID,
-        defaultValue: Sequelize.UUIDV1, 
+      defaultValue: Sequelize.UUIDV1,
       primaryKey: true,
       allowNull: false,
     },
@@ -56,8 +56,12 @@ const Book = sequelize.define(
     },
     Deleted: {
       type: Sequelize.BOOLEAN,
-      allowNull: false
-    }
+      allowNull: false,
+    },
+    RatingCount: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+    },
   },
   {
     freezeTableName: true,

@@ -214,6 +214,7 @@ function Home(props) {
                   <BookCard
                     loggedIn={Store.isLoggedIn}
                     home
+                    RatingCount={book.RatingCount}
                     id={book._id}
                     name={book.Name}
                     author={book.Author}
@@ -221,7 +222,7 @@ function Home(props) {
                     price={book.Selling_cost}
                     genre={book.Genre}
                     isbn={book.ISBN}
-                    rating={book.Rating}
+                    rating={Math.round(book.Rating)}
                     key={index}
                     publishYear={book.Year_of_Publication}
                   ></BookCard>

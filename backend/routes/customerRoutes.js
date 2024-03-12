@@ -1,6 +1,6 @@
 const express = require("express");
 const Books = require("../models/book");
-const { Op } = require("sequelize");
+const { Op, INTEGER } = require("sequelize");
 const sequelize = require("../config/dbconfig");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
@@ -84,6 +84,7 @@ router.post("/books", async (req, res) => {
       "Rating",
       "Selling_cost",
       "Year_of_Publication",
+      "RatingCount",
     ],
     where: {
       Genre: { [Op.or]: genre },
@@ -345,29 +346,31 @@ router.post("/cart", Sessionverifier, async (req, res) => {
       console.error("Error updating cart quantity:", error);
       res.status(500).json({ status: "error", error: error });
     }
-  }else if(req.body.type =="checkCart"){
-    try{
+  } else if (req.body.type == "checkCart") {
+    try {
       const varCustomer_id = req.body.Customer_id;
       const cartItems = await Wishlist.findAll({
         where: { Customer_id: varCustomer_id, inCart: 1 },
       });
       var checkDelete = 0;
-      for(let i = 0;i<cartItems.length;i++){
+      for (let i = 0; i < cartItems.length; i++) {
         // const currentOrderedBook = cartItems[i];
         const BookDetails = await Books.findByPk(cartItems[i].Book_id);
-        if(BookDetails.Deleted==1){
-              checkDelete = 1;
-              res.status(200).json({status:"Deleted",message:"Currently unavailable - "+BookDetails.Name});
-              break;
+        if (BookDetails.Deleted == 1) {
+          checkDelete = 1;
+          res.status(200).json({
+            status: "Deleted",
+            message: "Currently unavailable - " + BookDetails.Name,
+          });
+          break;
         }
       }
-      if(checkDelete == 0){
-        res.status(200).json({status:"success"});
+      if (checkDelete == 0) {
+        res.status(200).json({ status: "success" });
       }
-
-    }catch(error){
-      console.error("Error in checking cart items",error);
-      res.status(500).json({status:"error",error:error})
+    } catch (error) {
+      console.error("Error in checking cart items", error);
+      res.status(500).json({ status: "error", error: error });
     }
   }
 });
@@ -440,6 +443,25 @@ router.post("/checkout", Sessionverifier, async (req, res) => {
   } catch (error) {
     console.error("Error in checking out", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// Rating
+router.post("/rating", Sessionverifier, async (req, res) => {
+  if (req.body.type === "addRating") {
+    const RatingItem = await Books.findOne({
+      where: { _id: req.body.Book_id },
+    });
+    const oldRating = parseFloat(RatingItem["Rating"]);
+    const RatingCount = parseFloat(RatingItem["RatingCount"]);
+    const newRating =
+      (oldRating * RatingCount + parseFloat(req.body.rating)) /
+      (RatingCount + 1);
+    RatingItem.Rating = Math.round(newRating * 100) / 100;
+    RatingItem.RatingCount = RatingItem.RatingCount + 1;
+    // console.log(newRating);
+    await RatingItem.save();
+    res.json({ status: "success" });
   }
 });
 

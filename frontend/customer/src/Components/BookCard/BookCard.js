@@ -109,13 +109,24 @@ function BookCard(props) {
   };
 
   const cartHandler = () => {
+    if (!props?.loggedIn) {
+      toast.error("Please Log in first ", {
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
     Axios.post("cart", {
       Customer_id: Store.user_id,
       Book_id: props.id,
       type: "addToCart",
     })
       .then((res) => {
-        
         if (res.data.status === "success") {
           toast.success("Book Added to the Cart", {
             position: "top-center",
@@ -126,7 +137,7 @@ function BookCard(props) {
             draggable: true,
             progress: undefined,
           });
-        } else if(res.data.status === "empty"){
+        } else if (res.data.status === "empty") {
           toast.error("No available pieces", {
             position: "top-center",
             autoClose: 2000,
@@ -338,6 +349,7 @@ function BookCard(props) {
         )}
         {modalOpen && (
           <BookModal
+            loggedIn={props.loggedIn}
             book={props}
             addToWishlist={likeHandler}
             addToCart={cartHandler}
