@@ -13,11 +13,12 @@ a {
 }
 
 .main {
-  width: auto;
   font-family: "Inter", sans-serif;
   background-color: $main-bg;
   color: $main-color;
   overflow: auto;
+  min-width: 100vw;
+  min-height: 100vh;
 }
 
 .container {
@@ -35,6 +36,6 @@ a {
 }
 
 .contentContainer {
-  padding: 5px 20px;
+  padding: 2%;
   width: 100%;
 }
