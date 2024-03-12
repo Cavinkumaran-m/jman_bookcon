@@ -97,36 +97,61 @@ function Cart(props) {
     }
   };
 
-  const handleCheckout = async (e) => {
+  const handleCheckout = async(e) =>{
     e.preventDefault();
-    fetchCartItems();
-    Axios.post("checkout", {
-      Customer_id: Store.user_id,
-      Street: street,
-      City: city,
-      State: stateName,
-      Country: country,
-      Pincode: pincode,
-      Cost: grandTotal,
-    })
-      .then((res) => {
-        if (res.data.status === "success") {
-          toast.success("Order has been placed successfully", {
-            position: "top-center",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
+    Axios.post("cart", {
+        Customer_id: Store.user_id,
+        type: "checkCart",
+      }).then((res)=>{
+        if(res.data.status==="success"){
+          if(!street.trim() || !city.trim() || !stateName.trim() || !country.trim() || !pincode.trim()){
+            toast.error("Please enter all the fields");
+          }
+          else{
+            Axios.post("checkout", {
+              Customer_id: Store.user_id,
+              Street: street,
+              City: city,
+              State: stateName,
+              Country: country,
+              Pincode: pincode,
+              Cost: grandTotal,
+            })
+              .then((res) => {
+                if (res.data.status === "success") {
+                  toast.success("Order has been placed successfully", {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                  });
+                  fetchCartItems();
+                }
+              })
+              .catch((error) => {
+                console.error("Error during checkout:", error);
+              });
+            }
+        }else if(res.data.status==="Deleted"){
+          toast.error(res.data.message,{
+            position:"top-center",
+            autoClose:2000,
+            hideProgressBar:false,
+            closeOnClick:true,
+            pauseOnHover:true,
+            draggable:true,
+            progress:undefined,
           });
-          fetchCartItems();
         }
       })
-      .catch((error) => {
-        console.error("Error during checkout:", error);
+      .catch((err)=>{
+        console.log("Error",err);
       });
-  };
+    
+  }
 
   const updatedCart = cartItems.map((cartItem, index) => {
     const total = cartItem.book_details.Selling_cost * cartItem.quantity;
@@ -145,6 +170,7 @@ function Cart(props) {
   const totalItems = updatedCart.reduce((accumulator, cartItem) => {
     return accumulator + cartItem.quantity;
   }, 0);
+
 
   useEffect(() => {
     fetchCartItems();
@@ -527,7 +553,7 @@ function Cart(props) {
                                   className="form-control"
                                   placeholder="Pincode"
                                   id="Pincode"
-                                  onChange={(e) => setPincode(e.target.value)}
+                                  onChange={(e) => setPincode(e.target.value)}             
                                 />
                               </td>
                             </tr>
