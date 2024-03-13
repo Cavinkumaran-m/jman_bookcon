@@ -30,30 +30,35 @@ const OrderHistory = () => {
   return (
     <div className="order-history">
       <h1 className="mt-3 mb-3">Order History</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Book</th>
-            <th>Quantity</th>
-            <th>No. of Pieces per Book</th>
-            <th>Cost</th>
-          </tr>
-        </thead>
-        <tbody>
-          {orders?.map((order) =>
-            order.Order_Details.map((item, index) => (
-              <tr key={`${order.id}-${index}`}>
-                {<td>{order.Date.split("T")[0]}</td>}
-                <td>{item.Book_Name}</td>
-                <td>{item.No_Of_Pieces}</td>
-                <td>${item.Cost}</td>
-                <td>${item.Cost * item.No_Of_Pieces}</td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+      {orders?.length === 0 && (
+        <div className="display-4">No Orders placed So far</div>
+      )}
+      {orders?.length !== 0 && (
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Book</th>
+              <th>Quantity</th>
+              <th>No. of Pieces per Book</th>
+              <th>Cost</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders?.map((order) =>
+              order.Order_Details.map((item, index) => (
+                <tr key={`${order.id}-${index}`}>
+                  {<td>{order.Date.split("T")[0]}</td>}
+                  <td>{item.Book_Name}</td>
+                  <td>{item.No_Of_Pieces}</td>
+                  <td>${item.Cost}</td>
+                  <td>${item.Cost * item.No_Of_Pieces}</td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 };
