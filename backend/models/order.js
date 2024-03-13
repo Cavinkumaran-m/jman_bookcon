@@ -55,6 +55,6 @@ const Order = sequelize.define('Orders',{
     timestamps:false
 })
 
-Users.hasMany(Order)
-Order.belongsTo(Users)
+// Users.hasMany(Order)
+// Order.belongsTo(Users)
 module.exports = Order

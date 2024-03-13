@@ -39,9 +39,9 @@ const OrderDetail = sequelize.define('Order_Details',{
     freezeTableName:true,
     timestamps:false
 })
-Book.hasMany(OrderDetail);
-OrderDetail.belongsTo(Book);
-Order.hasMany(OrderDetail);
-OrderDetail.belongsTo(Order);
+// Book.hasMany(OrderDetail);
+// OrderDetail.belongsTo(Book);
+// Order.hasMany(OrderDetail);
+// OrderDetail.belongsTo(Order);
 
 module.exports = OrderDetail
