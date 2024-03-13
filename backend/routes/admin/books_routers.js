@@ -10,7 +10,8 @@ const book_router = express.Router();
 
 const getBooks = async (req, res) => {
     try{
-        const allBooks = await Books.findAll();
+        const query = "SELECT * FROM Books WHERE Deleted=0";
+        const allBooks = await await sequelize.query(query, { type: sequelize.QueryTypes.SELECT });
         console.log(allBooks);
         return res.status(status.ok).json({
             message : message.ok,

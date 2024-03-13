@@ -173,7 +173,7 @@ const Single = (props: Props) => {
           </ul>
         )}
       </div>
-      {open && <Add slug="product" columns={inputfields} setOpen={setOpen} originalValues={{
+      {open && <Add slug="product" columns={inputfields} setOpen={setOpen} id={props.id} originalValues={{
         "ISBN": props.info.ISBN,
         "Author of the Book": props.info.Author,
         "Genre": props.info.Genre,

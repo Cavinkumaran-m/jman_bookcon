@@ -29,6 +29,7 @@ type Props = {
   columns: inputFileds[];
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   originalValues?: formData;
+  id?: string
 };
 
 const Add = (props: Props) => {
