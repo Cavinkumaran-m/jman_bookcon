@@ -98,17 +98,23 @@ function Cart(props) {
     }
   };
 
-  const handleCheckout = async(e) =>{
+  const handleCheckout = async (e) => {
     e.preventDefault();
     Axios.post("cart", {
-        Customer_id: Store.user_id,
-        type: "checkCart",
-      }).then((res)=>{
-        if(res.data.status==="success"){
-          if(!street.trim() || !city.trim() || !stateName.trim() || !country.trim() || !pincode.trim()){
+      Customer_id: Store.user_id,
+      type: "checkCart",
+    })
+      .then((res) => {
+        if (res.data.status === "success") {
+          if (
+            !street.trim() ||
+            !city.trim() ||
+            !stateName.trim() ||
+            !country.trim() ||
+            !pincode.trim()
+          ) {
             toast.error("Please enter all the fields");
-          }
-          else{
+          } else {
             Axios.post("checkout", {
               Customer_id: Store.user_id,
               Street: street,
@@ -135,24 +141,23 @@ function Cart(props) {
               .catch((error) => {
                 console.error("Error during checkout:", error);
               });
-            }
-        }else if(res.data.status==="Deleted"){
-          toast.error(res.data.message,{
-            position:"top-center",
-            autoClose:2000,
-            hideProgressBar:false,
-            closeOnClick:true,
-            pauseOnHover:true,
-            draggable:true,
-            progress:undefined,
+          }
+        } else if (res.data.status === "Deleted") {
+          toast.error(res.data.message, {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
           });
         }
       })
-      .catch((err)=>{
-        console.log("Error",err);
+      .catch((err) => {
+        console.log("Error", err);
       });
-    
-  }
+  };
 
   const updatedCart = cartItems.map((cartItem, index) => {
     const total = cartItem.book_details.Selling_cost * cartItem.quantity;
@@ -164,14 +169,15 @@ function Cart(props) {
     return updatedItem;
   });
 
-  const grandTotal = updatedCart.reduce((accumulator, cartItem) => {
-    return accumulator + cartItem.total;
-  }, 0).toFixed(2);
+  const grandTotal = updatedCart
+    .reduce((accumulator, cartItem) => {
+      return accumulator + cartItem.total;
+    }, 0)
+    .toFixed(2);
 
   const totalItems = updatedCart.reduce((accumulator, cartItem) => {
     return accumulator + cartItem.quantity;
   }, 0);
-
 
   useEffect(() => {
     fetchCartItems();
@@ -350,7 +356,6 @@ function Cart(props) {
                                   </div>
                                 </td>
                                 <td className="text-center align-middle">
-                                  
                                   {/* To display the delete button*/}
                                   <button
                                     className="btn d-flex justify-content-center align-items-center"
@@ -371,7 +376,6 @@ function Cart(props) {
                                   </button>
                                 </td>
                                 <td className="text-center align-middle">
-                                  
                                   {/* To display the increment book quantity*/}
                                   <button
                                     className="btn"
@@ -397,7 +401,6 @@ function Cart(props) {
                                   </button>
                                 </td>
                                 <td className="text-center align-middle">
-                                  
                                   {/* To display the decrement book quantity*/}
                                   <button
                                     className="btn"
@@ -447,7 +450,7 @@ function Cart(props) {
                                     paddingLeft: "20px",
                                   }}
                                 >
-                                  {(item.total).toFixed(2)}
+                                  {item.total.toFixed(2)}
                                 </td>
                               </tr>
                             ))}
@@ -554,7 +557,7 @@ function Cart(props) {
                                   className="form-control"
                                   placeholder="Pincode"
                                   id="Pincode"
-                                  onChange={(e) => setPincode(e.target.value)}             
+                                  onChange={(e) => setPincode(e.target.value)}
                                 />
                               </td>
                             </tr>
@@ -622,11 +625,11 @@ function Cart(props) {
               </center>
             </>
           )}
-          <div>
+          {/* <div>
             <OrderHistory />
-          </div>
+          </div> */}
         </div>
-      </div>      
+      </div>
     </div>
   );
 }

@@ -465,4 +465,83 @@ router.post("/rating", Sessionverifier, async (req, res) => {
   }
 });
 
+// Order History
+router.post("/orderHistory", Sessionverifier, async (req, res) => {
+  if (req.body.type === "getOrderHistory") {
+    try {
+      const customer_id = req.body.Customer_id;
+      const query = `
+              SELECT 
+                  o._id,
+                  u.UserName AS Customer_Name,
+                  o.Status,
+                  o.Date,
+                  od.Book_Id,
+                  b.Name AS Book_Name,
+                  od.No_Of_Pieces,
+                  od.Cost,
+                  o.Cost AS Total_Cost,
+                  o.Street,
+                  o.City,
+                  o.State,
+                  o.Country,
+                  o.Pincode
+              FROM Orders o
+              INNER JOIN Order_Details od ON o._id = od.Order_Id
+              INNER JOIN Books b ON od.Book_Id = b._id
+              INNER JOIN Users u ON o.Customer_Id = u._id
+              WHERE o.Customer_Id=:customer_id
+              ORDER BY o.Date;
+          `;
+      const orderDetails = await sequelize.query(query, {
+        type: sequelize.QueryTypes.SELECT,
+        replacements: { customer_id },
+      });
+      const groupedOrderDetails = orderDetails.reduce((acc, curr) => {
+        const {
+          _id,
+          Customer_Name,
+          Status,
+          Date,
+          Book_Id,
+          Book_Name,
+          No_Of_Pieces,
+          Cost,
+          Total_Cost,
+          Street,
+          City,
+          State,
+          Country,
+          Pincode,
+        } = curr;
+        if (!acc[_id]) {
+          acc[_id] = {
+            _id,
+            Customer_Name,
+            Status,
+            Date,
+            Order_Details: [],
+            Total_Cost,
+          };
+        }
+        acc[_id].Order_Details.push({ Book_Name, No_Of_Pieces, Cost });
+        return acc;
+      }, {});
+
+      // Convert groupedOrderDetails object to an array of order objects
+      const result = Object.values(groupedOrderDetails);
+      console.log(result);
+      res.json({
+        status: "success",
+        payload: result,
+      });
+    } catch (error) {
+      console.log(error);
+      res.json({
+        status: "error",
+        error: error,
+      });
+    }
+  }
+});
 module.exports = router;

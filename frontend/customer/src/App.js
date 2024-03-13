@@ -18,6 +18,7 @@ import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword/resetPassword";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import OrderHistory from "./Pages/OrderHistory/OrderHistory";
 
 function App() {
   // Use this context to store data locally
@@ -52,6 +53,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/order-history" element={<OrderHistory />} />
         </Routes>
       </Router>
     </UserContext.Provider>
