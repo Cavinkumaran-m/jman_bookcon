@@ -530,7 +530,7 @@ router.post("/orderHistory", Sessionverifier, async (req, res) => {
 
       // Convert groupedOrderDetails object to an array of order objects
       const result = Object.values(groupedOrderDetails);
-      console.log(result);
+      // console.log(result);
       res.json({
         status: "success",
         payload: result,
