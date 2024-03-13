@@ -112,7 +112,7 @@ router.post("/request-otp", async (req, res) => {
     from: "sonadas.8april@gmail.com",
     to: email,
     subject: "OTP From BOOKCON",
-    text: `Your OTP is for accound recovery is ${otp}`,
+    text: `Your OTP for the account recovery is ${otp}`,
   };
 
   transporter.sendMail(mailOptions, (err, info) => {
