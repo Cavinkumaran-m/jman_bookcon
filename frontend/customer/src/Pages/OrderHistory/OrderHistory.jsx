@@ -17,7 +17,9 @@ const OrderHistory = () => {
 
   return (
     <div className="order-history">
-      <h1>Order History</h1>
+        <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
+            <h1>Order History</h1>
+        </div>
       <table>
         <thead>
           <tr>

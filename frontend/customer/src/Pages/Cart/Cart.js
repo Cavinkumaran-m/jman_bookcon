@@ -622,11 +622,11 @@ function Cart(props) {
               </center>
             </>
           )}
+          <div>
+            <OrderHistory />
+          </div>
         </div>
-      </div>
-      <div>
-        <OrderHistory />
-      </div>
+      </div>      
     </div>
   );
 }
