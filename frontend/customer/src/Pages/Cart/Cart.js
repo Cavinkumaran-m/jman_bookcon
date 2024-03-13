@@ -4,6 +4,7 @@ import { UserContext } from "../../CustomFunctionalities/Context/UserContext";
 import { NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 import emptyCart from "../../Images/cart.png";
+import OrderHistory from "../OrderHistory/OrderHistory";
 
 function Cart(props) {
   const [cartItems, setCartItems] = useState([]);
@@ -622,6 +623,9 @@ function Cart(props) {
             </>
           )}
         </div>
+      </div>
+      <div>
+        <OrderHistory />
       </div>
     </div>
   );
