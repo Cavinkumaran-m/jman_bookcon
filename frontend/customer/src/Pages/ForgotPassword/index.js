@@ -162,20 +162,29 @@ const ForgotPassword = () => {
                     onChange={(e) => setOTP(e.target.value)}
                   />
 
-                  <Box>
-                    <Button
-                      type="button"
-                      variant="contained"
-                     
-                      onClick={handleVerifyOTP}
-                    >
-                      Verify OTP
-                    </Button>
+                  <Box  >
+                  <Button
+                    type="button"
+                    variant="contained"
+                    sx={{
+                      width: { xs: '100%', sm: 'auto' }, 
+                      mt: { xs: 1, sm: 0 }, 
+                      ml: { sm: '4px' } 
+                    }}
+                    onClick={handleVerifyOTP}
+                  >
+                  Verify OTP
+                </Button>
+
 
                     <Button
                       type="button"
                       variant="contained"
-                      style={{marginLeft:"4px"}}
+                      sx={{
+                        width: { xs: '100%', sm: 'auto' }, 
+                        mt: { xs: 1, sm: 0 }, 
+                        ml: { sm: '4px' } 
+                      }}
                       onClick={handleResendOTP}
 
                     >
@@ -185,8 +194,13 @@ const ForgotPassword = () => {
 
                   <Link to="/login" style={{ textDecoration: 'none' }}>
                     <Button
-                      type="button"
-                      variant="contained"
+                    type="button"
+                    variant="contained"
+                    sx={{
+                      width: { xs: '100%', sm: 'auto' }, 
+                      mt: { xs: 1, sm: 0 }, 
+                      ml: { sm: '4px' } 
+                    }}
                    
                     >
                       Go Back
@@ -200,7 +214,12 @@ const ForgotPassword = () => {
                 <Button
                   type="submit"
                   variant="contained"
-                 
+                  sx={{
+                    width: { xs: '100%', sm: 'auto' }, 
+                    mt: { xs: 1, sm: 0 }, 
+                    ml: { sm: '4px' } 
+                  }}
+                  
                   disabled={!isEmailValid || !email}
                 >
                   Get OTP
@@ -208,8 +227,13 @@ const ForgotPassword = () => {
 
                 <Link to="/login" style={{ textDecoration: 'none' }}>
                   <Button
-                    type="button"
-                    variant="contained"
+                   type="button"
+                   variant="contained"
+                   sx={{
+                     width: { xs: '100%', sm: 'auto' }, 
+                     mt: { xs: 1, sm: 0 }, 
+                     ml: { sm: '4px' } 
+                   }}
                  
                     
                   >
