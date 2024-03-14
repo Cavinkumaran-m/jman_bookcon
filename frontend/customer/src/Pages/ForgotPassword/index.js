@@ -32,7 +32,7 @@ const ForgotPassword = () => {
       return; // Stop here if the email is not valid
     }
 
-    // Assuming the email is valid, proceed with OTP sending logic
+ 
     console.log("Sending OTP to:", email);
 
     Axios.post("/request-otp", {
@@ -91,7 +91,7 @@ const ForgotPassword = () => {
             draggable: true,
             progress: undefined,
           });
-          // localStorage.setItem("email", email);
+           localStorage.setItem("email", email);
           navigate("/reset-password");
         } else {
           toast.error(res.data.error, {
@@ -146,59 +146,82 @@ const ForgotPassword = () => {
               }
             />
 
+        <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" mt={2}>
+              {showOTPField && (
+                <>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="otp"
+                    label="Enter OTP"
+                    name="otp"
+                    autoComplete="off"
+                    autoFocus
+                    value={otp}
+                    onChange={(e) => setOTP(e.target.value)}
+                  />
+
+                  <Box>
+                    <Button
+                      type="button"
+                      variant="contained"
+                     
+                      onClick={handleVerifyOTP}
+                    >
+                      Verify OTP
+                    </Button>
+
+                    <Button
+                      type="button"
+                      variant="contained"
+                      style={{marginLeft:"4px"}}
+                      onClick={handleResendOTP}
+
+                    >
+                      Resend OTP
+                    </Button>
+                  </Box>
+
+                  <Link to="/login" style={{ textDecoration: 'none' }}>
+                    <Button
+                      type="button"
+                      variant="contained"
+                   
+                    >
+                      Go Back
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </Box>
             {!showOTPField && (
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                className={style.submitButton}
-                disabled={!isEmailValid || !email}
-              >
-                Get OTP
-              </Button>
-            )}
-
-            {showOTPField && (
-              <>
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="otp"
-                  label="Enter OTP"
-                  name="otp"
-                  autoComplete="off"
-                  autoFocus
-                  value={otp}
-                  onChange={(e) => setOTP(e.target.value)}
-                />
-
+              <Box display="flex" justifyContent="space-between" alignItems="center" mt={2}>
                 <Button
-                  type="button"
-                  fullWidth
+                  type="submit"
                   variant="contained"
-                  className={style.verifyButton}
-                  onClick={handleVerifyOTP}
+                 
+                  disabled={!isEmailValid || !email}
                 >
-                  Verify OTP
+                  Get OTP
                 </Button>
 
-                <Button
-                  type="button"
-                  fullWidth
-                  variant="contained"
-                  className={style.resendButton}
-                  sx={{ mt: 2 }}
-                  onClick={handleResendOTP}
-                >
-                  Resend OTP
-                </Button>
-              </>
+                <Link to="/login" style={{ textDecoration: 'none' }}>
+                  <Button
+                    type="button"
+                    variant="contained"
+                 
+                    
+                  >
+                    Go Back
+                  </Button>
+                </Link>
+              </Box>
             )}
+
+
           </form>
-          <NavLink to="/login">
-            <button className="mt-2 btn btn-primary">Cancel</button>
-          </NavLink>
+         
         </Box>
       </Paper>
     </Container>

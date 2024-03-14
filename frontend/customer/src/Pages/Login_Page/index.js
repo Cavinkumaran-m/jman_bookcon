@@ -144,10 +144,10 @@ const LoginPage = () => {
               variant="contained"
               style={{   marginTop: "20px",
               borderRadius: "20px",
-              display: "block", // Change this to "block" to allow `margin: auto` to work
+              display: "block", 
               marginLeft: "auto",
               marginRight: "auto",
-              width: "fit-content" // This ensures the button width only fits its content
+              width: "fit-content"
            }}
             >
               Sign In
