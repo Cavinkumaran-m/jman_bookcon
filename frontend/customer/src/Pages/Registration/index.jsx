@@ -55,7 +55,7 @@ const Register = () => {
       return;
     }
     if (user.password.length < 8 || user.password.length>16) {
-      toast.error("Password should be atleast 8  and maximum 16 characters");
+      toast.error("Password should be minimum 8  and maximum 16 characters");
       return;
     }
     const passwordPattern = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,16}$/;
@@ -73,23 +73,27 @@ const Register = () => {
 
     try {
       const response = await Axios.post("/user/adduser", userData);
-
-      if (response.status == 200) {
+      console.log(response);
+      if (response?.status == 200) {
         toast.success("User registered successfully");
         setUser({ name: "", email: "", password: "", date: user.date });
       } else {
         console.log(response);
 
-        const message = response?.data?.message
-          ? response.data.message
+        const message = response?.data
+          ? response.data
           : "Failed to register";
         toast.error(message);
       }
     } catch (error) {
-      const message = error?.response?.data?.message
-        ? error.response.data.message
-        : "Failed to register";
-      toast.error(message);
+      
+     
+        const message = error.response && error.response.data.message
+          ? error.response.data.message
+          : "Failed to register";
+        toast.error(message);
+      
+      console.error(error);
     }
   };
 
