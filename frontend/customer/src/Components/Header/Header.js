@@ -252,7 +252,7 @@ function Header(props) {
                     if (Store.isLoggedIn) {
                       return;
                     }
-                    toast.info("Please Login to access Cart Page", {
+                    toast.info("Please Login to access Order History", {
                       position: "top-center",
                       autoClose: 2000,
                       hideProgressBar: false,
