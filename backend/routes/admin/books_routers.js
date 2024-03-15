@@ -154,7 +154,8 @@ const createBook = async (req, res) => {
             Purchase_Cost: req.body.Purchase_Cost,
             Genre: req.body.Genre,
             Rating: req.body.Rating || 0,
-            Deleted: false
+            Deleted: false,
+            RatingCount: 0
         };
         console.log(bookData);
         const newBook = await Books.create(bookData);   

@@ -47,7 +47,7 @@ const columns: GridColDef[] = [
     flex: 0.5,
   },
   {
-    field: "Selling_cost",
+    field: "Selling_Cost",
     headerName: "Selling Price",
     type: "string",
     flex: 0.5,
