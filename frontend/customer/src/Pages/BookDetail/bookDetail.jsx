@@ -136,62 +136,58 @@ const BookModal = ({
           </Grid>
         </Grid>
       </DialogContent>
-      <DialogActions
-        sx={{ justifyContent: "space-between", padding: theme.spacing(3) }}
-      >
-        <Grid container spacing={1}>
-          <Grid item xs={4}>
-            <Button
-              onClick={addToCart}
-              color="primary"
-              variant="contained"
-              fullWidth
-              sx={{ backgroundColor: "blue" }}
-              startIcon={<ShoppingCartIcon />}
-            >
-              Add to Cart
-            </Button>
-          </Grid>
-          <Grid item xs={4}>
-            <Button
-              onClick={addToWishlist}
-              color="primary"
-              variant="contained"
-              fullWidth
-              sx={{ backgroundColor: "blue" }}
-              startIcon={<FavoriteIcon />}
-            >
-              Add to Wishlist
-            </Button>
-          </Grid>
-          <Grid item xs={4}>
-            <Button
-              onClick={() => {
-                if (!loggedIn) {
-                  toast.error("Please Log in first", {
-                    position: "top-center",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                  });
-                  return;
-                }
-                setShowRater((prev) => !prev);
-              }}
-              color="primary"
-              variant="contained"
-              fullWidth
-              sx={{ backgroundColor: "blue" }}
-              startIcon={<StarRateIcon />}
-            >
-              Give Rating
-            </Button>
-          </Grid>
+      <DialogActions sx={{ justifyContent: "center", padding: theme.spacing(3) }}>
+      <Grid container justifyContent="center" spacing={2}> 
+        <Grid item>
+          <Button
+            onClick={addToCart}
+            color="primary"
+            variant="contained"
+            sx={{ backgroundColor: "blue" }}
+            startIcon={<ShoppingCartIcon />}
+          >
+            Add to Cart
+          </Button>
         </Grid>
-      </DialogActions>
+        <Grid item>
+          <Button
+            onClick={addToWishlist}
+            color="primary"
+            variant="contained"
+            sx={{ backgroundColor: "blue" }}
+            startIcon={<FavoriteIcon />}
+          >
+            Add to Wishlist
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            onClick={() => {
+              if (!loggedIn) {
+                toast.error("Please Log in first", {
+                  position: "top-center",
+                  autoClose: 2000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined,
+                });
+                return;
+              }
+              setShowRater((prev) => !prev);
+            }}
+            color="primary"
+            variant="contained"
+            sx={{ backgroundColor: "blue" }}
+            startIcon={<StarRateIcon />}
+          >
+            Give Rating
+          </Button>
+        </Grid>
+      </Grid>
+    </DialogActions>
+
     </Dialog>
   );
 };

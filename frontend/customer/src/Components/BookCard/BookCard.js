@@ -14,7 +14,8 @@ function BookCard(props) {
   const [hover, setHover] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [buyHover, setBuyHover] = useState(false);
-  const stars = new Array(props.rating).fill("⭐");
+  const MAX_STARS = 5; // Maximum number of stars to display
+  const stars = new Array(Math.floor(Math.min(props.rating, MAX_STARS))).fill("⭐");
 
   const handleMouseEnter = () => {
     setHover(true);

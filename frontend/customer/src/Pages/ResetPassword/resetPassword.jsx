@@ -59,6 +59,7 @@ const ResetPassword = () => {
       });
       if (response.status === 200) {
         toast.success("Password reset successfull");
+        localStorage.clear();
         navigate("/login");
       } else {
         toast.error("Error resetting password");
@@ -113,11 +114,17 @@ const ResetPassword = () => {
             onChange={handleChange("confirmPassword")}
           />
           <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
+              type="submit"
+              // fullWidth
+              variant="contained"
+              style={{   marginTop: "20px",
+              borderRadius: "20px",
+              display: "block", // Change this to "block" to allow `margin: auto` to work
+              marginLeft: "auto",
+              marginRight: "auto",
+              width: "fit-content" // This ensures the button width only fits its content
+           }}
+            >
             Reset Password
           </Button>
         </Box>

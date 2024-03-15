@@ -25,10 +25,7 @@ app.post("/adduser", async (req, res) => {
     });
 
     if (existingUser) {
-      return res.status(409).json({
-        // 409 Conflict
-        message: "User already exists",
-      });
+     return res.status(201).send("User already exists");
     }
     const hash = crypto
       .createHmac("sha256", process.env.PASSWORD_SECRET_KEY)

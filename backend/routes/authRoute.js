@@ -24,7 +24,7 @@ router.post("/login", async (req, res) => {
     .createHmac("sha256", process.env.PASSWORD_SECRET_KEY)
     .update(password)
     .digest("hex")
-  
+  console.log(email," ",password," ",user.Password," ",hash)
 
   if (user && user.Password && user.Password === hash) {
     // const payload = {
@@ -82,7 +82,7 @@ function generateOTP(email) {
   const otp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6 digit OTP
   const ttl = 15 * 60 * 1000; // 15 minutes in milliseconds
   const expires = Date.now() + ttl;
-  const trimmedEmail = email.trim(); // Trim the email to remove extra spaces
+  const trimmedEmail = email.trim(); 
   const data = `${trimmedEmail}.${otp}`;
   const hash = crypto
     .createHmac("sha256", process.env.OTP_SECRET_KEY)
@@ -112,7 +112,7 @@ router.post("/request-otp", async (req, res) => {
     from: "sonadas.8april@gmail.com",
     to: email,
     subject: "OTP From BOOKCON",
-    text: `Your OTP is for accound recovery is ${otp}`,
+    text: `Your OTP for the account recovery is ${otp}`,
   };
 
   transporter.sendMail(mailOptions, (err, info) => {
@@ -152,23 +152,39 @@ router.post("/verify-otp", async (req, res) => {
     return res.json({ status: "error", error: "Invalid OTP" });
   }
 });
-
 router.post("/reset-password", async (req, res) => {
   const { email, password } = req.body;
-  const userResult = await userExists(email);
-  console.log("email", email);
-  if (!userResult.exists) {
-    return res.status(400).send("User does not exist");
-  }
 
-  const user = userResult.user;
-  const hash = crypto
-    .createHmac("sha256", process.env.PASSWORD_SECRET_KEY)
-    .update(password)
-    .digest("hex")
- 
-  await user.update({ Password: hash });
-  res.send("Password reset successfully");
+  try {
+    const userResult = await userExists(email);
+    console.log("email", email);
+
+    if (!userResult.exists) {
+      return res.status(400).send("User does not exist");
+    }
+
+    const user = userResult.user;
+    const hash = crypto
+      .createHmac("sha256", process.env.PASSWORD_SECRET_KEY)
+      .update(password)
+      .digest("hex");
+
+    console.log("hash", hash);
+
+    const updateResult = await user.update({ Password: hash });
+
+    if (updateResult) {
+      console.log("Password updated for user:", email);
+      res.send("Password reset successfully");
+    } else {
+      
+      console.log("Failed to update password for user:", email);
+      res.status(500).send("Failed to update password");
+    }
+  } catch (error) {
+    console.error("Error during password reset", error);
+    res.status(500).send("Error resetting password");
+  }
 });
 
 module.exports = router;
